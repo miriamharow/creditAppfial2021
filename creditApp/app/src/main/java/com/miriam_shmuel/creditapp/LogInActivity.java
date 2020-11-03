@@ -42,8 +42,8 @@ public class LogInActivity extends Activity {
                 if( mFirebaseUser != null ){
                     Toast.makeText(LogInActivity.this,"You are logged in",Toast.LENGTH_SHORT).show();
                     finish();
-                    Intent i = new Intent(LogInActivity.this, HomeActivity.class);
-                    startActivity(i);
+                    Intent intToHome = new Intent(LogInActivity.this, HomeActivity.class);
+                    startActivity(intToHome);
                 }
                 else{
                     Toast.makeText(LogInActivity.this,"Please Login",Toast.LENGTH_SHORT).show();
@@ -92,8 +92,8 @@ public class LogInActivity extends Activity {
         tvSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(LogInActivity.this, SignUpActivity.class);
-                startActivity(i);
+                Intent intToSignIn = new Intent(LogInActivity.this, SignUpActivity.class);
+                startActivity(intToSignIn);
             }
         });
     }
@@ -108,9 +108,5 @@ public class LogInActivity extends Activity {
     @Override
     public void onDestroy() {
         super.onDestroy();
-    //    Intent intent = new Intent(Intent.ACTION_MAIN);
-//        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-  //      intent.addCategory(Intent.CATEGORY_HOME);
-      //  startActivity(intent);
     }
 }

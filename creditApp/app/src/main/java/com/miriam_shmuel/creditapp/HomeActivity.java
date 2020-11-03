@@ -1,6 +1,5 @@
 package com.miriam_shmuel.creditapp;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -27,8 +26,8 @@ import com.google.firebase.auth.FirebaseAuth;
                     Toast.makeText(HomeActivity.this,"log out!",Toast.LENGTH_SHORT).show();
                     FirebaseAuth.getInstance().signOut();
                     finish();
-                    Intent intToMain = new Intent(HomeActivity.this, LogInActivity.class);
-                    startActivity(intToMain);
+                    Intent intToLogIn = new Intent(HomeActivity.this, LogInActivity.class);
+                    startActivity(intToLogIn);
                 }
             });
         }
