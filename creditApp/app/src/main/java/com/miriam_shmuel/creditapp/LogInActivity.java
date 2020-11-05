@@ -42,14 +42,13 @@ public class LogInActivity extends Activity {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 mFirebaseUser = mFirebaseAuth.getCurrentUser();
-                if( mFirebaseUser != null ){
-                    Toast.makeText(LogInActivity.this,"You are logged in",Toast.LENGTH_SHORT).show();
+                if (mFirebaseUser != null) {
+                    Toast.makeText(LogInActivity.this, "You are logged in", Toast.LENGTH_SHORT).show();
                     finish();
                     Intent intToHome = new Intent(LogInActivity.this, HomeActivity.class);
                     startActivity(intToHome);
-                }
-                else{
-                    Toast.makeText(LogInActivity.this,"Please Login",Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(LogInActivity.this, "Please Login", Toast.LENGTH_SHORT).show();
                 }
             }
         };
@@ -59,35 +58,30 @@ public class LogInActivity extends Activity {
             public void onClick(View v) {
                 String email = emailId.getText().toString();
                 String pwd = password.getText().toString();
-                if(email.isEmpty()){
+                if (email.isEmpty()) {
                     emailId.setError("Please enter your Email");
                     emailId.requestFocus();
-                }
-                else  if(pwd.isEmpty()){
+                } else if (pwd.isEmpty()) {
                     password.setError("Please enter your Password");
                     password.requestFocus();
-                }
-                else  if(email.isEmpty() && pwd.isEmpty()){
-                    Toast.makeText(LogInActivity.this,"Fields Are Empty!",Toast.LENGTH_SHORT).show();
-                }
-                else  if(!(email.isEmpty() && pwd.isEmpty())){
+                } else if (email.isEmpty() && pwd.isEmpty()) {
+                    Toast.makeText(LogInActivity.this, "Fields Are Empty!", Toast.LENGTH_SHORT).show();
+                } else if (!(email.isEmpty() && pwd.isEmpty())) {
                     mFirebaseAuth.signInWithEmailAndPassword(email, pwd).addOnCompleteListener(LogInActivity.this, new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
-                            if(!task.isSuccessful()){
-                                Toast.makeText(LogInActivity.this,"Login Error, Please Login Again",Toast.LENGTH_SHORT).show();
-                            }
-                            else{
-                                Toast.makeText(LogInActivity.this,"enter",Toast.LENGTH_SHORT).show();
+                            if (!task.isSuccessful()) {
+                                Toast.makeText(LogInActivity.this, "Login Error, Please Login Again", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(LogInActivity.this, "enter", Toast.LENGTH_SHORT).show();
                                 finish();
-                                Intent intToHome = new Intent(LogInActivity.this,HomeActivity.class);
+                                Intent intToHome = new Intent(LogInActivity.this, HomeActivity.class);
                                 startActivity(intToHome);
                             }
                         }
                     });
-                }
-                else{
-                    Toast.makeText(LogInActivity.this,"Error Occurred!",Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(LogInActivity.this, "Error Occurred!", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -108,29 +102,21 @@ public class LogInActivity extends Activity {
         mFirebaseAuth.removeAuthStateListener(mAuthStateListener);
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-    }
-
     public void ShowHidePass(View view){
-
-        if(view.getId()==R.id.show_pass_btn){
-
+        if(view.getId() == R.id.show_pass_btn){
             if(password.getTransformationMethod().equals(PasswordTransformationMethod.getInstance())){
-                ((ImageView)(view)).setImageResource(R.drawable.hide_password);
-
                 //Show Password
+                ((ImageView)(view)).setImageResource(R.drawable.hide_password);
                 password.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
             }
             else{
-                ((ImageView)(view)).setImageResource(R.drawable.show_password);
-
                 //Hide Password
+                ((ImageView)(view)).setImageResource(R.drawable.show_password);
                 password.setTransformationMethod(PasswordTransformationMethod.getInstance());
 
             }
         }
     }
 }
+
 

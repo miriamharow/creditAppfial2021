@@ -25,21 +25,74 @@
             android:hint="Email"
             android:inputType="textEmailAddress"/>
 
-        <EditText
-            android:id="@+id/password"
-            android:layout_width="match_parent"
+        <RelativeLayout
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="Password"
-            android:inputType="textPassword" />
+            android:layout_marginTop="10dp">
 
-        <EditText
-            android:id="@+id/pwdAuth"
-            android:layout_width="match_parent"
+            <EditText
+                android:id="@+id/password"
+                android:layout_width="fill_parent"
+                android:layout_height="45dp"
+                android:hint="Password"
+                android:inputType="textPassword"
+                android:paddingLeft="10dp"
+                android:paddingTop="10dp"
+                android:paddingRight="40dp"
+                android:paddingBottom="10dp"
+                android:text=""
+                />
+
+            <ImageView
+                android:id="@+id/show_password_btn"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="5dp"
+                android:alpha=".5"
+                android:onClick="ShowHidePass"
+                android:padding="5dp"
+                android:src="@drawable/show_password" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="Confirm Password"
-            android:inputType="textPassword" />
+            android:layout_marginTop="10dp">
+
+            <EditText
+                android:id="@+id/pwdAuth"
+                android:layout_width="fill_parent"
+                android:layout_height="45dp"
+                android:hint="Password"
+                android:inputType="textPassword"
+                android:paddingLeft="10dp"
+                android:paddingTop="10dp"
+                android:paddingRight="40dp"
+                android:paddingBottom="10dp"
+                android:text=""
+                />
+
+            <ImageView
+                android:id="@+id/show_pwdAuth_btn"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="5dp"
+                android:alpha=".5"
+                android:onClick="ShowHidePass"
+                android:padding="5dp"
+                android:src="@drawable/show_password" />
+        </RelativeLayout>
+
+        <TextView
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:id="@+id/textView_PwdNote"
+            android:textStyle="bold"
+            android:gravity="center" />
 
         <Button
             android:id="@+id/btnSignUp"
