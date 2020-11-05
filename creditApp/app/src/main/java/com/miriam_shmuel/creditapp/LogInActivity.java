@@ -23,7 +23,7 @@ import com.google.firebase.auth.FirebaseUser;
 public class LogInActivity extends Activity {
     EditText emailId, password;
     Button btnSignIn;
-    TextView tvSignUp;
+    TextView tvSignUp ,tvForgotPwd;
     FirebaseUser mFirebaseUser;
     FirebaseAuth mFirebaseAuth;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
@@ -37,6 +37,7 @@ public class LogInActivity extends Activity {
         password = findViewById(R.id.password);
         btnSignIn = findViewById(R.id.btnSignIn);
         tvSignUp = findViewById(R.id.tvSignUp);
+        tvForgotPwd = findViewById(R.id.tvForgotPwd);
 
         mAuthStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -93,6 +94,14 @@ public class LogInActivity extends Activity {
                 startActivity(intToSignIn);
             }
         });
+
+        tvForgotPwd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intToResetPwd = new Intent(LogInActivity.this, ResetPasswordActivity.class);
+                startActivity(intToResetPwd);
+            }
+        });
     }
 
     @Override
@@ -102,18 +111,17 @@ public class LogInActivity extends Activity {
         mFirebaseAuth.removeAuthStateListener(mAuthStateListener);
     }
 
-    public void ShowHidePass(View view){
-        if(view.getId() == R.id.show_pass_btn){
-            if(password.getTransformationMethod().equals(PasswordTransformationMethod.getInstance())){
+    public void ShowHidePass(View view) {
+        if(view.getId() == R.id.show_pass_btn) {
+            if (password.getTransformationMethod().equals(PasswordTransformationMethod.getInstance())) {
                 //Show Password
                 ((ImageView)(view)).setImageResource(R.drawable.hide_password);
                 password.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
             }
-            else{
+            else {
                 //Hide Password
                 ((ImageView)(view)).setImageResource(R.drawable.show_password);
                 password.setTransformationMethod(PasswordTransformationMethod.getInstance());
-
             }
         }
     }
