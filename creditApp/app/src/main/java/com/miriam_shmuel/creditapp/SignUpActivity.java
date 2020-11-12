@@ -31,7 +31,6 @@ public class SignUpActivity extends AppCompatActivity  {
     TextView pwdNote;
     Button btnSignUp;
     FirebaseAuth mFirebaseAuth;
-
     private boolean threadOff = false;
     private int i = 1;
 
