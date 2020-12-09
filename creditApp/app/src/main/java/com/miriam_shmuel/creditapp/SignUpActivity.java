@@ -21,7 +21,10 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 import static android.graphics.Color.GREEN;
@@ -31,6 +34,8 @@ public class SignUpActivity extends AppCompatActivity  {
     TextView pwdNote;
     Button btnSignUp;
     FirebaseAuth mFirebaseAuth;
+    private  FirebaseFirestore db;
+
     private boolean threadOff = false;
     private int i = 1;
 
@@ -39,6 +44,7 @@ public class SignUpActivity extends AppCompatActivity  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
 
+        db=FirebaseFirestore.getInstance();
         mFirebaseAuth = FirebaseAuth.getInstance();
         userName = findViewById(R.id.username);
         emailId = findViewById(R.id.email);
@@ -53,6 +59,7 @@ public class SignUpActivity extends AppCompatActivity  {
                 String email = emailId.getText().toString();
                 String pwd = password.getText().toString();
                 String pwdAuth = pwdauth.getText().toString();
+
                 if(name.isEmpty()){
                     userName.setError("Please enter your name");
                     userName.requestFocus();
@@ -73,13 +80,22 @@ public class SignUpActivity extends AppCompatActivity  {
                     Toast.makeText(SignUpActivity.this,"Fields Are Empty!", Toast.LENGTH_SHORT).show();
                 }
                 else if((!(name.isEmpty() && email.isEmpty() && pwd.isEmpty() && pwdAuth.isEmpty())) && (pwd.equals(pwdAuth))){
+
                     mFirebaseAuth.createUserWithEmailAndPassword(email, pwd).addOnCompleteListener(SignUpActivity.this, new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
+
                             if(!task.isSuccessful()){
                                 Toast.makeText(SignUpActivity.this,"SignUp Unsuccessful, Please Try Again",Toast.LENGTH_SHORT).show();
                             }
                             else {
+
+                                Map<String,Object> newUser= new HashMap<>();
+                                newUser.put("Fname","Alan");
+                                newUser.put("LastName","Mathison");
+                                newUser.put("born","1912");
+                                db.collection("users").document("123456").set(newUser);
+
                                 threadOff = true;
                                 Toast.makeText(SignUpActivity.this,"Success !",Toast.LENGTH_SHORT).show();
                                 finish();
@@ -158,4 +174,5 @@ public class SignUpActivity extends AppCompatActivity  {
             }
         }
     }
+
 }
