@@ -4,12 +4,11 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.Paint;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -18,23 +17,28 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
-
-import static android.graphics.Color.GREEN;
 
 public class SignUpActivity extends AppCompatActivity  {
+    FirebaseAuth mFirebaseAuth;
+    FirebaseFirestore db;
+
     EditText userName, emailId , password , pwdauth;
     TextView pwdNote;
     Button btnSignUp;
-    FirebaseAuth mFirebaseAuth;
-    private  FirebaseFirestore db;
 
     private boolean threadOff = false;
     private int i = 1;
@@ -45,17 +49,20 @@ public class SignUpActivity extends AppCompatActivity  {
         setContentView(R.layout.activity_signup);
 
         db=FirebaseFirestore.getInstance();
+
         mFirebaseAuth = FirebaseAuth.getInstance();
+
         userName = findViewById(R.id.username);
         emailId = findViewById(R.id.email);
         password  = findViewById(R.id.password);
         pwdauth = findViewById(R.id.pwdAuth);
         pwdNote  = findViewById(R.id.textView_PwdNote);
         btnSignUp = findViewById(R.id.btnSignUp);
+
         btnSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String name = userName.getText().toString();
+                final String name = userName.getText().toString();
                 String email = emailId.getText().toString();
                 String pwd = password.getText().toString();
                 String pwdAuth = pwdauth.getText().toString();
@@ -89,12 +96,7 @@ public class SignUpActivity extends AppCompatActivity  {
                                 Toast.makeText(SignUpActivity.this,"SignUp Unsuccessful, Please Try Again",Toast.LENGTH_SHORT).show();
                             }
                             else {
-
-                                Map<String,Object> newUser= new HashMap<>();
-                                newUser.put("Fname","Alan");
-                                newUser.put("LastName","Mathison");
-                                newUser.put("born","1912");
-                                db.collection("users").document("123456").set(newUser);
+                                addNewUserToDb(name);
 
                                 threadOff = true;
                                 Toast.makeText(SignUpActivity.this,"Success !",Toast.LENGTH_SHORT).show();
@@ -117,7 +119,28 @@ public class SignUpActivity extends AppCompatActivity  {
         threadAuthPwd();
     }
 
-    private void threadAuthPwd() {
+    public void addNewUserToDb(String name) {
+        final Map<String, Object> newUser = new HashMap<>();
+        newUser.put("Name",name);
+        db.collection("users")
+                .add(newUser)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        Toast.makeText(SignUpActivity.this, "add ", Toast.LENGTH_LONG).show();
+                        Log.d("", "DocumentSnapshot added with ID: " + documentReference.getId());
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(SignUpActivity.this, "error", Toast.LENGTH_LONG).show();
+                        Log.w("", "Error adding document", e);
+                    }
+                });
+    }
+
+    public void threadAuthPwd() {
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -137,7 +160,7 @@ public class SignUpActivity extends AppCompatActivity  {
         }).start();
     }
 
-    private void validatePwd() {
+    public void validatePwd() {
         if(!(password.getText().toString().isEmpty() && pwdauth.getText().toString().isEmpty())) {
             if(password.getText().toString().equals(pwdauth.getText().toString())) {
                 pwdNote.setText("");

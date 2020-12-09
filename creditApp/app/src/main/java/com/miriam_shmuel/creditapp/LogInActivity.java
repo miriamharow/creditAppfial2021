@@ -23,23 +23,16 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
-
-import java.util.HashMap;
-import java.util.Map;
-
-
 public class LogInActivity extends Activity {
     EditText emailId, password;
     Button btnSignIn, enter;
     TextView tvSignUp ,tvForgotPwd;
+
     FirebaseUser mFirebaseUser;
     FirebaseAuth mFirebaseAuth;
-    private FirebaseAuth.AuthStateListener mAuthStateListener;
-    FirebaseFirestore db;
+    FirebaseAuth.AuthStateListener mAuthStateListener;
+
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
@@ -50,14 +43,6 @@ public class LogInActivity extends Activity {
         btnSignIn = findViewById(R.id.btnSignIn);
         tvSignUp = findViewById(R.id.tvSignUp);
         tvForgotPwd = findViewById(R.id.tvForgotPwd);
-
-        enter = findViewById(R.id.btnenter);
-        db = FirebaseFirestore.getInstance();
-
-        final Map<String, Object> newUser = new HashMap<>();
-        newUser.put("first", "Ada");
-        newUser.put("last", "Lovelace");
-        newUser.put("born", 1815);
 
         mAuthStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -120,29 +105,6 @@ public class LogInActivity extends Activity {
             public void onClick(View v) {
                 Intent intToResetPwd = new Intent(LogInActivity.this, ResetPasswordActivity.class);
                 startActivity(intToResetPwd);
-            }
-        });
-
-        enter.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(LogInActivity.this, "enter in", Toast.LENGTH_LONG).show();
-                db.collection("users")
-                        .add(newUser)
-                        .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                            @Override
-                            public void onSuccess(DocumentReference documentReference) {
-                                Toast.makeText(LogInActivity.this, "add ", Toast.LENGTH_LONG).show();
-                                Log.d("", "DocumentSnapshot added with ID: " + documentReference.getId());
-                            }
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Toast.makeText(LogInActivity.this, "error", Toast.LENGTH_LONG).show();
-                                Log.w("", "Error adding document", e);
-                            }
-                        });
             }
         });
     }
