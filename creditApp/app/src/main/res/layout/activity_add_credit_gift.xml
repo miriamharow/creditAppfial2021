@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_weight="1"
+    android:orientation="vertical"
+    app:backgroundTint="@android:color/white"
+    tools:context=".AddCreditOrGiftActivity">
+
+    <TextView
+        android:id="@+id/titleID"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="+ ADD CREDIT"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display4"
+        android:textSize="30dp" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="5dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <RadioGroup
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+                <RadioButton
+                    android:id="@+id/radioGiftID"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Gift" />
+
+                <RadioButton
+                    android:id="@+id/radioCreditID"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Credit" />
+            </RadioGroup>
+
+        </LinearLayout>
+
+        <EditText
+            android:id="@+id/edtShopNameID"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:gravity="center"
+            android:hint="SHOP NAME"
+            android:textAppearance="@style/TextAppearance.AppCompat.Display4"
+            android:textColor="#00264d"
+            android:textSize="15dp"
+            app:fontFamily="casual" />
+
+        <EditText
+            android:id="@+id/edtCreditBarCodeID"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:gravity="center"
+            android:hint="BAR CODE NUMBER"
+            android:inputType="number"
+            android:textAppearance="@style/TextAppearance.AppCompat.Display4"
+            android:textColor="#00264d"
+            android:textSize="15dp"
+            app:fontFamily="casual" />
+
+        <TextView
+            android:id="@+id/editDateTextID"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:ems="10"
+            android:gravity="center"
+            android:hint="EXPIRATION DATE"
+            android:textAppearance="@style/TextAppearance.AppCompat.Display4"
+            android:textColor="#00264d"
+            android:textSize="15dp"
+            app:fontFamily="casual" />
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <ImageView
+                android:id="@+id/imgPicID"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:scaleType="fitXY"
+                android:src="@drawable/ic_receipt" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fabID"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginStart="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginBottom="16dp"
+                android:layout_weight="1"
+                android:src="@drawable/ic_camera" />
+
+        </RelativeLayout>
+
+        <Button
+            android:id="@+id/btnSaveID"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="SAVE"
+            android:textColor="#00264d"
+            app:fontFamily="casual" />
+    </LinearLayout>
+
+</LinearLayout>

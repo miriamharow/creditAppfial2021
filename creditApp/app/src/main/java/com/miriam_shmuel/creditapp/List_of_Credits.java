@@ -6,6 +6,11 @@ public class List_of_Credits {
     private List<Gift_Credit> lc;
     private String type;
 
+    public List_of_Credits() {
+        this.lc = null;
+        this.type = "Credits";
+    }
+
     public List<Gift_Credit> getLc() {
         return lc;
     }
@@ -20,10 +25,5 @@ public class List_of_Credits {
 
     public void setType(String type) {
         this.type = type;
-    }
-
-    public List_of_Credits() {
-        this.lc = null;
-        this.type = "Credits";
     }
 }

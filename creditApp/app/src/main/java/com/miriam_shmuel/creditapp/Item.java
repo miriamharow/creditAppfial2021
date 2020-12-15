@@ -7,6 +7,12 @@ public class Item {
     private String warantyPic;
     private Date expirationDate;
 
+    public Item(String name, String warantyPic, Date expirationDate) {
+        this.name = name;
+        this.warantyPic = warantyPic;
+        this.expirationDate = expirationDate;
+    }
+
     public String getName() {
         return name;
     }
@@ -28,12 +34,6 @@ public class Item {
     }
 
     public void setExpirationDate(Date expirationDate) {
-        this.expirationDate = expirationDate;
-    }
-
-    public Item(String name, String warantyPic, Date expirationDate) {
-        this.name = name;
-        this.warantyPic = warantyPic;
         this.expirationDate = expirationDate;
     }
 }
