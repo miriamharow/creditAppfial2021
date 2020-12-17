@@ -1,7 +1,6 @@
 package com.miriam_shmuel.creditapp;
 
 import android.Manifest;
-import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -12,34 +11,33 @@ import android.provider.MediaStore;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.Calendar;
 
-public class AddCreditOrGiftActivity extends AppCompatActivity {
+public class AddCreditOrGiftActivity extends AppCompatActivity  implements View.OnClickListener {
     private RadioButton rCredit, rGift;
     private EditText edtShopName, edtCreditBarCodeID;
     private TextView editDateText;
     private ImageView imgPic;
     private Bitmap picBitmap;
     private FloatingActionButton fab;
-    private Button btnSave;
+    private Button btnSave, btnPlusShopName;
+    private LinearLayout shops;
 
     private Calendar calender;
     private int day, month, year;
-    private int  dayED, monthED, yearED;
+    private int dayED, monthED, yearED;
 
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     public boolean isPICAP = false;
@@ -58,6 +56,9 @@ public class AddCreditOrGiftActivity extends AppCompatActivity {
         btnSave = findViewById(R.id.btnSaveID);
         //btnSave.setOnClickListener(this);
 
+        btnPlusShopName = findViewById(R.id.btnPlusShopNameID);
+        btnPlusShopName.setOnClickListener(this);
+
         fab = findViewById(R.id.fabID);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,6 +66,8 @@ public class AddCreditOrGiftActivity extends AppCompatActivity {
                 takePicture();
             }
         });
+
+        shops = findViewById(R.id.shops);
 
         //--------------------FULL SCREEN--------------------
         // Hide the Activity Status Bar
@@ -93,9 +96,9 @@ public class AddCreditOrGiftActivity extends AppCompatActivity {
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                         editDateText.setText(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year);
 
-                        dayED=day;
-                        monthED=month+1;
-                        yearED=year;
+                        dayED = day;
+                        monthED = month + 1;
+                        yearED = year;
                     }
                 }, year, month, day);
                 // disable dates before today
@@ -115,8 +118,9 @@ public class AddCreditOrGiftActivity extends AppCompatActivity {
             takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
             // check if camera app exists ?
-            if (takePictureIntent.resolveActivity(getPackageManager()) != null){
-                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);}
+            if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+            }
         }
     }
 
@@ -140,6 +144,17 @@ public class AddCreditOrGiftActivity extends AppCompatActivity {
             Uri ImageUri = data.getData();
             imgPic.setImageBitmap(picBitmap);
             isPICAP = true;
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.btnPlusShopNameID:
+                EditText edt = new EditText(this);
+                shops.addView(edt);
+
+
         }
     }
 }

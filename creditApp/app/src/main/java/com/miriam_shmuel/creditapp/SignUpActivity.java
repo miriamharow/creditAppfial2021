@@ -22,7 +22,6 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
@@ -59,7 +58,7 @@ public class SignUpActivity extends AppCompatActivity  {
             @Override
             public void onClick(View v) {
                 final String name = userName.getText().toString();
-                String email = emailId.getText().toString();
+                final String email = emailId.getText().toString();
                 String pwd = password.getText().toString();
                 String pwdAuth = pwdauth.getText().toString();
 
@@ -87,12 +86,13 @@ public class SignUpActivity extends AppCompatActivity  {
                     mFirebaseAuth.createUserWithEmailAndPassword(email, pwd).addOnCompleteListener(SignUpActivity.this, new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
+                            final String semail = email;
 
                             if(!task.isSuccessful()){
                                 Toast.makeText(SignUpActivity.this,"SignUp Unsuccessful, Please Try Again",Toast.LENGTH_SHORT).show();
                             }
                             else {
-                                addNewUserToDb(name);
+                                addNewUserToDb(name, semail);
 
                                 threadOff = true;
                                 Toast.makeText(SignUpActivity.this,"Success !",Toast.LENGTH_SHORT).show();
@@ -115,16 +115,16 @@ public class SignUpActivity extends AppCompatActivity  {
         threadAuthPwd();
     }
 
-    public void addNewUserToDb(String name) {
+    public void addNewUserToDb(String name, String email) {
         final Map<String, Object> newUser = new HashMap<>();
         newUser.put("Name",name);
-        db.collection("users")
-                .add(newUser)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+        db.collection("users").document(email)
+                .set(newUser)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
-                    public void onSuccess(DocumentReference documentReference) {
+                    public void onSuccess(Void aVoid) {
                         Toast.makeText(SignUpActivity.this, "add ", Toast.LENGTH_LONG).show();
-                        Log.d("", "DocumentSnapshot added with ID: " + documentReference.getId());
+                        //Log.d("", "DocumentSnapshot added with ID: " + documentReference.getId());
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
