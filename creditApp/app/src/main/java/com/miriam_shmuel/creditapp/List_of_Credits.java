@@ -1,9 +1,10 @@
 package com.miriam_shmuel.creditapp;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class List_of_Credits {
-    private List<Gift_Credit> lc;
+    private ArrayList<Gift_Credit> lc;
     private String type;
 
     public List_of_Credits() {
@@ -11,11 +12,11 @@ public class List_of_Credits {
         this.type = "Credits";
     }
 
-    public List<Gift_Credit> getLc() {
+    public ArrayList<Gift_Credit> getLc() {
         return lc;
     }
 
-    public void setLc(List<Gift_Credit> lc) {
+    public void setLc(ArrayList<Gift_Credit> lc) {
         this.lc = lc;
     }
 

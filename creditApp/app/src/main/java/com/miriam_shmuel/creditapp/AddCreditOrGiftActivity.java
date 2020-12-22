@@ -1,6 +1,7 @@
 package com.miriam_shmuel.creditapp;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -10,19 +11,23 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 
 public class AddCreditOrGiftActivity extends AppCompatActivity  implements View.OnClickListener {
@@ -42,6 +47,9 @@ public class AddCreditOrGiftActivity extends AppCompatActivity  implements View.
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     public boolean isPICAP = false;
     private Intent takePictureIntent;
+
+    public  ArrayList<String> listShopDia;
+    public ArrayAdapter adapterDia;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -108,6 +116,11 @@ public class AddCreditOrGiftActivity extends AppCompatActivity  implements View.
         });
         //---------------------------------------------------
 
+
+        //------------------LIST SHOP DIALOG-----------------
+        listShopDia = new ArrayList<String>();
+        //---------------------------------------------------
+
     }
 
     // get a picture from camera
@@ -151,10 +164,43 @@ public class AddCreditOrGiftActivity extends AppCompatActivity  implements View.
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btnPlusShopNameID:
-                EditText edt = new EditText(this);
-                shops.addView(edt);
-
-
+                addShopName();
         }
     }
+
+    private void addShopName() {
+        AlertDialog.Builder mBuilder = new AlertDialog.Builder(AddCreditOrGiftActivity.this);
+        final View dialogView = getLayoutInflater().inflate(R.layout.dialog_add_shop, null);
+        final EditText diaShopName = (EditText) dialogView.findViewById(R.id.edtDiaShopNameId);
+        final String shopName = diaShopName.getText().toString();
+
+        final ListView listViewDia = (ListView) dialogView.findViewById(R.id.listViewDiaID);
+        final Button diaBtnAddShop = (Button) dialogView.findViewById(R.id.btnDiaPlusShopNameID);
+
+        adapterDia = new ArrayAdapter(AddCreditOrGiftActivity.this, R.layout.item_shop_name, listShopDia);
+        listViewDia.setAdapter(adapterDia);
+        Toast.makeText(AddCreditOrGiftActivity.this, "Sbaba1", Toast.LENGTH_SHORT).show();
+
+        mBuilder.setView(dialogView);
+        final AlertDialog dialog = mBuilder.create();
+        dialog.show();
+
+        diaBtnAddShop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(!diaShopName.getText().toString().isEmpty())
+                {
+                    listShopDia.add("a");
+                    listShopDia.add("b");
+                    adapterDia.notifyDataSetChanged();
+                    dialog.show();
+                    Toast.makeText(AddCreditOrGiftActivity.this, "Sbaba3", Toast.LENGTH_SHORT).show();
+
+               }
+            }
+        });
+    }
 }
+
+
+
