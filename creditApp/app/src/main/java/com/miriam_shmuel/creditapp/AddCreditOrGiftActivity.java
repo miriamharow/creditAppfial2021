@@ -188,7 +188,7 @@ public class AddCreditOrGiftActivity extends AppCompatActivity  implements View.
         final View dialogViewItem = getLayoutInflater().inflate(R.layout.item_shop_name, null);
         final Button diaBtnRemoveShop = (Button) dialogViewItem.findViewById(R.id.btnRemoveId);
 
-        if(shopNameFromEdt != null) {
+        if(!shopNameFromEdt.isEmpty()) {
             trylist.add(shopNameFromEdt);
             adapter.notifyDataSetChanged();
         }
