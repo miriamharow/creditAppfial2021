@@ -9,8 +9,10 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -48,8 +50,8 @@ public class AddCreditOrGiftActivity extends AppCompatActivity  implements View.
     public boolean isPICAP = false;
     private Intent takePictureIntent;
 
-    public  ArrayList<String> listShopDia;
-    public ArrayAdapter adapterDia;
+    public ArrayList<String> listShopDia;
+    public ArrayAdapter<String> adapterDia;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -118,9 +120,8 @@ public class AddCreditOrGiftActivity extends AppCompatActivity  implements View.
 
 
         //------------------LIST SHOP DIALOG-----------------
-        listShopDia = new ArrayList<String>();
+        //listShopDia = new ArrayList<String>();
         //---------------------------------------------------
-
     }
 
     // get a picture from camera
@@ -164,43 +165,73 @@ public class AddCreditOrGiftActivity extends AppCompatActivity  implements View.
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btnPlusShopNameID:
-                addShopName();
+                addShopName(edtShopName.getText().toString());
+                edtShopName.setText(null);
         }
     }
 
-    private void addShopName() {
+    private void addShopName(final String shopNameFromEdt) {
+        ListView listView;
+        final DialogListShopName adapter;
         AlertDialog.Builder mBuilder = new AlertDialog.Builder(AddCreditOrGiftActivity.this);
-        final View dialogView = getLayoutInflater().inflate(R.layout.dialog_add_shop, null);
-        final EditText diaShopName = (EditText) dialogView.findViewById(R.id.edtDiaShopNameId);
-        final String shopName = diaShopName.getText().toString();
-
-        final ListView listViewDia = (ListView) dialogView.findViewById(R.id.listViewDiaID);
-        final Button diaBtnAddShop = (Button) dialogView.findViewById(R.id.btnDiaPlusShopNameID);
-
-        adapterDia = new ArrayAdapter(AddCreditOrGiftActivity.this, R.layout.item_shop_name, listShopDia);
-        listViewDia.setAdapter(adapterDia);
-        Toast.makeText(AddCreditOrGiftActivity.this, "Sbaba1", Toast.LENGTH_SHORT).show();
-
-        mBuilder.setView(dialogView);
+        final View dialogViewList = getLayoutInflater().inflate(R.layout.dialog_list_shop_name, null);
+        mBuilder.setView(dialogViewList);
         final AlertDialog dialog = mBuilder.create();
+        final EditText diaShopName = (EditText) dialogViewList.findViewById(R.id.edtDiaShopNameId);
+        final Button diaBtnAddShop = (Button) dialogViewList.findViewById(R.id.btnDiaPlusShopNameID);
+        final ArrayList <String> trylist = new ArrayList<String>();
         dialog.show();
+        listView = dialogViewList.findViewById(R.id.listViewDiaID);
+        adapter = new DialogListShopName(this, trylist);
+        listView.setAdapter(adapter);
+
+        final View dialogViewItem = getLayoutInflater().inflate(R.layout.item_shop_name, null);
+        final Button diaBtnRemoveShop = (Button) dialogViewItem.findViewById(R.id.btnRemoveId);
+
+        if(shopNameFromEdt != null) {
+            trylist.add(shopNameFromEdt);
+            adapter.notifyDataSetChanged();
+        }
 
         diaBtnAddShop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(!diaShopName.getText().toString().isEmpty())
                 {
-                    listShopDia.add("a");
-                    listShopDia.add("b");
-                    adapterDia.notifyDataSetChanged();
-                    dialog.show();
-                    Toast.makeText(AddCreditOrGiftActivity.this, "Sbaba3", Toast.LENGTH_SHORT).show();
+                    String shopname = diaShopName.getText().toString();
+                    int isExcist = 0;
+                    if(!trylist.isEmpty()) {
+                        for(int i=0; i< trylist.size(); i++)
+                            if(trylist.get(i).equals(shopname)) {
+                                isExcist = 1;
+                            }
+                    }
 
-               }
+                    if(isExcist == 0) {
+                        trylist.add(shopname);
+                        adapter.notifyDataSetChanged();
+                        diaShopName.setText(null);
+                    }
+
+                    if(isExcist == 1) {
+                        diaShopName.setText(null);
+                        Toast.makeText(AddCreditOrGiftActivity.this, "SHOP NEM IS EXCIST!", Toast.LENGTH_LONG).show();
+                    }
+
+                }
+            }
+        });
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
+        {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+            {
+               String str = trylist.get(position);
+               trylist.remove(str);
+               adapter.notifyDataSetChanged();
             }
         });
     }
+
 }
-
-
-
