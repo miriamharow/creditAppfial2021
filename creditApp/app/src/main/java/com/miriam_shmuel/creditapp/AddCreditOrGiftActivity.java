@@ -9,7 +9,6 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
@@ -34,13 +33,14 @@ import java.util.Calendar;
 
 public class AddCreditOrGiftActivity extends AppCompatActivity  implements View.OnClickListener {
     private RadioButton rCredit, rGift;
-    private EditText edtShopName, edtCreditBarCodeID;
-    private TextView editDateText;
-    private ImageView imgPic;
+    private EditText edtShopNameGC, edtCreditBarCodeIDGC;
+    private TextView editDateTextGC;
+    private ImageView imgPicGC;
     private Bitmap picBitmap;
     private FloatingActionButton fab;
     private Button btnSave, btnPlusShopName;
-    private LinearLayout shops;
+    private LinearLayout shops, gift_credit_view, warranty_view;
+
 
     private Calendar calender;
     private int day, month, year;
@@ -58,10 +58,10 @@ public class AddCreditOrGiftActivity extends AppCompatActivity  implements View.
         setContentView(R.layout.activity_add_credit_gift);
         rCredit = findViewById(R.id.radioCreditID);
         rGift = findViewById(R.id.radioGiftID);
-        edtShopName = findViewById(R.id.edtShopNameID);
-        edtCreditBarCodeID = findViewById(R.id.edtCreditBarCodeID);
-        editDateText = findViewById(R.id.editDateTextID);
-        imgPic = findViewById(R.id.imgPicID);
+        edtShopNameGC = findViewById(R.id.edtShopNameIDGC);
+        edtCreditBarCodeIDGC = findViewById(R.id.edtCreditBarCodeIDGC);
+        editDateTextGC = findViewById(R.id.editDateTextIDGC);
+        imgPicGC = findViewById(R.id.imgPicIDGC);
 
         btnSave = findViewById(R.id.btnSaveID);
         //btnSave.setOnClickListener(this);
@@ -78,6 +78,8 @@ public class AddCreditOrGiftActivity extends AppCompatActivity  implements View.
         });
 
         shops = findViewById(R.id.shops);
+        gift_credit_view = findViewById(R.id.gift_credit_layout);
+        warranty_view = findViewById(R.id.warranty_layout);
 
         //--------------------FULL SCREEN--------------------
         // Hide the Activity Status Bar
@@ -95,16 +97,15 @@ public class AddCreditOrGiftActivity extends AppCompatActivity  implements View.
         year = calender.get(Calendar.YEAR);
         //---------------------------------------------------
 
-
         //-----------------DATE PICKER DIALOG----------------
-        editDateText.setOnClickListener(new View.OnClickListener() {
+        editDateTextGC.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 DatePickerDialog datePickerDialog = new DatePickerDialog(AddCreditOrGiftActivity.this, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                        editDateText.setText(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year);
+                        editDateTextGC.setText(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year);
 
                         dayED = day;
                         monthED = month + 1;
@@ -122,6 +123,30 @@ public class AddCreditOrGiftActivity extends AppCompatActivity  implements View.
         //------------------LIST SHOP DIALOG-----------------
         //listShopDia = new ArrayList<String>();
         //---------------------------------------------------
+    }
+
+    public void onRadioButtonClicked(View view) {
+        // Is the button now checked?
+        boolean checked = ((RadioButton) view).isChecked();
+
+        // Check which radio button was clicked
+        switch(view.getId()) {
+            case R.id.radioCreditID:
+                if (checked)
+                    gift_credit_view.setVisibility(View.VISIBLE);
+                    warranty_view.setVisibility(View.GONE);
+                    break;
+            case R.id.radioGiftID:
+                if (checked)
+                    gift_credit_view.setVisibility(View.VISIBLE);
+                    warranty_view.setVisibility(View.GONE);
+                    break;
+            case R.id.radioWarrantyID:
+                if (checked)
+                    gift_credit_view.setVisibility(View.GONE);
+                    warranty_view.setVisibility(View.VISIBLE);
+                break;
+        }
     }
 
     // get a picture from camera
@@ -156,7 +181,7 @@ public class AddCreditOrGiftActivity extends AppCompatActivity  implements View.
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             picBitmap = (Bitmap) data.getExtras().get("data"); // get picture as thumbnail
             Uri ImageUri = data.getData();
-            imgPic.setImageBitmap(picBitmap);
+            imgPicGC.setImageBitmap(picBitmap);
             isPICAP = true;
         }
     }
@@ -165,8 +190,8 @@ public class AddCreditOrGiftActivity extends AppCompatActivity  implements View.
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btnPlusShopNameID:
-                addShopName(edtShopName.getText().toString());
-                edtShopName.setText(null);
+                addShopName(edtShopNameGC.getText().toString());
+                edtShopNameGC.setText(null);
         }
     }
 
@@ -199,23 +224,23 @@ public class AddCreditOrGiftActivity extends AppCompatActivity  implements View.
                 if(!diaShopName.getText().toString().isEmpty())
                 {
                     String shopname = diaShopName.getText().toString();
-                    int isExcist = 0;
+                    int isExist = 0;
                     if(!trylist.isEmpty()) {
                         for(int i=0; i< trylist.size(); i++)
                             if(trylist.get(i).equals(shopname)) {
-                                isExcist = 1;
+                                isExist = 1;
                             }
                     }
 
-                    if(isExcist == 0) {
+                    if(isExist == 0) {
                         trylist.add(shopname);
                         adapter.notifyDataSetChanged();
                         diaShopName.setText(null);
                     }
 
-                    if(isExcist == 1) {
+                    if(isExist == 1) {
                         diaShopName.setText(null);
-                        Toast.makeText(AddCreditOrGiftActivity.this, "SHOP NEM IS EXCIST!", Toast.LENGTH_LONG).show();
+                        Toast.makeText(AddCreditOrGiftActivity.this, "SHOP NAME EXISTS!", Toast.LENGTH_LONG).show();
                     }
 
                 }
