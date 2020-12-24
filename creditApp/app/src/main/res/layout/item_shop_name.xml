@@ -26,6 +26,6 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:drawableRight="@drawable/ic_minus"
-            android:background="@color/cardview_light_background"/>
+            android:background="@color/cardview_light_background" />
     </LinearLayout>
 </LinearLayout>

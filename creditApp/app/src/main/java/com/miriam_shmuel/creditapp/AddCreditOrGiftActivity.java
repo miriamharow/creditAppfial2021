@@ -198,7 +198,7 @@ public class AddCreditOrGiftActivity extends AppCompatActivity  implements View.
     private void addShopName(final String shopNameFromEdt) {
         ListView listView;
         final DialogListShopName adapter;
-        AlertDialog.Builder mBuilder = new AlertDialog.Builder(AddCreditOrGiftActivity.this);
+        final AlertDialog.Builder mBuilder = new AlertDialog.Builder(AddCreditOrGiftActivity.this);
         final View dialogViewList = getLayoutInflater().inflate(R.layout.dialog_list_shop_name, null);
         mBuilder.setView(dialogViewList);
         final AlertDialog dialog = mBuilder.create();
@@ -209,6 +209,7 @@ public class AddCreditOrGiftActivity extends AppCompatActivity  implements View.
         listView = dialogViewList.findViewById(R.id.listViewDiaID);
         adapter = new DialogListShopName(this, trylist);
         listView.setAdapter(adapter);
+        final Button diaSaveShops = (Button) dialogViewList.findViewById(R.id.btnSaveShopsID);
 
         final View dialogViewItem = getLayoutInflater().inflate(R.layout.item_shop_name, null);
         final Button diaBtnRemoveShop = (Button) dialogViewItem.findViewById(R.id.btnRemoveId);
@@ -217,6 +218,18 @@ public class AddCreditOrGiftActivity extends AppCompatActivity  implements View.
             trylist.add(shopNameFromEdt);
             adapter.notifyDataSetChanged();
         }
+
+        diaSaveShops.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                trylist.add(diaShopName.getText().toString());
+                listShopDia = trylist;
+                dialog.cancel();
+                String str = "";
+                
+
+            }
+        });
 
         diaBtnAddShop.setOnClickListener(new View.OnClickListener() {
             @Override
