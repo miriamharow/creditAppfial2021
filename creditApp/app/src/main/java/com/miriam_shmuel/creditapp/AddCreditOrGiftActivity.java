@@ -38,7 +38,7 @@ public class AddCreditOrGiftActivity extends AppCompatActivity  implements View.
     private ImageView imgPicGC;
     private Bitmap picBitmap;
     private FloatingActionButton fab;
-    private Button btnSave, btnPlusShopName;
+    private Button btnSaveGC, btnPlusShopName, btnSaveW;
     private LinearLayout shops, gift_credit_view, warranty_view;
 
 
@@ -63,7 +63,8 @@ public class AddCreditOrGiftActivity extends AppCompatActivity  implements View.
         editDateTextGC = findViewById(R.id.editDateTextIDGC);
         imgPicGC = findViewById(R.id.imgPicIDGC);
 
-        btnSave = findViewById(R.id.btnSaveID);
+        btnSaveGC = findViewById(R.id.btnSaveIDGC);
+        btnSaveW = findViewById(R.id.btnSaveIDW);
         //btnSave.setOnClickListener(this);
 
         btnPlusShopName = findViewById(R.id.btnPlusShopNameID);
@@ -132,19 +133,24 @@ public class AddCreditOrGiftActivity extends AppCompatActivity  implements View.
         // Check which radio button was clicked
         switch(view.getId()) {
             case R.id.radioCreditID:
-                if (checked)
+                if (checked) {
                     gift_credit_view.setVisibility(View.VISIBLE);
-                warranty_view.setVisibility(View.GONE);
+                    warranty_view.setVisibility(View.GONE);
+                    btnPlusShopName.setVisibility(View.GONE);
+                }
                 break;
             case R.id.radioGiftID:
-                if (checked)
+                if (checked) {
                     gift_credit_view.setVisibility(View.VISIBLE);
-                warranty_view.setVisibility(View.GONE);
+                    warranty_view.setVisibility(View.GONE);
+                    btnPlusShopName.setVisibility(View.VISIBLE);
+                }
                 break;
             case R.id.radioWarrantyID:
-                if (checked)
+                if (checked) {
                     gift_credit_view.setVisibility(View.GONE);
-                warranty_view.setVisibility(View.VISIBLE);
+                    warranty_view.setVisibility(View.VISIBLE);
+                }
                 break;
         }
     }
@@ -224,7 +230,8 @@ public class AddCreditOrGiftActivity extends AppCompatActivity  implements View.
             public void onClick(View view) {
                 trylist.add(diaShopName.getText().toString());
                 listShopDia = trylist;
-                dialog.cancel();
+                //dialog.cancel();
+                Toast.makeText(AddCreditOrGiftActivity.this, listShopDia.toString(), Toast.LENGTH_LONG).show();
                 String str = "";
 
 
