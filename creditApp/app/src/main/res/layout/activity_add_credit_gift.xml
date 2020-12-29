@@ -162,8 +162,16 @@
                 android:layout_marginBottom="16dp"
                 android:layout_weight="1"
                 android:src="@drawable/ic_camera" />
-
         </RelativeLayout>
+        <Button
+            android:id="@+id/btnSaveIDGC"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="SAVE"
+            android:textColor="#00264d"
+            app:fontFamily="casual" />
+
     </LinearLayout>
 
     <LinearLayout
@@ -270,16 +278,17 @@
                     android:src="@drawable/ic_camera" />
 
             </RelativeLayout>
+            <Button
+                android:id="@+id/btnSaveID"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="SAVE"
+                android:textColor="#00264d"
+                app:fontFamily="casual" />
         </LinearLayout>
 
-        <Button
-            android:id="@+id/btnSaveID"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:text="SAVE"
-            android:textColor="#00264d"
-            app:fontFamily="casual" />
+
 
     </LinearLayout>
 </LinearLayout>
