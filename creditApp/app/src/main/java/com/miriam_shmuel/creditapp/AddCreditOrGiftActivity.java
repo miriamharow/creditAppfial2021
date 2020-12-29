@@ -134,17 +134,17 @@ public class AddCreditOrGiftActivity extends AppCompatActivity  implements View.
             case R.id.radioCreditID:
                 if (checked)
                     gift_credit_view.setVisibility(View.VISIBLE);
-                    warranty_view.setVisibility(View.GONE);
-                    break;
+                warranty_view.setVisibility(View.GONE);
+                break;
             case R.id.radioGiftID:
                 if (checked)
                     gift_credit_view.setVisibility(View.VISIBLE);
-                    warranty_view.setVisibility(View.GONE);
-                    break;
+                warranty_view.setVisibility(View.GONE);
+                break;
             case R.id.radioWarrantyID:
                 if (checked)
                     gift_credit_view.setVisibility(View.GONE);
-                    warranty_view.setVisibility(View.VISIBLE);
+                warranty_view.setVisibility(View.VISIBLE);
                 break;
         }
     }
@@ -226,7 +226,7 @@ public class AddCreditOrGiftActivity extends AppCompatActivity  implements View.
                 listShopDia = trylist;
                 dialog.cancel();
                 String str = "";
-                
+
 
             }
         });
@@ -265,9 +265,9 @@ public class AddCreditOrGiftActivity extends AppCompatActivity  implements View.
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id)
             {
-               String str = trylist.get(position);
-               trylist.remove(str);
-               adapter.notifyDataSetChanged();
+                String str = trylist.get(position);
+                trylist.remove(str);
+                adapter.notifyDataSetChanged();
             }
         });
     }

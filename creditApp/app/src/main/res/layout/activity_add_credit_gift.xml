@@ -19,7 +19,7 @@
         android:textSize="30dp" />
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="5dp">
@@ -27,11 +27,12 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="vertical">
 
             <RadioGroup
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:orientation="horizontal"
                 android:layout_weight="1">
 
                 <RadioButton
@@ -39,24 +40,24 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Gift"
-                    android:onClick="onRadioButtonClicked"/>
+                    android:onClick="onRadioButtonClicked"
+                    android:text="Gift" />
 
                 <RadioButton
                     android:id="@+id/radioCreditID"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Credit"
-                    android:onClick="onRadioButtonClicked"/>
+                    android:onClick="onRadioButtonClicked"
+                    android:text="Credit" />
 
                 <RadioButton
                     android:id="@+id/radioWarrantyID"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Warranty"
-                    android:onClick="onRadioButtonClicked"/>
+                    android:onClick="onRadioButtonClicked"
+                    android:text="Warranty" />
             </RadioGroup>
 
         </LinearLayout>
@@ -210,75 +211,75 @@
                     android:textSize="15dp"
                     app:fontFamily="casual" />
 
+            </LinearLayout>
+
+            <EditText
+                android:id="@+id/edtCreditBarCodeIDW"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:gravity="center"
+                android:hint="BAR CODE NUMBER"
+                android:inputType="number"
+                android:textAppearance="@style/TextAppearance.AppCompat.Display4"
+                android:textColor="#00264d"
+                android:textSize="15dp"
+                app:fontFamily="casual" />
+
+            <TextView
+                android:id="@+id/editDateTextIDW"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:ems="10"
+                android:gravity="center"
+                android:hint="EXPIRATION DATE"
+                android:textAppearance="@style/TextAppearance.AppCompat.Display4"
+                android:textColor="#00264d"
+                android:textSize="15dp"
+                app:fontFamily="casual" />
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <ImageView
+                    android:id="@+id/imgPicIDW"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="10dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/ic_receipt" />
+
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/fabW"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:layout_weight="1"
+                    android:src="@drawable/ic_camera" />
+
+            </RelativeLayout>
         </LinearLayout>
 
-        <EditText
-            android:id="@+id/edtCreditBarCodeIDW"
+        <Button
+            android:id="@+id/btnSaveID"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
-            android:gravity="center"
-            android:hint="BAR CODE NUMBER"
-            android:inputType="number"
-            android:textAppearance="@style/TextAppearance.AppCompat.Display4"
+            android:text="SAVE"
             android:textColor="#00264d"
-            android:textSize="15dp"
             app:fontFamily="casual" />
 
-        <TextView
-            android:id="@+id/editDateTextIDW"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:ems="10"
-            android:gravity="center"
-            android:hint="EXPIRATION DATE"
-            android:textAppearance="@style/TextAppearance.AppCompat.Display4"
-            android:textColor="#00264d"
-            android:textSize="15dp"
-            app:fontFamily="casual" />
-
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1">
-
-            <ImageView
-                android:id="@+id/imgPicIDW"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="10dp"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:scaleType="fitXY"
-                android:src="@drawable/ic_receipt" />
-
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/fabW"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentBottom="true"
-                android:layout_marginStart="16dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginBottom="16dp"
-                android:layout_weight="1"
-                android:src="@drawable/ic_camera" />
-
-        </RelativeLayout>
     </LinearLayout>
-
-    <Button
-        android:id="@+id/btnSaveID"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:text="SAVE"
-        android:textColor="#00264d"
-        app:fontFamily="casual" />
-
-</LinearLayout>
 </LinearLayout>
