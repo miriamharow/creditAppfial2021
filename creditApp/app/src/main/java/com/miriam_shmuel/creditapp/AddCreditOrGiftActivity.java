@@ -27,6 +27,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -40,6 +42,10 @@ public class AddCreditOrGiftActivity extends AppCompatActivity  implements View.
     private FloatingActionButton fab;
     private Button btnSaveGC, btnPlusShopName, btnSaveW;
     private LinearLayout shops, gift_credit_view, warranty_view;
+    private String type = "";
+
+    FirebaseAuth mFirebaseAuth;
+    FirebaseFirestore db;
 
 
     private Calendar calender;
@@ -53,6 +59,10 @@ public class AddCreditOrGiftActivity extends AppCompatActivity  implements View.
     public ArrayList<String> listShopDia;
     public ArrayAdapter<String> adapterDia;
 
+    public ArrayList<Shop> shopsList;
+
+
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_credit_gift);
@@ -65,7 +75,7 @@ public class AddCreditOrGiftActivity extends AppCompatActivity  implements View.
 
         btnSaveGC = findViewById(R.id.btnSaveIDGC);
         btnSaveW = findViewById(R.id.btnSaveIDW);
-        //btnSave.setOnClickListener(this);
+
 
         btnPlusShopName = findViewById(R.id.btnPlusShopNameID);
         btnPlusShopName.setOnClickListener(this);
@@ -81,6 +91,11 @@ public class AddCreditOrGiftActivity extends AppCompatActivity  implements View.
         shops = findViewById(R.id.shops);
         gift_credit_view = findViewById(R.id.gift_credit_layout);
         warranty_view = findViewById(R.id.warranty_layout);
+
+        db= FirebaseFirestore.getInstance();
+        mFirebaseAuth = FirebaseAuth.getInstance();
+
+        shopsList = new ArrayList<Shop>();
 
         //--------------------FULL SCREEN--------------------
         // Hide the Activity Status Bar
@@ -124,6 +139,13 @@ public class AddCreditOrGiftActivity extends AppCompatActivity  implements View.
         //------------------LIST SHOP DIALOG-----------------
         //listShopDia = new ArrayList<String>();
         //---------------------------------------------------
+
+        btnSaveGC.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                saveGC();
+            }
+        });
     }
 
     public void onRadioButtonClicked(View view) {
@@ -137,6 +159,7 @@ public class AddCreditOrGiftActivity extends AppCompatActivity  implements View.
                     gift_credit_view.setVisibility(View.VISIBLE);
                     warranty_view.setVisibility(View.GONE);
                     btnPlusShopName.setVisibility(View.GONE);
+                    type = "Credit";
                 }
                 break;
             case R.id.radioGiftID:
@@ -144,12 +167,14 @@ public class AddCreditOrGiftActivity extends AppCompatActivity  implements View.
                     gift_credit_view.setVisibility(View.VISIBLE);
                     warranty_view.setVisibility(View.GONE);
                     btnPlusShopName.setVisibility(View.VISIBLE);
+                    type = "Gift";
                 }
                 break;
             case R.id.radioWarrantyID:
                 if (checked) {
                     gift_credit_view.setVisibility(View.GONE);
                     warranty_view.setVisibility(View.VISIBLE);
+                    type = "Warranty";
                 }
                 break;
         }
@@ -168,6 +193,8 @@ public class AddCreditOrGiftActivity extends AppCompatActivity  implements View.
             }
         }
     }
+
+
 
     // Check if CAMERA Permission granted ?
     public boolean isCameraPermissionGranted() {
@@ -198,25 +225,41 @@ public class AddCreditOrGiftActivity extends AppCompatActivity  implements View.
             case R.id.btnPlusShopNameID:
                 addShopName(edtShopNameGC.getText().toString());
                 edtShopNameGC.setText(null);
+                break;
         }
     }
 
+
+
+    private void saveGC() {
+        Toast.makeText(AddCreditOrGiftActivity.this, "ENTERED", Toast.LENGTH_LONG).show();
+        List_of_Credits list_of_credits = new List_of_Credits();
+        list_of_credits.addCredit(null, "Credit", 25, null, shopsList);
+        Toast.makeText(AddCreditOrGiftActivity.this, "TEST", Toast.LENGTH_LONG).show();
+    }
+
+
+
     private void addShopName(final String shopNameFromEdt) {
         ListView listView;
-        final DialogListShopName adapter;
+        final AdapterShop adapter;
         final AlertDialog.Builder mBuilder = new AlertDialog.Builder(AddCreditOrGiftActivity.this);
         final View dialogViewList = getLayoutInflater().inflate(R.layout.dialog_list_shop_name, null);
         mBuilder.setView(dialogViewList);
         final AlertDialog dialog = mBuilder.create();
+
         final EditText diaShopName = (EditText) dialogViewList.findViewById(R.id.edtDiaShopNameId);
         final Button diaBtnAddShop = (Button) dialogViewList.findViewById(R.id.btnDiaPlusShopNameID);
         final ArrayList <String> trylist = new ArrayList<String>();
-        dialog.show();
-        listView = dialogViewList.findViewById(R.id.listViewDiaID);
-        adapter = new DialogListShopName(this, trylist);
-        listView.setAdapter(adapter);
-        final Button diaSaveShops = (Button) dialogViewList.findViewById(R.id.btnSaveShopsID);
 
+        dialog.show();
+
+        listView = dialogViewList.findViewById(R.id.listViewDiaID);
+
+        adapter = new AdapterShop(this, trylist);
+        listView.setAdapter(adapter);
+
+        final Button diaSaveShops = (Button) dialogViewList.findViewById(R.id.btnSaveShopsID);
         final View dialogViewItem = getLayoutInflater().inflate(R.layout.item_shop_name, null);
         final Button diaBtnRemoveShop = (Button) dialogViewItem.findViewById(R.id.btnRemoveId);
 
@@ -230,7 +273,7 @@ public class AddCreditOrGiftActivity extends AppCompatActivity  implements View.
             public void onClick(View view) {
                 trylist.add(diaShopName.getText().toString());
                 listShopDia = trylist;
-                //dialog.cancel();
+                dialog.cancel();
                 Toast.makeText(AddCreditOrGiftActivity.this, listShopDia.toString(), Toast.LENGTH_LONG).show();
                 String str = "";
 
@@ -253,6 +296,8 @@ public class AddCreditOrGiftActivity extends AppCompatActivity  implements View.
                     }
 
                     if(isExist == 0) {
+                        Shop shop = new Shop(shopname);
+                        shopsList.add(shop);
                         trylist.add(shopname);
                         adapter.notifyDataSetChanged();
                         diaShopName.setText(null);
@@ -272,8 +317,8 @@ public class AddCreditOrGiftActivity extends AppCompatActivity  implements View.
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id)
             {
-                String str = trylist.get(position);
-                trylist.remove(str);
+                Toast.makeText(AddCreditOrGiftActivity.this, "OK", Toast.LENGTH_LONG).show();
+                trylist.remove(position);
                 adapter.notifyDataSetChanged();
             }
         });

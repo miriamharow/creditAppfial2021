@@ -10,12 +10,12 @@ public class Gift_Credit {
     private List<Shop> shopName;
     private boolean used;
 
-    public Gift_Credit(String picture, String type, int barCode, Date expirationDate) {
+    public Gift_Credit(String picture, String type, int barCode, Date expirationDate, List<Shop> shopName) {
         this.picture = picture;
         this.type = type;
         this.barCode = barCode;
         this.expirationDate = expirationDate;
-        this.shopName = null;
+        this.shopName = shopName;
         this.used = false;
     }
 
@@ -58,6 +58,8 @@ public class Gift_Credit {
     public void setShopName(List<Shop> shopName) {
         this.shopName = shopName;
     }
+
+
 
 
 }
