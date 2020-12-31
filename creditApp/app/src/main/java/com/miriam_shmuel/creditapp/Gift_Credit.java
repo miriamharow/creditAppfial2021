@@ -1,16 +1,18 @@
 package com.miriam_shmuel.creditapp;
 
-import java.util.Date;
-import java.util.List;
+import java.util.ArrayList;
 
 public class Gift_Credit {
     private String picture, type;
-    private int barCode;
-    private Date expirationDate;
-    private List<Shop> shopName;
+    private String barCode;
+    private String expirationDate;
+    private ArrayList<Shop> shopName;
+
+
+
     private boolean used;
 
-    public Gift_Credit(String picture, String type, int barCode, Date expirationDate, List<Shop> shopName) {
+    public Gift_Credit(String picture, String type, String barCode, String expirationDate, ArrayList<Shop> shopName) {
         this.picture = picture;
         this.type = type;
         this.barCode = barCode;
@@ -35,31 +37,37 @@ public class Gift_Credit {
         this.type = type;
     }
 
-    public int getBarCode() {
+    public String getBarCode() {
         return barCode;
     }
 
-    public void setBarCode(int barCode) {
+    public void setBarCode(String barCode) {
         this.barCode = barCode;
     }
 
-    public Date getExpirationDate() {
+    public String getExpirationDate() {
         return expirationDate;
     }
 
-    public void setExpirationDate(Date expirationDate) {
+    public void setExpirationDate(String expirationDate) {
         this.expirationDate = expirationDate;
     }
 
-    public List<Shop> getShopName() {
+    public ArrayList<Shop> getShopName() {
         return shopName;
     }
 
-    public void setShopName(List<Shop> shopName) {
+    public void setShopName(ArrayList<Shop> shopName) {
         this.shopName = shopName;
     }
 
+    public boolean isUsed() {
+        return used;
+    }
 
+    public void setUsed(boolean used) {
+        this.used = used;
+    }
 
 
 }

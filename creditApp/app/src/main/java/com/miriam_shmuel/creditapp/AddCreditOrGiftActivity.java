@@ -52,6 +52,8 @@ public class AddCreditOrGiftActivity extends AppCompatActivity  implements View.
     private int day, month, year;
     private int dayED, monthED, yearED;
 
+    private String dateExp = "";
+
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     public boolean isPICAP = false;
     private Intent takePictureIntent;
@@ -121,7 +123,8 @@ public class AddCreditOrGiftActivity extends AppCompatActivity  implements View.
                 DatePickerDialog datePickerDialog = new DatePickerDialog(AddCreditOrGiftActivity.this, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                        editDateTextGC.setText(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year);
+                        dateExp = dayOfMonth + "/" + (monthOfYear + 1) + "/" + year;
+                        editDateTextGC.setText(dateExp);
 
                         dayED = day;
                         monthED = month + 1;
@@ -232,10 +235,25 @@ public class AddCreditOrGiftActivity extends AppCompatActivity  implements View.
 
 
     private void saveGC() {
-        Toast.makeText(AddCreditOrGiftActivity.this, "ENTERED", Toast.LENGTH_LONG).show();
+
         List_of_Credits list_of_credits = new List_of_Credits();
-        list_of_credits.addCredit(null, "Credit", 25, null, shopsList);
-        Toast.makeText(AddCreditOrGiftActivity.this, "TEST", Toast.LENGTH_LONG).show();
+        Shop s = new Shop(shops.toString());
+        shopsList.add(s);
+        //int barc = Integer.parseInt(edtCreditBarCodeIDGC.getText().toString());
+        //Toast.makeText(AddCreditOrGiftActivity.this, barc, Toast.LENGTH_LONG).show();
+        list_of_credits.addCredit(null, "Credit", edtCreditBarCodeIDGC.getText().toString(), dateExp, shopsList);
+
+        list_of_credits.readData();
+
+
+
+
+/*Toast.makeText(AddCreditOrGiftActivity.this, "1", Toast.LENGTH_SHORT).show();
+                ArrayList<Shop> ls = gc.getShopName();
+
+                Toast.makeText(AddCreditOrGiftActivity.this, ls.get(0).getName(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(AddCreditOrGiftActivity.this, "3", Toast.LENGTH_SHORT).show();*/
+
     }
 
 
