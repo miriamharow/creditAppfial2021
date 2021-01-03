@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -39,12 +40,11 @@ import com.google.firebase.auth.FirebaseAuth;
                 @Override
                 public void onClick(View view) {
                     //threadOff = false;
-                    Intent intent = new Intent(HomeActivity.this, AddCreditOrGiftActivity.class);
+                    Intent intent = new Intent(HomeActivity.this, AddActivity.class);
                     startActivity(intent);
                 }
             });
             //---------------------------------------------------
-
         }
 
         @Override

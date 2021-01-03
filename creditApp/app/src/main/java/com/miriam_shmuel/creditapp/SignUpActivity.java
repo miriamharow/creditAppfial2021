@@ -2,6 +2,7 @@ package com.miriam_shmuel.creditapp;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.os.SystemClock;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
@@ -92,8 +93,8 @@ public class SignUpActivity extends AppCompatActivity  {
                                 Toast.makeText(SignUpActivity.this,"SignUp Unsuccessful, Please Try Again",Toast.LENGTH_SHORT).show();
                             }
                             else {
-                                addNewUserToDb(name, semail);
-
+                                User user = new  User (name , email);
+                                addNewUserToDb(user);
                                 threadOff = true;
                                 Toast.makeText(SignUpActivity.this,"Success !",Toast.LENGTH_SHORT).show();
                                 finish();
@@ -101,6 +102,7 @@ public class SignUpActivity extends AppCompatActivity  {
                                 intToHome.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
                                         Intent.FLAG_ACTIVITY_CLEAR_TASK |
                                         Intent.FLAG_ACTIVITY_NEW_TASK);
+                               //intToHome.putExtra("currentUser", (Parcelable) user);
                                 startActivity(intToHome);
                             }
                         }
@@ -115,15 +117,15 @@ public class SignUpActivity extends AppCompatActivity  {
         threadAuthPwd();
     }
 
-    public void addNewUserToDb(String name, String email) {
+    public void addNewUserToDb(User user) {
         final Map<String, Object> newUser = new HashMap<>();
-        newUser.put("Name",name);
-        db.collection("users").document(email)
+        newUser.put("user",user);
+        db.collection(user.getEmail()).document("user")
                 .set(newUser)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        Toast.makeText(SignUpActivity.this, "add ", Toast.LENGTH_LONG).show();
+                        Toast.makeText(SignUpActivity.this, "create new user", Toast.LENGTH_LONG).show();
                         //Log.d("", "DocumentSnapshot added with ID: " + documentReference.getId());
                     }
                 })

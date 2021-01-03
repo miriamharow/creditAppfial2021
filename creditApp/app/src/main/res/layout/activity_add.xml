@@ -7,16 +7,16 @@
     android:layout_weight="1"
     android:orientation="vertical"
     app:backgroundTint="@android:color/white"
-    tools:context=".AddCreditOrGiftActivity">
+    tools:context=".AddActivity">
 
     <TextView
         android:id="@+id/titleID"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="+ ADD CREDIT"
+        android:text="+ADD"
         android:textAppearance="@style/TextAppearance.AppCompat.Display4"
-        android:textSize="30dp" />
+        android:textSize="10dp" />
 
     <LinearLayout
         android:layout_width="match_parent"

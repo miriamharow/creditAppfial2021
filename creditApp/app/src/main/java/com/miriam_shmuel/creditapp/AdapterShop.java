@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,10 +21,7 @@ public class AdapterShop extends ArrayAdapter<String> {
     AdapterShop(Context c, ArrayList<String> rows) {
         super(c, R.layout.item_shop_name, R.id.itemId, rows);
         this.context = c;
-
     }
-
-
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -32,10 +30,11 @@ public class AdapterShop extends ArrayAdapter<String> {
         TextView shop = row.findViewById(R.id.itemId);
         Button btnRow = row.findViewById(R.id.btnRemoveId);
 
-
-
-        //shop.setText(rows);
-
+        LayoutInflater layoutInflater1 = (LayoutInflater) context.getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View dialog = layoutInflater1.inflate(R.layout.dialog_list_shop_name, parent, false);
+        EditText inputUser = (EditText) dialog.findViewById(R.id.edtDiaShopNameId);
+        shop.setText(inputUser.getText().toString());
+        Toast.makeText(context,inputUser.getText().toString() , Toast.LENGTH_SHORT).show();
 
         btnRow.setOnClickListener(new View.OnClickListener() {
             @Override
