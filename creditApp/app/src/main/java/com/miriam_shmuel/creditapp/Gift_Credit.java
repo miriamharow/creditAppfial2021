@@ -3,22 +3,22 @@ package com.miriam_shmuel.creditapp;
 import java.util.ArrayList;
 
 public class Gift_Credit {
-    private String picture, type;
+    private String picture;
+    private String type;
+    private String key;
     private String barCode;
     private String expirationDate;
     private ArrayList<Shop> shopName;
-
-
-
     private boolean used;
 
-    public Gift_Credit(String picture, String type, String barCode, String expirationDate, ArrayList<Shop> shopName) {
+    public Gift_Credit(String picture, String barCode, String expirationDate, ArrayList<Shop> shopName) {
         this.picture = picture;
-        this.type = type;
+        this.type = "credit";
         this.barCode = barCode;
         this.expirationDate = expirationDate;
         this.shopName = shopName;
         this.used = false;
+        this.key = shopName.get(0).getName()+barCode;
     }
 
     public String getPicture() {
@@ -69,5 +69,11 @@ public class Gift_Credit {
         this.used = used;
     }
 
+    public String getKey() {
+        return key;
+    }
 
+    public void setKey(String key) {
+        this.key = key;
+    }
 }

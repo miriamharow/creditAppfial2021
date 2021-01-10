@@ -52,9 +52,6 @@ public class AddActivity extends AppCompatActivity  implements View.OnClickListe
     private Button btnSaveGC, btnPlusShopName, btnSaveW;
     private LinearLayout shops, gift_credit_view, warranty_view;
 
-    FirebaseAuth mFirebaseAuth;
-    FirebaseFirestore db;
-
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     public boolean isPICAP = false;
     private Intent takePictureIntent;
@@ -68,11 +65,13 @@ public class AddActivity extends AppCompatActivity  implements View.OnClickListe
 
     public Uri ImageUri;
 
-    public ArrayList<String> listShopDia;
-    public ArrayAdapter<String> adapterDia;
+    public static AddActivity instance;
     public ArrayList<Shop> shopsList;
 
     private StorageReference storageRef;
+    ArrayList<String> loo = new ArrayList<String>();
+    ListView listView;
+    AdapterShop adapter;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -108,10 +107,8 @@ public class AddActivity extends AppCompatActivity  implements View.OnClickListe
             }
         });
 
-        db= FirebaseFirestore.getInstance();
-        mFirebaseAuth = FirebaseAuth.getInstance();
-
         shopsList = new ArrayList<Shop>();
+        instance = this;
 
         //--------------------FULL SCREEN--------------------
         // Hide the Activity Status Bar
@@ -151,18 +148,13 @@ public class AddActivity extends AppCompatActivity  implements View.OnClickListe
             }
         });
         //---------------------------------------------------
-
-
-        //------------------LIST SHOP DIALOG-----------------
-        //listShopDia = new ArrayList<String>();
-        //---------------------------------------------------
     }
 
     public void onRadioButtonClicked(View view) {
         // Is the button now checked?
         boolean checked = ((RadioButton) view).isChecked();
         // Check which radio button was clicked
-        switch(view.getId()) {
+        switch (view.getId()) {
             case R.id.radioCreditID:
                 if (checked) {
                     gift_credit_view.setVisibility(View.VISIBLE);
@@ -207,8 +199,7 @@ public class AddActivity extends AppCompatActivity  implements View.OnClickListe
         // check if permission for READ_CONTACTS is granted ?
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
             return true;
-        }
-        else {
+        } else {
             // show requestPermissions dialog
             ActivityCompat.requestPermissions(AddActivity.this, new String[]{Manifest.permission.CAMERA}, 111);
             return false;
@@ -230,35 +221,39 @@ public class AddActivity extends AppCompatActivity  implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btnPlusShopNameID:
-                addShopName(edtShopNameGC.getText().toString());
+                UpdateShopName(edtShopNameGC.getText().toString());
                 edtShopNameGC.setText(null);
                 break;
         }
     }
 
-
-
     private void saveGC() {
+        // if(type == "credit")
+        //{
         List_of_Credits list_of_credits = new List_of_Credits();
-        ArrayList <Shop> ls = new ArrayList<Shop>();
+        ArrayList<Shop> ls = new ArrayList<Shop>();
         Shop s = new Shop(edtShopNameGC.getText().toString());
         ls.add(s);
-        String key = list_of_credits.addCredit(null, "Credit", edtCreditBarCodeIDGC.getText().toString(), dateExp, ls);
+        String key = list_of_credits.addCredit(null, edtCreditBarCodeIDGC.getText().toString(), dateExp, ls);
         savePic(key);
+        //}
+        if (type == "Gift") {
+            List_of_Gifts list_of_gifts = new List_of_Gifts();
+            //String key = list_of_gifts.addCredit(null, "Gift", edtCreditBarCodeIDGC.getText().toString(), dateExp, loo);
+            //savePic(key);
+        }
+
+
     }
 
-    private void savePic(String key){
+    private void savePic(String key) {
         // Create a storage reference from our app
         StorageReference storageRef = FirebaseStorage.getInstance().getReference();
         // Create a reference to "mountains.jpg"
-        StorageReference mountainsRef = storageRef.child(key+".jpg");
+        StorageReference mountainsRef = storageRef.child(key + ".jpg");
         // Create a reference to 'images/mountains.jpg'
-        StorageReference mountainImagesRef = storageRef.child("images/"+key+".jpg");
+        StorageReference mountainImagesRef = storageRef.child("images/" + key + ".jpg");
 
-        // Get the data from an ImageView as bytes
-        //imageView.setDrawingCacheEnabled(true);
-        //imageView.buildDrawingCache();
-        //Bitmap bitmap = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         picBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
         byte[] data = baos.toByteArray();
@@ -272,91 +267,61 @@ public class AddActivity extends AppCompatActivity  implements View.OnClickListe
         }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
-                // ...
             }
         });
     }
 
-    private void addShopName(final String shopNameFromEdt) {
-        ListView listView;
-        final AdapterShop adapter;
-        final AlertDialog.Builder mBuilder = new AlertDialog.Builder(AddActivity.this);
+    public void UpdateShopName(String shopNameFromEdt) {
+        AlertDialog.Builder mBuilder = new AlertDialog.Builder(AddActivity.this);
         final View dialogViewList = getLayoutInflater().inflate(R.layout.dialog_list_shop_name, null);
-        mBuilder.setView(dialogViewList);
-        final AlertDialog dialog = mBuilder.create();
-
         final EditText diaShopName = (EditText) dialogViewList.findViewById(R.id.edtDiaShopNameId);
         final Button diaBtnAddShop = (Button) dialogViewList.findViewById(R.id.btnDiaPlusShopNameID);
-        final ArrayList <String> trylist = new ArrayList<String>();
-
+        listView = dialogViewList.findViewById(R.id.listViewDiaID);
+        mBuilder.setView(dialogViewList);
+        final AlertDialog dialog = mBuilder.create();
         dialog.show();
 
-        listView = dialogViewList.findViewById(R.id.listViewDiaID);
-
-        adapter = new AdapterShop(this, trylist);
-        listView.setAdapter(adapter);
-
-        final Button diaSaveShops = (Button) dialogViewList.findViewById(R.id.btnSaveShopsID);
         final View dialogViewItem = getLayoutInflater().inflate(R.layout.item_shop_name, null);
         final Button diaBtnRemoveShop = (Button) dialogViewItem.findViewById(R.id.btnRemoveId);
 
-        if(!shopNameFromEdt.isEmpty()) {
-            trylist.add(shopNameFromEdt);
+        adapter = new AdapterShop(this, dialog, loo);
+        listView.setAdapter(adapter);
+
+        if ((!shopNameFromEdt.isEmpty()) && (!shomNameExist(shopNameFromEdt))) {
+            loo.add(shopNameFromEdt);
             adapter.notifyDataSetChanged();
         }
-
-        diaSaveShops.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                trylist.add(diaShopName.getText().toString());
-                listShopDia = trylist;
-                dialog.cancel();
-                Toast.makeText(AddActivity.this, listShopDia.toString(), Toast.LENGTH_LONG).show();
-                String str = "";
-            }
-        });
+        else {
+            Toast.makeText(AddActivity.this, "SHOP NAME EXISTS!", Toast.LENGTH_SHORT).show();
+        }
 
         diaBtnAddShop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(!diaShopName.getText().toString().isEmpty())
-                {
+                if (!diaShopName.getText().toString().isEmpty()) {
                     String shopname = diaShopName.getText().toString();
-                    int isExist = 0;
-                    if(!trylist.isEmpty()) {
-                        for(int i=0; i< trylist.size(); i++)
-                            if(trylist.get(i).equals(shopname)) {
-                                isExist = 1;
-                            }
-                    }
-
-                    if(isExist == 0) {
+                    if (!shomNameExist(shopname)) {
                         Shop shop = new Shop(shopname);
                         shopsList.add(shop);
-                        trylist.add(shopname);
+                        loo.add(shopname);
                         adapter.notifyDataSetChanged();
-                        diaShopName.setText(null);
                     }
-
-                    if(isExist == 1) {
-                        diaShopName.setText(null);
-                        Toast.makeText(AddActivity.this, "SHOP NAME EXISTS!", Toast.LENGTH_LONG).show();
-                    }
-
+                    else
+                        Toast.makeText(AddActivity.this, "SHOP NAME EXISTS!", Toast.LENGTH_SHORT).show();
+                    diaShopName.setText(null);
                 }
             }
         });
+        adapter.notifyDataSetChanged();
+    }
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
-        {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id)
-            {
-                Toast.makeText(AddActivity.this, "OK", Toast.LENGTH_LONG).show();
-                trylist.remove(position);
-                adapter.notifyDataSetChanged();
+    public boolean shomNameExist(String shopname) {
+        if (!loo.isEmpty()) {
+            for (int i = 0; i < loo.size(); i++) {
+                if (loo.get(i).equals(shopname))
+                    return true;
             }
-        });
+        }
+        return false;
     }
 }
