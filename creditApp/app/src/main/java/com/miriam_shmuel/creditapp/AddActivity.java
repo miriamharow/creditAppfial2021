@@ -6,14 +6,11 @@ import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -31,14 +28,11 @@ import androidx.core.app.ActivityCompat;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -221,6 +215,10 @@ public class AddActivity extends AppCompatActivity  implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btnPlusShopNameID:
+                String shopname = edtShopNameGC.getText().toString();
+                Shop shop = new Shop(shopname);
+                shopsList.add(shop);
+                loo.add(shopname);
                 UpdateShopName(edtShopNameGC.getText().toString());
                 edtShopNameGC.setText(null);
                 break;
@@ -228,21 +226,36 @@ public class AddActivity extends AppCompatActivity  implements View.OnClickListe
     }
 
     private void saveGC() {
-        // if(type == "credit")
-        //{
-        List_of_Credits list_of_credits = new List_of_Credits();
-        ArrayList<Shop> ls = new ArrayList<Shop>();
-        Shop s = new Shop(edtShopNameGC.getText().toString());
-        ls.add(s);
-        String key = list_of_credits.addCredit(null, edtCreditBarCodeIDGC.getText().toString(), dateExp, ls);
-        savePic(key);
-        //}
+        if(type == "Credit")
+        {
+            List_of_Credits list_of_credits = new List_of_Credits();
+            ArrayList<Shop> ls = new ArrayList<Shop>();
+            Shop s = new Shop(edtShopNameGC.getText().toString());
+            ls.add(s);
+            String key = list_of_credits.addCredit(null, edtCreditBarCodeIDGC.getText().toString(), dateExp, ls);
+            savePic(key);
+
+        }
         if (type == "Gift") {
             List_of_Gifts list_of_gifts = new List_of_Gifts();
-            //String key = list_of_gifts.addCredit(null, "Gift", edtCreditBarCodeIDGC.getText().toString(), dateExp, loo);
-            //savePic(key);
+            ArrayList<Shop> ls = new ArrayList<Shop>();
+            ls = shopsList;
+            String key = list_of_gifts.addGift(null, edtCreditBarCodeIDGC.getText().toString(), dateExp, ls);
+            savePic(key);
         }
 
+
+    }
+
+    private void printShopList(){
+        String str = "";
+        for (int i = 0; i<shopsList.size(); i++){
+            if (i != shopsList.size()-1)
+                str += shopsList.get(i)+", ";
+            else
+                str += shopsList.get(i);
+        }
+        edtShopNameGC.setText(str);
 
     }
 
@@ -276,6 +289,7 @@ public class AddActivity extends AppCompatActivity  implements View.OnClickListe
         final View dialogViewList = getLayoutInflater().inflate(R.layout.dialog_list_shop_name, null);
         final EditText diaShopName = (EditText) dialogViewList.findViewById(R.id.edtDiaShopNameId);
         final Button diaBtnAddShop = (Button) dialogViewList.findViewById(R.id.btnDiaPlusShopNameID);
+        final Button btnSaveShops = (Button) dialogViewList.findViewById(R.id.saveShops);
         listView = dialogViewList.findViewById(R.id.listViewDiaID);
         mBuilder.setView(dialogViewList);
         final AlertDialog dialog = mBuilder.create();
@@ -287,7 +301,7 @@ public class AddActivity extends AppCompatActivity  implements View.OnClickListe
         adapter = new AdapterShop(this, dialog, loo);
         listView.setAdapter(adapter);
 
-        if ((!shopNameFromEdt.isEmpty()) && (!shomNameExist(shopNameFromEdt))) {
+        if ((!shopNameFromEdt.isEmpty()) && (!shopNameExist(shopNameFromEdt))) {
             loo.add(shopNameFromEdt);
             adapter.notifyDataSetChanged();
         }
@@ -300,7 +314,7 @@ public class AddActivity extends AppCompatActivity  implements View.OnClickListe
             public void onClick(View view) {
                 if (!diaShopName.getText().toString().isEmpty()) {
                     String shopname = diaShopName.getText().toString();
-                    if (!shomNameExist(shopname)) {
+                    if (!shopNameExist(shopname)) {
                         Shop shop = new Shop(shopname);
                         shopsList.add(shop);
                         loo.add(shopname);
@@ -313,9 +327,24 @@ public class AddActivity extends AppCompatActivity  implements View.OnClickListe
             }
         });
         adapter.notifyDataSetChanged();
+        btnSaveShops.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String shopname = diaShopName.getText().toString();
+                if (!shopNameExist(shopname)) {
+                    Shop shop = new Shop(shopname);
+                    shopsList.add(shop);
+                    loo.add(shopname);
+                }
+                dialog.dismiss();
+                printShopList();
+
+            }
+        });
+
     }
 
-    public boolean shomNameExist(String shopname) {
+    public boolean shopNameExist(String shopname) {
         if (!loo.isEmpty()) {
             for (int i = 0; i < loo.size(); i++) {
                 if (loo.get(i).equals(shopname))

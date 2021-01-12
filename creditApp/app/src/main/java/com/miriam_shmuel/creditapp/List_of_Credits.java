@@ -4,17 +4,14 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -53,8 +50,9 @@ public class List_of_Credits {
 
     public String addCredit(String picture, String barCode, String expirationDate, ArrayList<Shop> shopName) {
         String key = shopName.get(0).getName()+barCode;
-        if(iSExist(key) == false){
-            Gift_Credit credit = new Gift_Credit(key, barCode, expirationDate, shopName);
+        Log.d("Debug", "OK" );
+        //if(iSExist(key) == false){
+            Gift_Credit credit = new Gift_Credit(key, barCode, expirationDate, shopName, "credit");
             this.listOfCredit.add(credit);
 
             data.put("credit", credit);
@@ -73,7 +71,7 @@ public class List_of_Credits {
                             Log.w(TAG, "Error adding document", e);
                         }
                     });
-        }
+        //}
         return key;
     }
 

@@ -38,4 +38,9 @@
         android:layout_marginRight="10dp"
         android:layout_weight="1">
     </ListView>
+    <Button
+        android:id="@+id/saveShops"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Save" />
 </LinearLayout>

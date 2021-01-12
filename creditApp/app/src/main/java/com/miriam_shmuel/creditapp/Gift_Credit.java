@@ -11,9 +11,9 @@ public class Gift_Credit {
     private ArrayList<Shop> shopName;
     private boolean used;
 
-    public Gift_Credit(String picture, String barCode, String expirationDate, ArrayList<Shop> shopName) {
+    public Gift_Credit(String picture, String barCode, String expirationDate, ArrayList<Shop> shopName, String type) {
         this.picture = picture;
-        this.type = "credit";
+        this.type = type;
         this.barCode = barCode;
         this.expirationDate = expirationDate;
         this.shopName = shopName;
