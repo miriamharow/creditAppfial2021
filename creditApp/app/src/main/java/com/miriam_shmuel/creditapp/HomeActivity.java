@@ -5,21 +5,27 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
 
     public class HomeActivity extends AppCompatActivity {
         private FloatingActionButton goAddPage;
         Button btnLogout;
+        FrameLayout simpleFrameLayout;
+        TabLayout tabLayout;
 
         FirebaseAuth mFirebaseAuth;
         private FirebaseAuth.AuthStateListener mAuthStateListener;
@@ -45,6 +51,43 @@ import com.google.firebase.auth.FirebaseAuth;
                 }
             });
             //---------------------------------------------------
+
+            simpleFrameLayout = (FrameLayout) findViewById(R.id.simpleFrameLayout);
+            tabLayout = (TabLayout) findViewById(R.id.tab);
+
+            tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+                @Override
+                public void onTabSelected(TabLayout.Tab tab) {
+// get the current selected tab's position and replace the fragment accordingly
+                    Fragment fragment = null;
+                    switch (tab.getPosition()) {
+                        case 0:
+                            fragment = new GiftFragment();
+                            break;
+                        case 1:
+                            fragment = new CreditFragment();
+                            break;
+                        case 2:
+                            fragment = new WarrantyFragment();
+                            break;
+                    }
+                    FragmentManager fm = getSupportFragmentManager();
+                    FragmentTransaction ft = fm.beginTransaction();
+                    ft.replace(R.id.simpleFrameLayout, fragment);
+                    ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+                    ft.commit();
+                }
+
+                @Override
+                public void onTabUnselected(TabLayout.Tab tab) {
+
+                }
+
+                @Override
+                public void onTabReselected(TabLayout.Tab tab) {
+
+                }
+            });
         }
 
         @Override
