@@ -59,6 +59,8 @@ public class AddActivity extends AppCompatActivity  implements View.OnClickListe
 
     public Uri ImageUri;
 
+    public boolean savedName = false;
+
     public static AddActivity instance;
     public ArrayList<Shop> shopsList;
 
@@ -251,7 +253,7 @@ public class AddActivity extends AppCompatActivity  implements View.OnClickListe
         String str = "";
         for (int i = 0; i<shopsList.size(); i++){
             if (i != shopsList.size()-1)
-                str += shopsList.get(i)+", ";
+                str += shopsList.get(i)+"; ";
             else
                 str += shopsList.get(i);
         }
@@ -306,7 +308,7 @@ public class AddActivity extends AppCompatActivity  implements View.OnClickListe
             adapter.notifyDataSetChanged();
         }
         else {
-            Toast.makeText(AddActivity.this, "SHOP NAME EXISTS!", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(AddActivity.this, "SHOP NAME EXISTS!", Toast.LENGTH_SHORT).show();
         }
 
         diaBtnAddShop.setOnClickListener(new View.OnClickListener() {
@@ -331,10 +333,11 @@ public class AddActivity extends AppCompatActivity  implements View.OnClickListe
             @Override
             public void onClick(View view) {
                 String shopname = diaShopName.getText().toString();
-                if (!shopNameExist(shopname)) {
+                if (!shopNameExist(shopname) && !shopname.contains(";")) {
                     Shop shop = new Shop(shopname);
                     shopsList.add(shop);
                     loo.add(shopname);
+                    savedName = true;
                 }
                 dialog.dismiss();
                 printShopList();
@@ -343,6 +346,7 @@ public class AddActivity extends AppCompatActivity  implements View.OnClickListe
         });
 
     }
+
 
     public boolean shopNameExist(String shopname) {
         if (!loo.isEmpty()) {
