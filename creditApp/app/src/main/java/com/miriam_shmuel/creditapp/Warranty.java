@@ -1,16 +1,14 @@
 package com.miriam_shmuel.creditapp;
 
-import java.util.Date;
-
 public class Warranty {
     private Shop shopName;
     private String itemName;
     private String itemReceipt;
     private String shopReceipt;
-    private int barCode;
-    private Date expirationDate;
+    private String barCode;
+    private String expirationDate;
 
-    public Warranty(Shop shopName, int barCode, Date expirationDate, String itemName, String itemReceipt, String shopReceipt) {
+    public Warranty(Shop shopName, String barCode, String expirationDate, String itemName, String itemReceipt, String shopReceipt) {
         this.shopName = shopName;
         this.barCode = barCode;
         this.expirationDate = expirationDate;
@@ -51,19 +49,19 @@ public class Warranty {
         this.shopReceipt = shopReceipt;
     }
 
-    public int getBarCode() {
+    public String getBarCode() {
         return barCode;
     }
 
-    public void setBarCode(int barCode) {
+    public void setBarCode(String barCode) {
         this.barCode = barCode;
     }
 
-    public Date getExpirationDate() {
+    public String getExpirationDate() {
         return expirationDate;
     }
 
-    public void setExpirationDate(Date expirationDate) {
+    public void setExpirationDate(String expirationDate) {
         this.expirationDate = expirationDate;
     }
 }

@@ -7,11 +7,14 @@ public class Gift_Credit {
     private String type;
     private String key;
     private String barCode;
+
+
+    private String value;
     private String expirationDate;
     private ArrayList<Shop> shopName;
     private boolean used;
 
-    public Gift_Credit(String picture, String barCode, String expirationDate, ArrayList<Shop> shopName, String type) {
+    public Gift_Credit(String picture, String barCode, String expirationDate, ArrayList<Shop> shopName, String type, String value) {
         this.picture = picture;
         this.type = type;
         this.barCode = barCode;
@@ -19,6 +22,15 @@ public class Gift_Credit {
         this.shopName = shopName;
         this.used = false;
         this.key = shopName.get(0).getName()+barCode;
+        this.value = value;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
     }
 
     public String getPicture() {

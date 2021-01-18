@@ -17,51 +17,39 @@ import java.util.Map;
 
 import static android.content.ContentValues.TAG;
 
-public class List_of_Gifts {
-    private ArrayList<Gift_Credit> listOfGifts;
-    private String type;
+public class List_of_Warranty {
+
+
+    private ArrayList<Warranty> listOfWarranty;
     private Map<String, Object> data;
     private FirebaseFirestore db;
     private FirebaseUser user;
     private String email, doc;
 
-    public List_of_Gifts() {
-        this.listOfGifts = new ArrayList<Gift_Credit>();
+    public List_of_Warranty() {
+        this.listOfWarranty = new ArrayList<Warranty>();
         this.data = new HashMap<>();
         db = FirebaseFirestore.getInstance();
         user = FirebaseAuth.getInstance().getCurrentUser();
         email = user.getEmail();
-        doc = "list of gift";
+        doc = "list of warranty";
     }
 
-    public ArrayList<Gift_Credit> getlistGift() {
-        return listOfGifts;
+    public ArrayList<Warranty> getListOfWarranty() {
+        return listOfWarranty;
     }
 
-    public void setlistGift(ArrayList<Gift_Credit> listGift) {
-        this.listOfGifts = listGift;
+    public void setListOfWarranty(ArrayList<Warranty> listOfWarranty) {
+        this.listOfWarranty = listOfWarranty;
     }
 
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public String addGift(String picture, String barCode, String expirationDate, ArrayList<Shop> shopName, String value) {
-        String str = "";
-        for (int i = 0; i<shopName.size(); i++)
-                str += shopName.get(i).toString().replaceAll(" ","_");
-        String key = str+barCode;
+    String addWarranty(String picture1, String picture2, String barCode, String expirationDate, ArrayList<Shop> shopName, String item){
+        String key = item+barCode;
         Log.d("Debug", "OK" );
         //if(iSExist(key) == false){
-        Gift_Credit gift = new Gift_Credit(key, barCode, expirationDate, shopName, "gift", value);
-        this.listOfGifts.add(gift);
-
-        data.put("gift", gift);
-
+        Warranty warranty = new Warranty(shopName.get(0), barCode, expirationDate, item, picture1, picture2);
+        this.listOfWarranty.add(warranty);
+        data.put("warranty", warranty);
         db.collection(email).document(doc).collection(key)
                 .add(data)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
@@ -79,4 +67,31 @@ public class List_of_Gifts {
         //}
         return key;
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

@@ -38,11 +38,11 @@ import java.util.Calendar;
 
 public class AddActivity extends AppCompatActivity  implements View.OnClickListener {
     private RadioButton rCredit, rGift;
-    private EditText edtShopNameGC, edtCreditBarCodeIDGC;
-    private TextView editDateTextGC;
-    private ImageView imgPicGC;
-    private Bitmap picBitmap;
-    private FloatingActionButton fab;
+    private EditText edtShopNameGC, edtCreditBarCodeIDGC, edtvalueIDGC, edtItemW, edtShopNameIDW, edtCreditBarCodeIDW;
+    private TextView editDateTextGC, editDateTextIDW;
+    private ImageView imgPicGC, picItemIDW, picReceiptIDW;
+    private Bitmap picBitmap, picBitmap1, picBitmap2;
+    private FloatingActionButton fab, fabItemW, fabReceiptW;
     private Button btnSaveGC, btnPlusShopName, btnSaveW;
     private LinearLayout shops, gift_credit_view, warranty_view;
 
@@ -76,8 +76,15 @@ public class AddActivity extends AppCompatActivity  implements View.OnClickListe
         rGift = findViewById(R.id.radioGiftID);
         edtShopNameGC = findViewById(R.id.edtShopNameIDGC);
         edtCreditBarCodeIDGC = findViewById(R.id.edtCreditBarCodeIDGC);
+        edtvalueIDGC = findViewById(R.id.valueIDGC);
         editDateTextGC = findViewById(R.id.editDateTextIDGC);
+        edtItemW = findViewById(R.id.itemW);
+        edtShopNameIDW = findViewById(R.id.edtShopNameIDW);
+        edtCreditBarCodeIDW = findViewById(R.id.edtCreditBarCodeIDW);
+        editDateTextIDW = findViewById(R.id.editDateTextIDW);
         imgPicGC = findViewById(R.id.imgPicIDGC);
+        picItemIDW = findViewById(R.id.picItemIDW);
+        picReceiptIDW = findViewById(R.id.picReceiptIDW);
         shops = findViewById(R.id.shops);
         gift_credit_view = findViewById(R.id.gift_credit_layout);
         warranty_view = findViewById(R.id.warranty_layout);
@@ -91,12 +98,34 @@ public class AddActivity extends AppCompatActivity  implements View.OnClickListe
         });
 
         btnSaveW = findViewById(R.id.btnSaveIDW);
+        btnSaveW.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                saveW();
+            }
+        });
 
         btnPlusShopName = findViewById(R.id.btnPlusShopNameID);
         btnPlusShopName.setOnClickListener(this);
 
         fab = findViewById(R.id.fabID);
         fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                takePicture();
+            }
+        });
+
+        fabItemW = findViewById(R.id.fabItemW);
+        fabItemW.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                takePicture();
+            }
+        });
+
+        fabReceiptW = findViewById(R.id.fabReceiptW);
+        fabReceiptW.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 takePicture();
@@ -125,25 +154,28 @@ public class AddActivity extends AppCompatActivity  implements View.OnClickListe
         //-----------------DATE PICKER DIALOG----------------
         editDateTextGC.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-
-                DatePickerDialog datePickerDialog = new DatePickerDialog(AddActivity.this, new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                        dateExp = dayOfMonth + "/" + (monthOfYear + 1) + "/" + year;
-                        editDateTextGC.setText(dateExp);
-
-                        dayED = day;
-                        monthED = month + 1;
-                        yearED = year;
-                    }
-                }, year, month, day);
-                // disable dates before today
-                datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis());
-                datePickerDialog.show();
-            }
-        });
+            public void onClick(View v) {makeDate();}});
+        editDateTextIDW.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {makeDate();}});
         //---------------------------------------------------
+    }
+
+    public void makeDate(){
+        DatePickerDialog datePickerDialog = new DatePickerDialog(AddActivity.this, new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                dateExp = dayOfMonth + "/" + (monthOfYear + 1) + "/" + year;
+                editDateTextGC.setText(dateExp);
+
+                dayED = day;
+                monthED = month + 1;
+                yearED = year;
+            }
+        }, year, month, day);
+        // disable dates before today
+        datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis());
+        datePickerDialog.show();
     }
 
     public void onRadioButtonClicked(View view) {
@@ -206,10 +238,27 @@ public class AddActivity extends AppCompatActivity  implements View.OnClickListe
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            picBitmap = (Bitmap) data.getExtras().get("data"); // get picture as thumbnail
-            ImageUri = data.getData();
-            imgPicGC.setImageBitmap(picBitmap);
-            isPICAP = true;
+            if(type == "Credit" || type == "Gift1") {
+                picBitmap = (Bitmap) data.getExtras().get("data"); // get picture as thumbnail
+                ImageUri = data.getData();
+                imgPicGC.setImageBitmap(picBitmap);
+                isPICAP = true;
+            }
+            else
+            {
+                if (picBitmap1 == null){
+                    picBitmap1 = (Bitmap) data.getExtras().get("data"); // get picture as thumbnail
+                    ImageUri = data.getData();
+                    picItemIDW.setImageBitmap(picBitmap1);
+                    isPICAP = true;
+                }
+                else{
+                    picBitmap2 = (Bitmap) data.getExtras().get("data"); // get picture as thumbnail
+                    ImageUri = data.getData();
+                    picReceiptIDW.setImageBitmap(picBitmap1);
+                    isPICAP = true;
+                }
+            }
         }
     }
 
@@ -234,20 +283,30 @@ public class AddActivity extends AppCompatActivity  implements View.OnClickListe
             ArrayList<Shop> ls = new ArrayList<Shop>();
             Shop s = new Shop(edtShopNameGC.getText().toString());
             ls.add(s);
-            String key = list_of_credits.addCredit(null, edtCreditBarCodeIDGC.getText().toString(), dateExp, ls);
-            savePic(key);
+            String key = list_of_credits.addCredit(null, edtCreditBarCodeIDGC.getText().toString(), dateExp, ls, edtvalueIDGC.getText().toString());
+            savePic(key, picBitmap);
 
         }
         if (type == "Gift") {
             List_of_Gifts list_of_gifts = new List_of_Gifts();
             ArrayList<Shop> ls = new ArrayList<Shop>();
             ls = shopsList;
-            String key = list_of_gifts.addGift(null, edtCreditBarCodeIDGC.getText().toString(), dateExp, ls);
-            savePic(key);
+            String key = list_of_gifts.addGift(null, edtCreditBarCodeIDGC.getText().toString(), dateExp, ls, edtvalueIDGC.getText().toString());
+            savePic(key, picBitmap);
         }
-
-
     }
+
+    private void saveW(){
+        List_of_Warranty list_of_warranty = new List_of_Warranty();
+        ArrayList<Shop> ls = new ArrayList<Shop>();
+        Shop s = new Shop(edtShopNameGC.getText().toString());
+        ls.add(s);
+        String key = list_of_warranty.addWarranty(null, null, edtCreditBarCodeIDGC.getText().toString(), dateExp, ls, edtItemW.getText().toString());
+        savePic(key + "itemReceipt", picBitmap1);
+        savePic(key + "shopReceipt", picBitmap2);
+    }
+
+
 
     private void printShopList(){
         String str = "";
@@ -261,7 +320,7 @@ public class AddActivity extends AppCompatActivity  implements View.OnClickListe
 
     }
 
-    private void savePic(String key) {
+    private void savePic(String key, Bitmap bitmap) {
         // Create a storage reference from our app
         StorageReference storageRef = FirebaseStorage.getInstance().getReference();
         // Create a reference to "mountains.jpg"
@@ -270,7 +329,7 @@ public class AddActivity extends AppCompatActivity  implements View.OnClickListe
         StorageReference mountainImagesRef = storageRef.child("images/" + key + ".jpg");
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        picBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
         byte[] data = baos.toByteArray();
 
         UploadTask uploadTask = mountainsRef.putBytes(data);
