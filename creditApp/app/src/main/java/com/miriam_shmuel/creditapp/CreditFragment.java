@@ -1,8 +1,6 @@
 package com.miriam_shmuel.creditapp;
 
-import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,7 +32,7 @@ public class CreditFragment extends Fragment {
         ArrayList<Shop> shopName = new ArrayList<Shop> ();
         shopName.add(s);
 
-        Gift_Credit c = new Gift_Credit("1234", "1234", "1/2/3", shopName, "c");
+       // Gift_Credit c = new Gift_Credit("1234", "1234", "1/2/3", shopName, "c");
         arrayList = new  ArrayList<>();
 
         cAdpter = new Adaptercredits(getContext(), R.layout.item_element, arrayList);
@@ -42,7 +40,7 @@ public class CreditFragment extends Fragment {
         listView = view.findViewById(R.id.listViewID);
         listView.setAdapter(cAdpter);
 
-        arrayList.add(c);
+        //arrayList.add(c);
         cAdpter.notifyDataSetChanged();
         //---------------------------------------------------
     }
