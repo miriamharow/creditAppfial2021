@@ -50,14 +50,11 @@ public class List_of_Gifts {
         this.type = type;
     }
 
-    public String addGift(String picture, String barCode, String expirationDate, ArrayList<Shop> shopName, String value) {
-        String str = "";
-        for (int i = 0; i<shopName.size(); i++)
-                str += shopName.get(i).toString().replaceAll(" ","_");
-        String key = str+barCode;
+    public String addGift(String picture, String barCode, String expirationDate, ArrayList<Shop> shopName, String value, String giftName) {
+        String key = giftName+barCode;
         Log.d("Debug", "OK" );
         //if(iSExist(key) == false){
-        Gift_Credit gift = new Gift_Credit(key, barCode, expirationDate, shopName, "gift", value);
+        Gift_Credit gift = new Gift_Credit(key, barCode, expirationDate, shopName, "gift", value, giftName);
         this.listOfGifts.add(gift);
 
         data.put("gift", gift);

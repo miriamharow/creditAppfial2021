@@ -52,7 +52,7 @@ public class List_of_Credits {
         String key = shopName.get(0).getName()+barCode;
         Log.d("Debug", "OK" );
         //if(iSExist(key) == false){
-            Gift_Credit credit = new Gift_Credit(key, barCode, expirationDate, shopName, "credit", value);
+            Gift_Credit credit = new Gift_Credit(key, barCode, expirationDate, shopName, "credit", value, null);
             this.listOfCredit.add(credit);
 
             data.put("credit", credit);

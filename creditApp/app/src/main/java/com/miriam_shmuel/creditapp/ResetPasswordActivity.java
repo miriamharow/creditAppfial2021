@@ -33,20 +33,32 @@ public class ResetPasswordActivity extends Activity {
         btnSenedPwd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                progressBar.setVisibility(View.VISIBLE);
-                firebaseAuth.sendPasswordResetEmail(UserEmail.getText().toString())
-                        .addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                progressBar.setVisibility(View.GONE);
-                                if (task.isSuccessful())
-                                    Toast.makeText(ResetPasswordActivity.this, "send your email reset password", Toast.LENGTH_SHORT).show();
-                                else
-                                    Toast.makeText(ResetPasswordActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                            }
-                        });
+                String email = UserEmail.getText().toString();
+                if (!checkEmail(email))
+                    Toast.makeText(ResetPasswordActivity.this, "Require format exemple@exemple.com", Toast.LENGTH_SHORT).show();
+                else{
+                    progressBar.setVisibility(View.VISIBLE);
+                    firebaseAuth.sendPasswordResetEmail(email)
+                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    progressBar.setVisibility(View.GONE);
+                                    if (task.isSuccessful())
+                                        Toast.makeText(ResetPasswordActivity.this, "Reset password invitation sent to your email", Toast.LENGTH_SHORT).show();
+                                    else
+                                        Toast.makeText(ResetPasswordActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                }
+
             }
         });
+    }
+
+    private boolean checkEmail(String email) {
+        if (!email.contains("@") || !email.contains("."))
+            return false;
+        return true;
     }
 }
 

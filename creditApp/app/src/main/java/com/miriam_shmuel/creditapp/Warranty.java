@@ -1,14 +1,14 @@
 package com.miriam_shmuel.creditapp;
 
 public class Warranty {
-    private Shop shopName;
+    private String shopName;
     private String itemName;
     private String itemReceipt;
     private String shopReceipt;
     private String barCode;
     private String expirationDate;
 
-    public Warranty(Shop shopName, String barCode, String expirationDate, String itemName, String itemReceipt, String shopReceipt) {
+    public Warranty(String shopName, String barCode, String expirationDate, String itemName, String itemReceipt, String shopReceipt) {
         this.shopName = shopName;
         this.barCode = barCode;
         this.expirationDate = expirationDate;
@@ -33,11 +33,11 @@ public class Warranty {
         this.itemReceipt = itemReceipt;
     }
 
-    public Shop getShopName() {
+    public String getShopName() {
         return shopName;
     }
 
-    public void setShopName(Shop shopName) {
+    public void setShopName(String shopName) {
         this.shopName = shopName;
     }
 
