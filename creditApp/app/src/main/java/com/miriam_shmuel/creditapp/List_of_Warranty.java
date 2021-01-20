@@ -43,11 +43,11 @@ public class List_of_Warranty {
         this.listOfWarranty = listOfWarranty;
     }
 
-    String addWarranty(String picture1, String picture2, String barCode, String expirationDate, ArrayList<Shop> shopName, String item){
-        String key = item+barCode;
+    String addWarranty(String picture1, String picture2, String barCode, String expirationDate, String shopName, String item){
+        String key = shopName+barCode;
         Log.d("Debug", "OK" );
         //if(iSExist(key) == false){
-        Warranty warranty = new Warranty(shopName.get(0), barCode, expirationDate, item, picture1, picture2);
+        Warranty warranty = new Warranty(shopName, barCode, expirationDate, item, key+"itemReceipt", key+"shopReceipt");
         this.listOfWarranty.add(warranty);
         data.put("warranty", warranty);
         db.collection(email).document(doc).collection(key)

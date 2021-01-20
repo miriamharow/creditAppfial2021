@@ -38,7 +38,7 @@ import java.util.Calendar;
 
 public class AddActivity extends AppCompatActivity  implements View.OnClickListener {
     private RadioButton rCredit, rGift;
-    private EditText edtShopNameGC, edtCreditBarCodeIDGC, edtvalueIDGC, edtItemW, edtShopNameIDW, edtCreditBarCodeIDW;
+    private EditText edtShopNameGC, edtCreditBarCodeIDGC, edtvalueIDGC, edtItemW, edtShopNameIDW, edtCreditBarCodeIDW, edtgiftNameIDG;
     private TextView editDateTextGC, editDateTextIDW;
     private ImageView imgPicGC, picItemIDW, picReceiptIDW;
     private Bitmap picBitmap, picBitmap1, picBitmap2;
@@ -88,7 +88,7 @@ public class AddActivity extends AppCompatActivity  implements View.OnClickListe
         shops = findViewById(R.id.shops);
         gift_credit_view = findViewById(R.id.gift_credit_layout);
         warranty_view = findViewById(R.id.warranty_layout);
-
+        edtgiftNameIDG = findViewById(R.id.edtGiftNameIDG);
         btnSaveGC = findViewById(R.id.btnSaveIDGC);
         btnSaveGC.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -166,7 +166,10 @@ public class AddActivity extends AppCompatActivity  implements View.OnClickListe
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                 dateExp = dayOfMonth + "/" + (monthOfYear + 1) + "/" + year;
-                editDateTextGC.setText(dateExp);
+                if (type == "Warranty")
+                    editDateTextIDW.setText(dateExp);
+                else
+                    editDateTextGC.setText(dateExp);
 
                 dayED = day;
                 monthED = month + 1;
@@ -188,6 +191,7 @@ public class AddActivity extends AppCompatActivity  implements View.OnClickListe
                     gift_credit_view.setVisibility(View.VISIBLE);
                     warranty_view.setVisibility(View.GONE);
                     btnPlusShopName.setVisibility(View.GONE);
+                    edtgiftNameIDG.setVisibility(View.GONE);
                     type = "Credit";
                 }
                 break;
@@ -196,6 +200,7 @@ public class AddActivity extends AppCompatActivity  implements View.OnClickListe
                     gift_credit_view.setVisibility(View.VISIBLE);
                     warranty_view.setVisibility(View.GONE);
                     btnPlusShopName.setVisibility(View.VISIBLE);
+                    edtgiftNameIDG.setVisibility(View.VISIBLE);
                     type = "Gift";
                 }
                 break;
@@ -238,7 +243,7 @@ public class AddActivity extends AppCompatActivity  implements View.OnClickListe
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            if(type == "Credit" || type == "Gift1") {
+            if(type == "Credit" || type == "Gift") {
                 picBitmap = (Bitmap) data.getExtras().get("data"); // get picture as thumbnail
                 ImageUri = data.getData();
                 imgPicGC.setImageBitmap(picBitmap);
@@ -255,7 +260,7 @@ public class AddActivity extends AppCompatActivity  implements View.OnClickListe
                 else{
                     picBitmap2 = (Bitmap) data.getExtras().get("data"); // get picture as thumbnail
                     ImageUri = data.getData();
-                    picReceiptIDW.setImageBitmap(picBitmap1);
+                    picReceiptIDW.setImageBitmap(picBitmap2);
                     isPICAP = true;
                 }
             }
@@ -291,7 +296,7 @@ public class AddActivity extends AppCompatActivity  implements View.OnClickListe
             List_of_Gifts list_of_gifts = new List_of_Gifts();
             ArrayList<Shop> ls = new ArrayList<Shop>();
             ls = shopsList;
-            String key = list_of_gifts.addGift(null, edtCreditBarCodeIDGC.getText().toString(), dateExp, ls, edtvalueIDGC.getText().toString());
+            String key = list_of_gifts.addGift(null, edtCreditBarCodeIDGC.getText().toString(), dateExp, ls, edtvalueIDGC.getText().toString(), edtgiftNameIDG.getText().toString());
             savePic(key, picBitmap);
         }
     }
@@ -301,7 +306,7 @@ public class AddActivity extends AppCompatActivity  implements View.OnClickListe
         ArrayList<Shop> ls = new ArrayList<Shop>();
         Shop s = new Shop(edtShopNameGC.getText().toString());
         ls.add(s);
-        String key = list_of_warranty.addWarranty(null, null, edtCreditBarCodeIDGC.getText().toString(), dateExp, ls, edtItemW.getText().toString());
+        String key = list_of_warranty.addWarranty(null, null, edtCreditBarCodeIDW.getText().toString(), dateExp, edtShopNameIDW.getText().toString(), edtItemW.getText().toString());
         savePic(key + "itemReceipt", picBitmap1);
         savePic(key + "shopReceipt", picBitmap2);
     }
@@ -324,15 +329,15 @@ public class AddActivity extends AppCompatActivity  implements View.OnClickListe
         // Create a storage reference from our app
         StorageReference storageRef = FirebaseStorage.getInstance().getReference();
         // Create a reference to "mountains.jpg"
-        StorageReference mountainsRef = storageRef.child(key + ".jpg");
+        StorageReference imageRef = storageRef.child(key + ".jpg");
         // Create a reference to 'images/mountains.jpg'
-        StorageReference mountainImagesRef = storageRef.child("images/" + key + ".jpg");
+        StorageReference documentImagesRef = storageRef.child("images/" + key + ".jpg");
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
         byte[] data = baos.toByteArray();
 
-        UploadTask uploadTask = mountainsRef.putBytes(data);
+        UploadTask uploadTask = imageRef.putBytes(data);
         uploadTask.addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception) {

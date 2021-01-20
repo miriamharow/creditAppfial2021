@@ -8,21 +8,33 @@ public class Gift_Credit {
     private String key;
     private String barCode;
 
-
     private String value;
     private String expirationDate;
     private ArrayList<Shop> shopName;
     private boolean used;
 
-    public Gift_Credit(String picture, String barCode, String expirationDate, ArrayList<Shop> shopName, String type, String value) {
-        this.picture = picture;
+
+
+    private String giftName;
+
+
+    public Gift_Credit(String key, String barCode, String expirationDate, ArrayList<Shop> shopName, String type, String value, String giftName) {
         this.type = type;
         this.barCode = barCode;
         this.expirationDate = expirationDate;
         this.shopName = shopName;
         this.used = false;
-        this.key = shopName.get(0).getName()+barCode;
         this.value = value;
+        this.giftName = giftName;
+        this.key = key;
+    }
+
+    public String getGiftName() {
+        return giftName;
+    }
+
+    public void setGiftName(String giftName) {
+        this.giftName = giftName;
     }
 
     public String getValue() {

@@ -81,6 +81,14 @@ public class SignUpActivity extends AppCompatActivity  {
                 else  if(name.isEmpty() && email.isEmpty() && pwd.isEmpty() && pwdAuth.isEmpty()){
                     Toast.makeText(SignUpActivity.this,"Fields Are Empty!", Toast.LENGTH_SHORT).show();
                 }
+                else if(!checkEmail(email)){
+                    emailId.setError("Require format exemple@exemple.com");
+                    emailId.requestFocus();
+                }
+                else if(pwd.length()<6){
+                    password.setError("Require at least 6 characters");
+                    password.requestFocus();
+                }
                 else if((!(name.isEmpty() && email.isEmpty() && pwd.isEmpty() && pwdAuth.isEmpty())) && (pwd.equals(pwdAuth))){
 
                     mFirebaseAuth.createUserWithEmailAndPassword(email, pwd).addOnCompleteListener(SignUpActivity.this, new OnCompleteListener<AuthResult>() {
@@ -110,6 +118,12 @@ public class SignUpActivity extends AppCompatActivity  {
                 else{
                     Toast.makeText(SignUpActivity.this,"Error Occurred!",Toast.LENGTH_SHORT).show();
                 }
+            }
+
+            private boolean checkEmail(String email) {
+                if (!email.contains("@") || !email.contains("."))
+                    return false;
+                return true;
             }
         });
 
