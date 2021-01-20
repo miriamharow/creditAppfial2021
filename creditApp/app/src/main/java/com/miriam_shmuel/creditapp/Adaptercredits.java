@@ -49,7 +49,7 @@ public class Adaptercredits extends ArrayAdapter<Gift_Credit> {
         Log.d("Debug", "getview  v" );
         // get view
        LayoutInflater layoutInflater = LayoutInflater.from(context);
-       View view = layoutInflater.inflate(R.layout.item_element, parent, false);
+       View view = layoutInflater.inflate(resource, null, false);
 
         // bind to view elements
         TextView cNameStore = (TextView)view.findViewById(R.id.cNameID);
@@ -65,3 +65,6 @@ public class Adaptercredits extends ArrayAdapter<Gift_Credit> {
         return view;
     }
 }
+
+
+

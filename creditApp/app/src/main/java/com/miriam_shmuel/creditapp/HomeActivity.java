@@ -23,7 +23,6 @@ import com.google.firebase.auth.FirebaseAuth;
 
     public class HomeActivity extends AppCompatActivity {
         private FloatingActionButton goAddPage;
-        Button btnLogout;
         FrameLayout simpleFrameLayout;
         TabLayout tabLayout;
 
