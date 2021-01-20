@@ -29,7 +29,6 @@ public class Adaptercredits extends ArrayAdapter<Gift_Credit> {
         this.context = context;
         this.resource = resource;
         this.creditlist = contactlist;
-        Log.d("Debug", "getview constractor v" );
     }
 
     /**
@@ -46,7 +45,6 @@ public class Adaptercredits extends ArrayAdapter<Gift_Credit> {
     @Override
     public View getView(int position, @Nullable View convertView, @Nullable ViewGroup parent)
     {
-        Log.d("Debug", "getview  v" );
         // get view
        LayoutInflater layoutInflater = LayoutInflater.from(context);
        View view = layoutInflater.inflate(resource, null, false);

@@ -288,8 +288,9 @@ public class AddActivity extends AppCompatActivity  implements View.OnClickListe
             ArrayList<Shop> ls = new ArrayList<Shop>();
             Shop s = new Shop(edtShopNameGC.getText().toString());
             ls.add(s);
-            String key = list_of_credits.addCredit(null, edtCreditBarCodeIDGC.getText().toString(), dateExp, ls, edtvalueIDGC.getText().toString());
-            savePic(key, picBitmap);
+            list_of_credits.iSExist(null, edtCreditBarCodeIDGC.getText().toString(), dateExp, ls, edtvalueIDGC.getText().toString());
+
+            savePic(ls.get(0).getName() + edtCreditBarCodeIDGC.getText().toString(), picBitmap);
 
         }
         if (type == "Gift") {
@@ -410,7 +411,6 @@ public class AddActivity extends AppCompatActivity  implements View.OnClickListe
         });
 
     }
-
 
     public boolean shopNameExist(String shopname) {
         if (!loo.isEmpty()) {

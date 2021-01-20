@@ -133,7 +133,7 @@ public class SignUpActivity extends AppCompatActivity  {
     public void addNewUserToDb(User user) {
         final Map<String, Object> newUser = new HashMap<>();
         newUser.put("user",user);
-        db.collection(user.getEmail()).document("user")
+        db.collection(" details user").document(user.getEmail())
                 .set(newUser)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
