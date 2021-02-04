@@ -3,20 +3,14 @@ package com.miriam_shmuel.creditapp;
 import java.util.ArrayList;
 
 public class Gift_Credit {
-    private String picture;
     private String type;
     private String key;
     private String barCode;
-
     private String value;
     private String expirationDate;
     private ArrayList<Shop> shopName;
     private boolean used;
-
-
-
     private String giftName;
-
 
     public Gift_Credit(String key, String barCode, String expirationDate, ArrayList<Shop> shopName, String type, String value, String giftName) {
         this.type = type;
@@ -45,17 +39,7 @@ public class Gift_Credit {
         this.value = value;
     }
 
-    public String getPicture() {
-        return picture;
-    }
-
-    public void setPicture(String picture) {
-        this.picture = picture;
-    }
-
-    public String getType() {
-        return type;
-    }
+    public String getType() { return type; }
 
     public void setType(String type) {
         this.type = type;

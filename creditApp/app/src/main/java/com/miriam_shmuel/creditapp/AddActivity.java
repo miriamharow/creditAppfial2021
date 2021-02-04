@@ -9,6 +9,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -33,6 +34,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
+import java.text.BreakIterator;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -47,7 +49,7 @@ public class AddActivity extends AppCompatActivity  implements View.OnClickListe
     private LinearLayout shops, gift_credit_view, warranty_view;
 
     private static final int REQUEST_IMAGE_CAPTURE = 1;
-    public boolean isPICAP = false;
+    public boolean isPICAP = false ,isPICAP1 = false, isPICAP2 = false;
     private Intent takePictureIntent;
 
     private Calendar calender;
@@ -65,9 +67,11 @@ public class AddActivity extends AppCompatActivity  implements View.OnClickListe
     public ArrayList<Shop> shopsList;
 
     private StorageReference storageRef;
-    ArrayList<String> loo = new ArrayList<String>();
+    ArrayList<String> diaListShopNsme = new ArrayList<String>();
     ListView listView;
     AdapterShop adapter;
+
+    boolean printShopListFlag = false;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -176,6 +180,7 @@ public class AddActivity extends AppCompatActivity  implements View.OnClickListe
                 yearED = year;
             }
         }, year, month, day);
+
         // disable dates before today
         datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis());
         datePickerDialog.show();
@@ -255,13 +260,13 @@ public class AddActivity extends AppCompatActivity  implements View.OnClickListe
                     picBitmap1 = (Bitmap) data.getExtras().get("data"); // get picture as thumbnail
                     ImageUri = data.getData();
                     picItemIDW.setImageBitmap(picBitmap1);
-                    isPICAP = true;
+                    isPICAP1 = true;
                 }
                 else{
                     picBitmap2 = (Bitmap) data.getExtras().get("data"); // get picture as thumbnail
                     ImageUri = data.getData();
                     picReceiptIDW.setImageBitmap(picBitmap2);
-                    isPICAP = true;
+                    isPICAP2 = true;
                 }
             }
         }
@@ -271,59 +276,126 @@ public class AddActivity extends AppCompatActivity  implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btnPlusShopNameID:
-                String shopname = edtShopNameGC.getText().toString();
-                Shop shop = new Shop(shopname);
-                shopsList.add(shop);
-                loo.add(shopname);
-                UpdateShopName(edtShopNameGC.getText().toString());
+               // String shopname = edtShopNameGC.getText().toString();
+                //Shop shop = new Shop(shopname);
+                //shopsList.add(shop);
+                //loo.add(shopname);
+                String edtsname = edtShopNameGC.getText().toString();
+                UpdateShopName(edtsname);
                 edtShopNameGC.setText(null);
                 break;
         }
     }
 
     private void saveGC() {
-        if(type == "Credit")
-        {
-            List_of_Credits list_of_credits = new List_of_Credits();
-            ArrayList<Shop> ls = new ArrayList<Shop>();
-            Shop s = new Shop(edtShopNameGC.getText().toString());
-            ls.add(s);
-            list_of_credits.iSExist(null, edtCreditBarCodeIDGC.getText().toString(), dateExp, ls, edtvalueIDGC.getText().toString());
+        if(type == "Credit") {
+            if(fullFieldsCG()){
+                List_of_Credits list_of_credits = new List_of_Credits();
+                ArrayList<Shop> shopName = new ArrayList<Shop>();
+                Shop s = new Shop(edtShopNameGC.getText().toString());
+                shopName.add(s);
 
-            savePic(ls.get(0).getName() + edtCreditBarCodeIDGC.getText().toString(), picBitmap);
-
+                list_of_credits.iSExist(edtCreditBarCodeIDGC.getText().toString(), dateExp, shopName, edtvalueIDGC.getText().toString(),picBitmap);
+                finish();
+            }
         }
         if (type == "Gift") {
-            List_of_Gifts list_of_gifts = new List_of_Gifts();
-            ArrayList<Shop> ls = new ArrayList<Shop>();
-            ls = shopsList;
-            String key = list_of_gifts.addGift(null, edtCreditBarCodeIDGC.getText().toString(), dateExp, ls, edtvalueIDGC.getText().toString(), edtgiftNameIDG.getText().toString());
-            savePic(key, picBitmap);
+            if(fullFieldsCG()) {
+                List_of_Gifts list_of_gifts = new List_of_Gifts();
+                list_of_gifts.iSExist(edtCreditBarCodeIDGC.getText().toString(), dateExp, shopsList, edtvalueIDGC.getText().toString(), edtgiftNameIDG.getText().toString() ,picBitmap);
+                finish();
+            }
         }
+    }
+
+    private boolean fullFieldsCG() {
+        String name = edtShopNameGC.getText().toString();
+        String giftName = edtgiftNameIDG.getText().toString();
+        String value = edtvalueIDGC.getText().toString();
+        String barCode = edtCreditBarCodeIDGC.getText().toString();
+        String expDate = editDateTextGC.getText().toString();
+
+        if(giftName.isEmpty() && (type == "Gift")){
+            edtgiftNameIDG.setError("Please enter shop name");
+            edtgiftNameIDG.requestFocus();
+            return false;
+        }
+        else if(shopsList.isEmpty() && (type == "Gift"))
+        {
+            Toast.makeText((instance), "plese edit shoop name and press +", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        else if(name.isEmpty() && (type == "Credit")){
+            edtShopNameGC.setError("Please enter shop name");
+            edtShopNameGC.requestFocus();
+            return false;
+        }
+        else if(value.isEmpty()){
+            edtvalueIDGC.setError("Please enter value credit");
+            edtvalueIDGC.requestFocus();
+            return false;
+        }
+        else if(barCode.isEmpty()){
+            edtCreditBarCodeIDGC.setError("Please enter bar code credit");
+            edtCreditBarCodeIDGC.requestFocus();
+            return false;
+        }
+        else if(expDate.isEmpty()){
+            Toast.makeText((instance), "plese edit expartion date of the recept credit", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        else if(isPICAP != true){
+            Toast.makeText((instance), "plese take a picture of the recept credit", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        else if(!((name.isEmpty()) && (value.isEmpty()) && (barCode.isEmpty()) && (expDate.isEmpty()) &&
+                 (isPICAP != true))){
+            return true;
+        }
+        return true;
     }
 
     private void saveW(){
-        List_of_Warranty list_of_warranty = new List_of_Warranty();
-        ArrayList<Shop> ls = new ArrayList<Shop>();
-        Shop s = new Shop(edtShopNameGC.getText().toString());
-        ls.add(s);
-        String key = list_of_warranty.addWarranty(null, null, edtCreditBarCodeIDW.getText().toString(), dateExp, edtShopNameIDW.getText().toString(), edtItemW.getText().toString());
-        savePic(key + "itemReceipt", picBitmap1);
-        savePic(key + "shopReceipt", picBitmap2);
+        if(fullFieldsW()){
+            List_of_Warranty list_of_warranty = new List_of_Warranty();
+            list_of_warranty.iSExist(edtCreditBarCodeIDW.getText().toString(), editDateTextIDW.getText().toString(), edtShopNameIDW.getText().toString(), edtItemW.getText().toString(), picBitmap1, picBitmap2 );
+            finish();
+        }
     }
 
-
-
-    private void printShopList(){
-        String str = "";
-        for (int i = 0; i<shopsList.size(); i++){
-            if (i != shopsList.size()-1)
-                str += shopsList.get(i)+"; ";
-            else
-                str += shopsList.get(i);
+    private boolean fullFieldsW(){
+        String itemName = edtItemW.getText().toString();
+        String shopName = edtShopNameIDW.getText().toString();
+        String barCode = edtCreditBarCodeIDW.getText().toString();
+        String expDate = editDateTextIDW.getText().toString();
+        if(itemName.isEmpty()){
+            edtItemW.setError("Please enter item name warrenty");
+            edtItemW.requestFocus();
+            return false;
         }
-        edtShopNameGC.setText(str);
-
+        else if(shopName.isEmpty()){
+            edtShopNameIDW.setError("Please enter shop name warrenty");
+            edtShopNameIDW.requestFocus();
+            return false;
+        }
+        else if(barCode.isEmpty()){
+            edtCreditBarCodeIDW.setError("Please enter bar code warrenty");
+            edtCreditBarCodeIDW.requestFocus();
+            return false;
+        }
+        else if(expDate.isEmpty()){
+            Toast.makeText((instance), "plese enter experiton date of warrenty", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        else if(!isPICAP1){
+            Toast.makeText((instance), "plese take a picture of warrenty", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        else if(!isPICAP2){
+            Toast.makeText((instance), "plese take a picture of shop receipt", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        return true;
     }
 
     private void savePic(String key, Bitmap bitmap) {
@@ -356,7 +428,7 @@ public class AddActivity extends AppCompatActivity  implements View.OnClickListe
         final View dialogViewList = getLayoutInflater().inflate(R.layout.dialog_list_shop_name, null);
         final EditText diaShopName = (EditText) dialogViewList.findViewById(R.id.edtDiaShopNameId);
         final Button diaBtnAddShop = (Button) dialogViewList.findViewById(R.id.btnDiaPlusShopNameID);
-        final Button btnSaveShops = (Button) dialogViewList.findViewById(R.id.saveShops);
+        final Button btnShowShops = (Button) dialogViewList.findViewById(R.id.showShops);
         listView = dialogViewList.findViewById(R.id.listViewDiaID);
         mBuilder.setView(dialogViewList);
         final AlertDialog dialog = mBuilder.create();
@@ -365,26 +437,33 @@ public class AddActivity extends AppCompatActivity  implements View.OnClickListe
         final View dialogViewItem = getLayoutInflater().inflate(R.layout.item_shop_name, null);
         final Button diaBtnRemoveShop = (Button) dialogViewItem.findViewById(R.id.btnRemoveId);
 
-        adapter = new AdapterShop(this, dialog, loo);
+        adapter = new AdapterShop(this, dialog, diaListShopNsme);
         listView.setAdapter(adapter);
 
-        if ((!shopNameFromEdt.isEmpty()) && (!shopNameExist(shopNameFromEdt))) {
-            loo.add(shopNameFromEdt);
-            adapter.notifyDataSetChanged();
+        if(diaListShopNsme.isEmpty()) {
+            printShopListFlag = false;
         }
-        else {
-            //Toast.makeText(AddActivity.this, "SHOP NAME EXISTS!", Toast.LENGTH_SHORT).show();
+
+        if ((!shopNameFromEdt.isEmpty()) && (!shopNameExist(shopNameFromEdt)) && (!printShopListFlag)) {
+            String shopname = diaShopName.getText().toString();
+            Shop shop = new Shop(shopname);
+            shopsList.add(shop);
+            diaListShopNsme.add(shopNameFromEdt);
+            adapter.notifyDataSetChanged();
+            if ((!shopNameExist(shopNameFromEdt))) {
+                Toast.makeText(AddActivity.this, "SHOP NAME EXISTS!", Toast.LENGTH_SHORT).show();
+            }
         }
 
         diaBtnAddShop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (!diaShopName.getText().toString().isEmpty()) {
+                if ((!(diaShopName.getText().toString()).isEmpty())) {
                     String shopname = diaShopName.getText().toString();
                     if (!shopNameExist(shopname)) {
                         Shop shop = new Shop(shopname);
                         shopsList.add(shop);
-                        loo.add(shopname);
+                        diaListShopNsme.add(shopname);
                         adapter.notifyDataSetChanged();
                     }
                     else
@@ -393,32 +472,46 @@ public class AddActivity extends AppCompatActivity  implements View.OnClickListe
                 }
             }
         });
-        adapter.notifyDataSetChanged();
-        btnSaveShops.setOnClickListener(new View.OnClickListener() {
+
+        btnShowShops.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String shopname = diaShopName.getText().toString();
-                if (!shopNameExist(shopname) && !shopname.contains(";")) {
+              /* String shopname = diaShopName.getText().toString();
+                if (!shopNameExist(shopname) && !shopname.contains(";") && !shopNameExist(shopname)) {
                     Shop shop = new Shop(shopname);
                     shopsList.add(shop);
-                    loo.add(shopname);
+                   // loo.add(shopname);
                     savedName = true;
                 }
+               */
                 dialog.dismiss();
                 printShopList();
-
             }
         });
 
     }
 
     public boolean shopNameExist(String shopname) {
-        if (!loo.isEmpty()) {
-            for (int i = 0; i < loo.size(); i++) {
-                if (loo.get(i).equals(shopname))
+        if (!diaListShopNsme.isEmpty()) {
+            for (int i = 0; i < diaListShopNsme.size(); i++) {
+                if (diaListShopNsme.get(i).equals(shopname))
                     return true;
             }
         }
         return false;
+    }
+
+    private void printShopList() {
+        printShopListFlag = true;
+        if (!diaListShopNsme.isEmpty()) {
+            String str = "";
+            for (int i = 0; i<diaListShopNsme.size(); i++){
+                if (i != diaListShopNsme.size()-1)
+                    str += diaListShopNsme.get(i)+";  ";
+                else
+                    str += diaListShopNsme.get(i);
+            }
+            edtShopNameGC.setText(str);
+        }
     }
 }

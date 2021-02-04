@@ -7,14 +7,16 @@ public class Warranty {
     private String shopReceipt;
     private String barCode;
     private String expirationDate;
+    private String key;
 
-    public Warranty(String shopName, String barCode, String expirationDate, String itemName, String itemReceipt, String shopReceipt) {
+    public Warranty(String shopName, String barCode, String expirationDate, String itemName, String key) {
         this.shopName = shopName;
         this.barCode = barCode;
         this.expirationDate = expirationDate;
         this.itemName = itemName;
-        this.itemReceipt = itemReceipt;
-        this.shopReceipt = shopReceipt;
+        this.key = key;
+        this.itemReceipt = key + "itemReceipt";
+        this.shopReceipt = key + "shopReceipt";
     }
 
     public String getItemName() {
@@ -64,4 +66,8 @@ public class Warranty {
     public void setExpirationDate(String expirationDate) {
         this.expirationDate = expirationDate;
     }
+
+    public String getKey() { return key; }
+
+    public void setKey(String key) { this.key = key; }
 }

@@ -1,5 +1,6 @@
 package com.miriam_shmuel.creditapp;
 
+import android.graphics.Bitmap;
 import android.os.Build;
 import android.util.Log;
 import android.widget.Toast;
@@ -19,21 +20,24 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import static android.content.ContentValues.TAG;
+import static com.miriam_shmuel.creditapp.AddActivity.instance;
 
 public class List_of_Credits {
     private ArrayList<Gift_Credit> listOfCredit;
     private Map<String, Object> data;
     private FirebaseFirestore db;
     private FirebaseUser user;
-    private String email, doc;
+    private String email, docCredits;
 
     public List_of_Credits() {
         this.listOfCredit = new ArrayList<Gift_Credit>();
@@ -41,7 +45,7 @@ public class List_of_Credits {
         db = FirebaseFirestore.getInstance();
         user = FirebaseAuth.getInstance().getCurrentUser();
         email = user.getEmail();
-        doc = "list of credit";
+        docCredits = "list of credit";
     }
 
     public ArrayList<Gift_Credit> getListOfCredit() {
@@ -56,12 +60,11 @@ public class List_of_Credits {
         return data;
     }
 
-    public String addCredit(String picture, String barCode, String expirationDate, ArrayList<Shop> shopName, String value) {
-        String key = shopName.get(0).getName() + barCode;
+    public void addCredit(String key, String barCode, String expirationDate, ArrayList<Shop> shopName, String value) {
         Gift_Credit credit = new Gift_Credit(key, barCode, expirationDate, shopName, "credit", value, null);
         this.listOfCredit.add(credit);
         data.put("credit", credit);
-        db.collection("user").document(email).collection(doc).document(key).set(data)
+        db.collection("user").document(email).collection(docCredits).document(key).set(data)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
@@ -74,14 +77,11 @@ public class List_of_Credits {
                         Log.w(TAG, "Error writing document", e);
                     }
                 });
-
-        //}
-        return key;
     }
 
 
     public ArrayList<Gift_Credit> readData() {
-        CollectionReference docRef = db.collection("user").document(email).collection(doc);
+        CollectionReference docRef = db.collection("user").document(email).collection(docCredits);
         docRef.get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -100,18 +100,46 @@ public class List_of_Credits {
         return listOfCredit;
     }
 
+    private void savePic(String key, Bitmap bitmap) {
+        // Create a storage reference from our app
+        StorageReference storageRef = FirebaseStorage.getInstance().getReference();
+        // Create a reference to "mountains.jpg"
+        StorageReference imageRef = storageRef.child(key + ".jpg");
+        // Create a reference to 'images/mountains.jpg'
+        StorageReference documentImagesRef = storageRef.child("images/" + key + ".jpg");
 
-    public void iSExist(final String picture, final String barCode, final String expirationDate, final ArrayList<Shop> shopName, final String value) {
-        String key = shopName.get(0).getName() + barCode;
-        DocumentReference docRef = db.collection("user").document(email).collection(doc).document(key);
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] data = baos.toByteArray();
+
+        UploadTask uploadTask = imageRef.putBytes(data);
+        uploadTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                // Handle unsuccessful uploads
+            }
+        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+            }
+        });
+    }
+
+    public boolean iSExist(final String barCode, final String expirationDate, final ArrayList<Shop> shopName, final String value, final Bitmap bitmap) {
+        final String key = shopName.get(0).getName() + barCode;
+        DocumentReference docRef = db.collection("user").document(email).collection(docCredits).document(key);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
-                    } else {
-                        addCredit( picture, barCode,  expirationDate, shopName,  value);
+                        Toast.makeText((instance), "the credit is Exist", Toast.LENGTH_SHORT).show();
+                    }
+                    else {
+                        addCredit(key, barCode,  expirationDate, shopName,  value);
+                        savePic( key, bitmap);
+                        Toast.makeText((instance), "save", Toast.LENGTH_SHORT).show();
                     }
                 }
                 else {
@@ -119,6 +147,6 @@ public class List_of_Credits {
                 }
             }
         });
+            return true;
     }
-
 }

@@ -31,11 +31,12 @@ public class AdapterShop extends ArrayAdapter<String> {
         View item = layoutInflater.inflate(R.layout.item_shop_name, parent, false);
         TextView shopName = item.findViewById(R.id.itemId);
         shopName.setText(rows.get(position));
+
         Button btnRow = item.findViewById(R.id.btnRemoveId);
         btnRow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AddActivity.instance.loo = DelItemFromList(position);
+                AddActivity.instance.diaListShopNsme = DelItemFromList(position);
                 AddActivity.instance.shopsList = DelItemFromListShop(position);
                 AddActivity.instance.UpdateShopName("");
                 dialog.cancel();

@@ -39,8 +39,8 @@
         android:layout_weight="1">
     </ListView>
     <Button
-        android:id="@+id/saveShops"
+        android:id="@+id/showShops"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Save" />
+        android:text="Show" />
 </LinearLayout>
