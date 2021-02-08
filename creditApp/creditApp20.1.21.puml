@@ -1,0 +1,111 @@
+@startuml
+class com.miriam_shmuel.creditapp.List_of_Credits {
+- ArrayList<Gift_Credit> listOfCredit
+- Map<String,Object> data
+- FirebaseFirestore db
+- FirebaseUser user
+- String email
++ ArrayList<Gift_Credit> getListOfCredit()
++ void setListOfCredit(ArrayList<Gift_Credit>)
++ Map<String,Object> getData()
++ String addCredit(String,String,String,ArrayList<Shop>,String)
++ void readData()
++ boolean iSExist(String)
+}
+
+class com.miriam_shmuel.creditapp.Warranty {
+- String shopName
+- String itemName
+- String itemReceipt
+- String shopReceipt
+- String barCode
+- String expirationDate
++ String getItemName()
++ void setItemName(String)
++ String getItemReceipt()
++ void setItemReceipt(String)
++ String getShopName()
++ void setShopName(String)
++ String getShopReceipt()
++ void setShopReceipt(String)
++ String getBarCode()
++ void setBarCode(String)
++ String getExpirationDate()
++ void setExpirationDate(String)
+}
+class com.miriam_shmuel.creditapp.List_of_Warranty {
+- ArrayList<Warranty> listOfWarranty
+- Map<String,Object> data
+- FirebaseFirestore db
+- FirebaseUser user
+- String email
++ ArrayList<Warranty> getListOfWarranty()
++ void setListOfWarranty(ArrayList<Warranty>)
+~ String addWarranty(String,String,String,String,String,String)
+}
+class com.miriam_shmuel.creditapp.User {
+- String email
+- String name
++ String getName()
++ void setName(String)
++ String getEmail()
++ void setEmail(String)
+}
+class com.miriam_shmuel.creditapp.Gift_Credit {
+- String picture
+- String type
+- String key
+- String barCode
+- String value
+- String expirationDate
+- ArrayList<Shop> shopName
+- boolean used
+- String giftName
++ String getGiftName()
++ void setGiftName(String)
++ String getValue()
++ void setValue(String)
++ String getPicture()
++ void setPicture(String)
++ String getType()
++ void setType(String)
++ String getBarCode()
++ void setBarCode(String)
++ String getExpirationDate()
++ void setExpirationDate(String)
++ ArrayList<Shop> getShopName()
++ void setShopName(ArrayList<Shop>)
++ boolean isUsed()
++ void setUsed(boolean)
++ String getKey()
++ void setKey(String)
+}
+class com.miriam_shmuel.creditapp.Shop {
+- String name
++ String getName()
++ void setName(String)
++ String toString()
+}
+class com.miriam_shmuel.creditapp.List_of_Gifts {
+- ArrayList<Gift_Credit> listOfGifts
+- String type
+- Map<String,Object> data
+- FirebaseFirestore db
+- FirebaseUser user
+- String email
++ ArrayList<Gift_Credit> getlistGift()
++ void setlistGift(ArrayList<Gift_Credit>)
++ String getType()
++ void setType(String)
++ String addGift(String,String,String,ArrayList<Shop>,String,String)
+}
+
+com.miriam_shmuel.creditapp.Warranty <|-- com.miriam_shmuel.creditapp.List_of_Warranty
+com.miriam_shmuel.creditapp.Gift_Credit <|-- com.miriam_shmuel.creditapp.List_of_Gifts
+com.miriam_shmuel.creditapp.Gift_Credit <|-- com.miriam_shmuel.creditapp.List_of_Credits
+com.miriam_shmuel.creditapp.Shop <|-- com.miriam_shmuel.creditapp.List_of_Credits
+
+
+
+
+@enduml

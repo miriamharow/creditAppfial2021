@@ -84,11 +84,11 @@ public class List_of_Gifts {
                 });
     }
 
-    private void savePic(String key, Bitmap bitmap) {
+    private void savePic(String key, Bitmap bitmap, String email) {
         // Create a storage reference from our app
         StorageReference storageRef = FirebaseStorage.getInstance().getReference();
         // Create a reference to "mountains.jpg"
-        StorageReference imageRef = storageRef.child(key + ".jpg");
+        StorageReference imageRef = storageRef.child(email+"/"+"list of gifts/"+key + ".jpg");
         // Create a reference to 'images/mountains.jpg'
         StorageReference documentImagesRef = storageRef.child("images/" + key + ".jpg");
 
@@ -142,7 +142,7 @@ public class List_of_Gifts {
                     }
                     else {
                         addGift(key, barCode,  expirationDate, shopName,  value, giftName);
-                        savePic( key, bitmap);
+                        savePic( key, bitmap, email);
                         Toast.makeText((instance), "save", Toast.LENGTH_SHORT).show();
                     }
                 }

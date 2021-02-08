@@ -104,7 +104,7 @@ public class List_of_Credits {
         // Create a storage reference from our app
         StorageReference storageRef = FirebaseStorage.getInstance().getReference();
         // Create a reference to "mountains.jpg"
-        StorageReference imageRef = storageRef.child(key + ".jpg");
+        StorageReference imageRef = storageRef.child(email+"/"+"list of credits/"+key + ".jpg");
         // Create a reference to 'images/mountains.jpg'
         StorageReference documentImagesRef = storageRef.child("images/" + key + ".jpg");
 

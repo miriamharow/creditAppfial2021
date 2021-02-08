@@ -9,7 +9,6 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -34,7 +33,6 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
-import java.text.BreakIterator;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -341,11 +339,11 @@ public class AddActivity extends AppCompatActivity  implements View.OnClickListe
             return false;
         }
         else if(expDate.isEmpty()){
-            Toast.makeText((instance), "plese edit expartion date of the recept credit", Toast.LENGTH_SHORT).show();
+            Toast.makeText((instance), "please edit expiration date of the receipt credit", Toast.LENGTH_SHORT).show();
             return false;
         }
         else if(isPICAP != true){
-            Toast.makeText((instance), "plese take a picture of the recept credit", Toast.LENGTH_SHORT).show();
+            Toast.makeText((instance), "please take a picture of the receipt credit", Toast.LENGTH_SHORT).show();
             return false;
         }
         else if(!((name.isEmpty()) && (value.isEmpty()) && (barCode.isEmpty()) && (expDate.isEmpty()) &&

@@ -1,0 +1,325 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_weight="1"
+    android:orientation="vertical"
+    app:backgroundTint="@android:color/white"
+    tools:context=".EditItemActivity">
+
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:text="EDIT"
+        android:textSize="30dp"
+        android:layout_marginRight="12dp"
+        android:layout_marginTop="12dp"
+        android:textColor="#346beb"
+        />
+
+    <LinearLayout
+        android:id="@+id/creditgiftlayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:id="@+id/giftNameField"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/CGiftNameTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Gift Name:"
+                android:layout_weight="1"/>
+
+            <TextView
+                android:id="@+id/CGiftNameID"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Exemple"
+                android:layout_weight="1"/>
+            <EditText
+                android:id="@+id/CedtGiftNameID"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Exemple"
+                android:layout_weight="1"
+                android:visibility="gone"/>
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/CshopNameTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Shop Name:"
+                android:layout_weight="1"/>
+
+            <TextView
+                android:id="@+id/CShopNameID"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Exemple"
+                android:layout_weight="1"/>
+            <EditText
+                android:id="@+id/CedtShopNameID"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Exemple"
+                android:layout_weight="1"
+                android:visibility="gone"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/CvalueTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Value"
+                android:layout_weight="1"/>
+
+            <TextView
+                android:id="@+id/CvalueID"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Exemple" />
+            <EditText
+                android:id="@+id/CedtvalueID"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Exemple"
+                android:layout_weight="1"
+                android:visibility="gone"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/CexpDateTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Expiration Date" />
+
+            <TextView
+                android:id="@+id/CexpDateID"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Exemple" />
+            <EditText
+                android:id="@+id/CedtexpDateID"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Exemple"
+                android:layout_weight="1"
+                android:visibility="gone"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/CbarcodeTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Barcode" />
+
+            <TextView
+                android:id="@+id/CbarcodeID"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Exemple" />
+            <EditText
+                android:id="@+id/CedtbarcodeID"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Exemple"
+                android:layout_weight="1"
+                android:visibility="gone"/>
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/CimageView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:srcCompat="@tools:sample/avatars" />
+
+        <Button
+            android:id="@+id/CbtnSave"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="SAVE"
+            android:visibility="gone"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/warrantylayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/WitemTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="ItemName"
+                android:layout_weight="1"/>
+
+            <TextView
+                android:id="@+id/WitemID"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Exemple" />
+            <EditText
+                android:id="@+id/WedtitemID"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Exemple"
+                android:layout_weight="1"
+                android:visibility="gone"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/WshopNameTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Shop Name:"
+                android:layout_weight="1"/>
+
+            <TextView
+                android:id="@+id/WShopNameID"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Exemple"
+                android:layout_weight="1"/>
+            <EditText
+                android:id="@+id/WedtShopNameID"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Exemple"
+                android:layout_weight="1"
+                android:visibility="gone"/>
+
+        </LinearLayout>
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/WexpDateTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Expiration Date" />
+
+            <TextView
+                android:id="@+id/WexpDateID"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Exemple" />
+            <EditText
+                android:id="@+id/WedtexpDateID"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Exemple"
+                android:layout_weight="1"
+                android:visibility="gone"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/WbarcodeTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Barcode" />
+
+            <TextView
+                android:id="@+id/WbarcodeID"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Exemple" />
+            <EditText
+                android:id="@+id/WedtbarcodeID"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Exemple"
+                android:layout_weight="1"
+                android:visibility="gone"/>
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/WReceiptPic"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:srcCompat="@tools:sample/avatars" />
+        <ImageView
+            android:id="@+id/WWarantyPic"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:srcCompat="@tools:sample/avatars" />
+
+        <Button
+            android:id="@+id/WbtnSave"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="SAVE"
+            android:visibility="gone"/>
+
+
+
+    </LinearLayout>
+</LinearLayout>

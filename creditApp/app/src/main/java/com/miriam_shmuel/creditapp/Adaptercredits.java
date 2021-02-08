@@ -1,12 +1,11 @@
 package com.miriam_shmuel.creditapp;
 
-import android.util.Log;
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
-import android.content.Context;
 
 import androidx.annotation.Nullable;
 
@@ -58,7 +57,7 @@ public class Adaptercredits extends ArrayAdapter<Gift_Credit> {
         Gift_Credit creditI = creditlist.get(position);
         cNameStore.setText(creditI.getShopName().get(0).getName());
         cDate.setText(creditI.getExpirationDate());
-        cbarCode.setText(creditI.getBarCode());
+        cbarCode.setText(creditI.getValue());
 
         return view;
     }

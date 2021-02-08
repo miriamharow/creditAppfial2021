@@ -1,17 +1,14 @@
 package com.miriam_shmuel.creditapp;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import androidx.fragment.app.Fragment;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class CreditFragment extends Fragment  {
     public static List_of_Credits instance;
@@ -28,6 +25,28 @@ public class CreditFragment extends Fragment  {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //------------------OPEN ITEM------------------------
+        /*listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
+        {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+            {
+                Gift_Credit credit = arrayList.get(position);
+                String shopname = credit.getShopName().get(0).toString();
+                String value = credit.getValue();
+                String expDate = credit.getExpirationDate();
+                /*Intent intentCI = new Intent(MainActivity.this, CreditItem.class);
+                intentCI.putExtra("storeName",sn);
+                intentCI.putExtra("expDate", ed);
+                intentCI.putExtra("numberBarCode", nbc);
+                intentCI.putExtra("cis", isc);
+                startActivity(intentCI);*/
+            //}
+        //});
+
+        //---------------------------------------------------
+
     }
 
     @Override
@@ -61,6 +80,8 @@ public class CreditFragment extends Fragment  {
 
 
         return view;
+
+
     }
 
 }
