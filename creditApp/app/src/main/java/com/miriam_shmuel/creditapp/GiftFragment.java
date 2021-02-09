@@ -1,10 +1,12 @@
 package com.miriam_shmuel.creditapp;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import androidx.annotation.NonNull;
@@ -41,6 +43,20 @@ public class GiftFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        ListView list = (ListView) listView.findViewById(R.id.listViewID);
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view,
+                                    int position, long id) {
+                Intent intent = new Intent(getActivity(), EditItemActivity.class);
+                intent.putExtra("key", "value");
+                startActivity(intent);
+
+
+            }
+        });
     }
 
     @Override

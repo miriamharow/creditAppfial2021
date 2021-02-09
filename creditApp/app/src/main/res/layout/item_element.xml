@@ -47,6 +47,16 @@
             app:fontFamily="casual"
             android:textColor="#00264d"/>
 
-
+        <ImageButton
+            android:id="@+id/btnEditID"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:background="#FAFAFA"
+            app:srcCompat="@drawable/edit_icon"
+            android:scaleType="fitCenter"
+            />
     </LinearLayout>
 </LinearLayout>

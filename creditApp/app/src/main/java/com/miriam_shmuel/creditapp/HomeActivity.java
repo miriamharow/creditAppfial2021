@@ -32,7 +32,7 @@ import com.google.firebase.auth.FirebaseAuth;
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_home);
             //--------------------SCREEN-------------------------
-            getSupportActionBar().setTitle("My Credit");
+            getSupportActionBar().setTitle("Credit App");
             getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#00264d")));
 
 

@@ -292,7 +292,6 @@ public class AddActivity extends AppCompatActivity  implements View.OnClickListe
                 ArrayList<Shop> shopName = new ArrayList<Shop>();
                 Shop s = new Shop(edtShopNameGC.getText().toString());
                 shopName.add(s);
-
                 list_of_credits.iSExist(edtCreditBarCodeIDGC.getText().toString(), dateExp, shopName, edtvalueIDGC.getText().toString(),picBitmap);
                 finish();
             }
