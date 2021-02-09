@@ -23,6 +23,8 @@ public class Gift_Credit {
         this.key = key;
     }
 
+    public Gift_Credit(){}
+
     public String getGiftName() {
         return giftName;
     }
@@ -84,4 +86,5 @@ public class Gift_Credit {
     public void setKey(String key) {
         this.key = key;
     }
+
 }

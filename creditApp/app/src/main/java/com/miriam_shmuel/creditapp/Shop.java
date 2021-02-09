@@ -7,6 +7,8 @@ public class Shop {
         this.name = name;
     }
 
+    public Shop(){}
+
     public String getName() {
         return name;
     }

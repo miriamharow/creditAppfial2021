@@ -63,8 +63,8 @@ public class List_of_Credits {
     public void addCredit(String key, String barCode, String expirationDate, ArrayList<Shop> shopName, String value) {
         Gift_Credit credit = new Gift_Credit(key, barCode, expirationDate, shopName, "credit", value, null);
         this.listOfCredit.add(credit);
-        data.put("credit", credit);
-        db.collection("user").document(email).collection(docCredits).document(key).set(data)
+       //data.put("credit", credit);
+        db.collection("user").document(email).collection(docCredits).document(key).set(listOfCredit.get(0))
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
