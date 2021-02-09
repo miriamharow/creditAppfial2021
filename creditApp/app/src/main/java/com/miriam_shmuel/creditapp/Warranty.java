@@ -19,6 +19,8 @@ public class Warranty {
         this.shopReceipt = key + "shopReceipt";
     }
 
+    public Warranty(){}
+
     public String getItemName() {
         return itemName;
     }

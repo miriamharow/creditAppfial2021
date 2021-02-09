@@ -67,9 +67,7 @@ public class List_of_Gifts {
 
     public void addGift(String key, String barCode, String expirationDate, ArrayList<Shop> shopName, String value, String giftName) {
         Gift_Credit gift = new Gift_Credit(key, barCode, expirationDate, shopName, "gift", value, giftName);
-        this.listOfGifts.add(gift);
-        data.put("gift", gift);
-        db.collection("user").document(email).collection(docGifts).document(key).set(data)
+        db.collection("user").document(email).collection(docGifts).document(key).set(gift)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {

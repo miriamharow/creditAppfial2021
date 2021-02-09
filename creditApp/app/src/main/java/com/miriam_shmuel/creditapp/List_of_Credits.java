@@ -1,12 +1,10 @@
 package com.miriam_shmuel.creditapp;
 
 import android.graphics.Bitmap;
-import android.os.Build;
 import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -14,12 +12,9 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -62,9 +57,7 @@ public class List_of_Credits {
 
     public void addCredit(String key, String barCode, String expirationDate, ArrayList<Shop> shopName, String value) {
         Gift_Credit credit = new Gift_Credit(key, barCode, expirationDate, shopName, "credit", value, null);
-        this.listOfCredit.add(credit);
-       //data.put("credit", credit);
-        db.collection("user").document(email).collection(docCredits).document(key).set(listOfCredit.get(0))
+        db.collection("user").document(email).collection(docCredits).document(key).set(credit)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
@@ -79,26 +72,6 @@ public class List_of_Credits {
                 });
     }
 
-
-    public ArrayList<Gift_Credit> readData() {
-        CollectionReference docRef = db.collection("user").document(email).collection(docCredits);
-        docRef.get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @RequiresApi(api = Build.VERSION_CODES.N)
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                Log.d(TAG, document.getId() + " => " + document.getData());
-                                Map<String, Object> d = document.getData();
-                                String str =d.toString();
-
-                            }
-                        }
-                    }
-                });
-        return listOfCredit;
-    }
 
     private void savePic(String key, Bitmap bitmap) {
         // Create a storage reference from our app

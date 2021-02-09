@@ -11,23 +11,23 @@ import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
 
-public class Adaptercredits extends ArrayAdapter<Gift_Credit> {
+public class AdapterWarranties extends ArrayAdapter<Warranty> {
     /*
      * The context is used to inflate the layout file, and the list is the data we want
      * to populate into the lists.
      **/
     Context context; // The current context. Used to inflate the layout file.
-    ArrayList <Gift_Credit> creditlist; //A List of AndroidFlavor objects to display in a list
+    ArrayList <Warranty> warrantylist; //A List of AndroidFlavor objects to display in a list
     int resource; // layout file
 
-    public Adaptercredits(Context context, int resource, ArrayList<Gift_Credit> contactlist) {
+    public AdapterWarranties(Context context, int resource, ArrayList<Warranty> contactlist) {
         // Here, we initialize the ArrayAdapter's internal storage for the context and the list.
         // the second argument is used when the ArrayAdapter is populating a single TextView.
         // this is a custom adapter for two TextViews and an ImageView not
         super(context, resource, contactlist);
         this.context = context;
         this.resource = resource;
-        this.creditlist = contactlist;
+        this.warrantylist = contactlist;
     }
 
     /**
@@ -45,8 +45,8 @@ public class Adaptercredits extends ArrayAdapter<Gift_Credit> {
     public View getView(int position, @Nullable View convertView, @Nullable ViewGroup parent)
     {
         // get view
-       LayoutInflater layoutInflater = LayoutInflater.from(context);
-       View view = layoutInflater.inflate(resource, null, false);
+        LayoutInflater layoutInflater = LayoutInflater.from(context);
+        View view = layoutInflater.inflate(resource, null, false);
 
         // bind to view elements
         TextView cNameStore = (TextView)view.findViewById(R.id.cNameID);
@@ -54,10 +54,12 @@ public class Adaptercredits extends ArrayAdapter<Gift_Credit> {
         TextView cbarCode = (TextView)view.findViewById(R.id.CbarbarcodeID);
 
         // add contact to list in specific position
-        Gift_Credit creditI = creditlist.get(position);
-        cNameStore.setText(creditI.getShopName().get(0).getName());
-        cDate.setText(creditI.getExpirationDate());
-        cbarCode.setText(creditI.getValue());
+        Warranty warrantyI = warrantylist.get(position);
+            cNameStore.setText(warrantyI.getItemName());
+            cDate.setText(warrantyI.getShopName());
+            cbarCode.setText(warrantyI.getExpirationDate());
+
+
 
         return view;
     }

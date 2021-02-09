@@ -26,12 +26,12 @@ import static android.content.ContentValues.TAG;
 
 public class CreditFragment extends Fragment  {
     public static List_of_Credits instance;
-    public View view;
     private List_of_Credits listCredit;
-    private Adaptercredits cAdpter;
+    private Map<String, Object> data;
+    public View view;
+    private AdapterCreditsGifts cAdpter;
     private ListView listView;
     private ArrayList<Gift_Credit> arrayList;
-    private Map<String, Object> data;
     private FirebaseFirestore db;
     private FirebaseUser user;
     private String email;
@@ -74,7 +74,6 @@ public class CreditFragment extends Fragment  {
                              Bundle savedInstanceState) {
 
         List_of_Credits listOfcredit = new List_of_Credits();
-        listOfcredit.readData();
         final View view = inflater.inflate(R.layout.fragment_credit, container, false);
         arrayList = new  ArrayList<>();
         CollectionReference ColRef = db.collection("user").document(email).collection("list of credit");
@@ -87,7 +86,7 @@ public class CreditFragment extends Fragment  {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 arrayList.add(document.toObject(Gift_Credit.class));
                             }
-                            cAdpter = new Adaptercredits(getActivity(), R.layout.item_element, arrayList);
+                            cAdpter = new AdapterCreditsGifts(getActivity(), R.layout.item_element, arrayList);
                             //view = getLayoutInflater().inflate(R.layout.fragment_credit, null);
                             listView = (ListView)view.findViewById(R.id.listViewID);
                             listView.setAdapter(cAdpter);
@@ -97,15 +96,7 @@ public class CreditFragment extends Fragment  {
                     }
                 });
 
-
-
-
-
-
-
         return view;
-
-
     }
 
 }

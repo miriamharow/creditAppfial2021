@@ -55,9 +55,7 @@ public class List_of_Warranty {
 
     public void addWarranty(String barCode, String expirationDate, String shopName, String itemName, String key) {
        Warranty warranty= new Warranty(shopName, barCode, expirationDate, itemName, key);
-        this.listOfWarranty.add(warranty);
-        data.put("warranty", warranty);
-        db.collection("user").document(email).collection(docWarranty).document(key).set(data)
+        db.collection("user").document(email).collection(docWarranty).document(key).set(warranty)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
@@ -122,4 +120,5 @@ public class List_of_Warranty {
         });
         return true;
     }
+
 }
