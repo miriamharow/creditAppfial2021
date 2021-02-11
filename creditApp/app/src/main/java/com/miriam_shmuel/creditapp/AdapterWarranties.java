@@ -24,7 +24,7 @@ public class AdapterWarranties extends ArrayAdapter<Warranty> {
         // Here, we initialize the ArrayAdapter's internal storage for the context and the list.
         // the second argument is used when the ArrayAdapter is populating a single TextView.
         // this is a custom adapter for two TextViews and an ImageView not
-        super(context, resource, contactlist);
+        super(context, R.layout.item_element, R.id.itemId, contactlist);
         this.context = context;
         this.resource = resource;
         this.warrantylist = contactlist;

@@ -5,26 +5,21 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
 
 public class AdapterCreditsGifts extends ArrayAdapter<Gift_Credit> {
-    /*
-     * The context is used to inflate the layout file, and the list is the data we want
-     * to populate into the lists.
-     **/
     Context context; // The current context. Used to inflate the layout file.
     ArrayList <Gift_Credit> creditlist; //A List of AndroidFlavor objects to display in a list
     int resource; // layout file
 
     public AdapterCreditsGifts(Context context, int resource, ArrayList<Gift_Credit> contactlist) {
-        // Here, we initialize the ArrayAdapter's internal storage for the context and the list.
-        // the second argument is used when the ArrayAdapter is populating a single TextView.
-        // this is a custom adapter for two TextViews and an ImageView not
-        super(context, resource, contactlist);
+        super(context, R.layout.item_element, R.id.itemId, contactlist);
         this.context = context;
         this.resource = resource;
         this.creditlist = contactlist;
@@ -46,7 +41,8 @@ public class AdapterCreditsGifts extends ArrayAdapter<Gift_Credit> {
     {
         // get view
        LayoutInflater layoutInflater = LayoutInflater.from(context);
-       View view = layoutInflater.inflate(resource, null, false);
+        View view = layoutInflater.inflate(resource, null, false);
+
 
         // bind to view elements
         TextView cNameStore = (TextView)view.findViewById(R.id.cNameID);
@@ -64,12 +60,35 @@ public class AdapterCreditsGifts extends ArrayAdapter<Gift_Credit> {
             cNameStore.setText(creditI.getGiftName());
             cDate.setText(creditI.getExpirationDate());
             cbarCode.setText(creditI.getValue());
-        }
 
+        }
+        View item = layoutInflater.inflate(R.layout.item_element, parent, false);
+        ImageButton btnRow = item.findViewById(R.id.btnEditID);
+        btnRow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(context, "First Fragment", Toast.LENGTH_LONG).show();
+            }
+        });
 
 
         return view;
     }
+
+    /*View row = layoutInflater.inflate(R.layout.item_element,parent,false);
+        row.setOnClickListener(new View.OnClickListener()
+    {
+        @Override
+        public void onClick(View view)
+        {
+                /*Gift_Credit gift = arrayList.get(position);
+                Intent intentCI = new Intent(getActivity(), EditItemActivity.class);
+                intentCI.putExtra("gift", (Parcelable) gift);
+                startActivity(intentCI);
+            Toast.makeText(context, "First Fragment", Toast.LENGTH_LONG).show();
+        }
+    });*/
+
 }
 
 

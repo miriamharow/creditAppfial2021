@@ -73,7 +73,6 @@ public class CreditFragment extends Fragment  {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        List_of_Credits listOfcredit = new List_of_Credits();
         final View view = inflater.inflate(R.layout.fragment_credit, container, false);
         arrayList = new  ArrayList<>();
         CollectionReference ColRef = db.collection("user").document(email).collection("list of credit");
