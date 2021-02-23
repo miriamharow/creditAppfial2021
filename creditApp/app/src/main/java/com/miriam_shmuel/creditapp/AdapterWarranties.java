@@ -7,10 +7,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 public class AdapterWarranties extends ArrayAdapter<Warranty> {
@@ -66,8 +66,9 @@ public class AdapterWarranties extends ArrayAdapter<Warranty> {
             public void onClick(View v) {
                 // on the item click on our list view.
                 // we are displaying a toast message.
-                Toast.makeText(getContext(), "Item clicked is : "+warrantyI.getKey(), Toast.LENGTH_SHORT).show();
                 Intent intentCI = new Intent(getContext(), EditItemActivity.class);
+                intentCI.putExtra("type","warranty");
+                intentCI.putExtra("obj", (Serializable) warrantyI);
                 context.startActivity(intentCI);
             }
         });
