@@ -1,6 +1,8 @@
 package com.miriam_shmuel.creditapp;
 
-public class Warranty {
+import java.io.Serializable;
+
+public class Warranty implements Serializable {
     private String shopName;
     private String itemName;
     private String itemReceipt;

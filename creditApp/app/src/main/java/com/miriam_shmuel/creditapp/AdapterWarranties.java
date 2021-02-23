@@ -1,11 +1,13 @@
 package com.miriam_shmuel.creditapp;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
@@ -54,10 +56,21 @@ public class AdapterWarranties extends ArrayAdapter<Warranty> {
         TextView cbarCode = (TextView)view.findViewById(R.id.CbarbarcodeID);
 
         // add contact to list in specific position
-        Warranty warrantyI = warrantylist.get(position);
+        final Warranty warrantyI = warrantylist.get(position);
             cNameStore.setText(warrantyI.getItemName());
             cDate.setText(warrantyI.getShopName());
             cbarCode.setText(warrantyI.getExpirationDate());
+
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // on the item click on our list view.
+                // we are displaying a toast message.
+                Toast.makeText(getContext(), "Item clicked is : "+warrantyI.getKey(), Toast.LENGTH_SHORT).show();
+                Intent intentCI = new Intent(getContext(), EditItemActivity.class);
+                context.startActivity(intentCI);
+            }
+        });
 
 
 

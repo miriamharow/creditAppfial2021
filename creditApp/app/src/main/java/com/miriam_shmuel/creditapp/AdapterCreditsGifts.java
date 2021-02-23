@@ -1,16 +1,16 @@
 package com.miriam_shmuel.creditapp;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 public class AdapterCreditsGifts extends ArrayAdapter<Gift_Credit> {
@@ -50,7 +50,7 @@ public class AdapterCreditsGifts extends ArrayAdapter<Gift_Credit> {
         TextView cbarCode = (TextView)view.findViewById(R.id.CbarbarcodeID);
 
         // add contact to list in specific position
-        Gift_Credit creditI = creditlist.get(position);
+        final Gift_Credit creditI = creditlist.get(position);
         if(creditI.getType().equals("credit")) {
             cNameStore.setText(creditI.getShopName().get(0).getName());
             cDate.setText(creditI.getExpirationDate());
@@ -62,12 +62,16 @@ public class AdapterCreditsGifts extends ArrayAdapter<Gift_Credit> {
             cbarCode.setText(creditI.getValue());
 
         }
-        View item = layoutInflater.inflate(R.layout.item_element, parent, false);
-        ImageButton btnRow = item.findViewById(R.id.btnEditID);
-        btnRow.setOnClickListener(new View.OnClickListener() {
+
+        view.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                Toast.makeText(context, "First Fragment", Toast.LENGTH_LONG).show();
+            public void onClick(View v) {
+                // on the item click on our list view.
+                // we are displaying a toast message.
+                Intent intentCI = new Intent(getContext(), EditItemActivity.class);
+                intentCI.putExtra("type",creditI.getType());
+                intentCI.putExtra("obj", (Serializable) creditI);
+                context.startActivity(intentCI);
             }
         });
 

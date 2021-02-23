@@ -1,8 +1,9 @@
 package com.miriam_shmuel.creditapp;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Gift_Credit {
+public class Gift_Credit implements Serializable {
     private String type;
     private String key;
     private String barCode;

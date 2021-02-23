@@ -1,6 +1,8 @@
 package com.miriam_shmuel.creditapp;
 
-public class Shop {
+import java.io.Serializable;
+
+public class Shop implements Serializable {
     private String name;
 
     public Shop(String name){
