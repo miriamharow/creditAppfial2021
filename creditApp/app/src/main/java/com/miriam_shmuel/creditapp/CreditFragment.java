@@ -2,6 +2,7 @@ package com.miriam_shmuel.creditapp;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,6 +40,8 @@ public class CreditFragment extends Fragment  {
     private FirebaseUser user;
     private String email;
 
+    private boolean threadOff = false;
+    private int i =1;
 
 
     public CreditFragment() {
@@ -54,14 +57,13 @@ public class CreditFragment extends Fragment  {
         final View view = inflater.inflate(R.layout.fragment_credit, container, false);
         arrayList = new  ArrayList<>();
         listView = (ListView)view.findViewById(R.id.listViewID);
+
         CollectionReference ColRef = db.collection("user").document(email).collection("list of credit");
         //asynchronously retrieve all documents
-        Log.d("test","in 0");
         ColRef.get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        Log.d("test","in list");
                         if (task.isSuccessful()) {
                             int i=0;
                             Log.d("test","in 1");
@@ -70,42 +72,56 @@ public class CreditFragment extends Fragment  {
                                 Log.d("test","number array "+i++);
                             }
                             cAdpter = new AdapterCreditsGifts(getActivity(), R.layout.item_element, arrayList);
-                            //view = getLayoutInflater().inflate(R.layout.fragment_credit, null);
                             listView.setAdapter(cAdpter);
-                            Log.d("test","in 1.1");
-                            listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
-                            {
-                                @Override
-                                public void onItemClick(AdapterView<?> parent, View view, int position, long id)
-                                {
-                                    Log.d("test","in 2");
-                                    Log.d("test","clicked");
-                                    //Gift_Credit credit = arrayList.get(position);
-                                    Intent intentCI = new Intent(getActivity(), EditItemActivity.class);
-                                    startActivity(intentCI);
-                                }
-                            });
+                            thread();
                         } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());
                         }
 
                     }
                 });
-
-        Log.d("test","in 3");
         Toast.makeText(getActivity(), ""+arrayList.isEmpty(), Toast.LENGTH_SHORT).show();
-//        listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
-//        {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id)
-//            {
-//                Log.d("test","clicked");
-//                //Gift_Credit credit = arrayList.get(position);
-//                Intent intentCI = new Intent(getActivity(), EditItemActivity.class);
-//                startActivity(intentCI);
-//            }
-//        });
         return view;
     }
 
+    public void thread() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (i == 1) {
+                    if (!threadOff) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                SystemClock.sleep(10);    // sleep for 1000ms = 1sec
+                            }
+                        });
+                        SystemClock.sleep(1000);    // sleep for 1000ms = 1sec
+                    }
+                }
+            }
+
+            private void runOnUiThread(Runnable runnable) {
+                getCredit();
+            }
+        }).start();
+    }
+
+    private void getCredit() {
+        Log.d("test","in getCredit");
+        final View view = getLayoutInflater().inflate(R.layout.fragment_credit,  null);
+        listView = view.findViewById(R.id.listViewID);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
+        {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+            {
+                Log.d("test","click");
+                Intent intentCI = new Intent(getActivity(), EditItemActivity.class);
+                threadOff = true;
+                startActivity(intentCI);
+            }
+        });
+        Log.d("test","finish getCredit");
+    }
 }
