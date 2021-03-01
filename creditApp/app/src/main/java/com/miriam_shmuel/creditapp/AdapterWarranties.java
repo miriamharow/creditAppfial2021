@@ -66,15 +66,12 @@ public class AdapterWarranties extends ArrayAdapter<Warranty> {
             public void onClick(View v) {
                 // on the item click on our list view.
                 // we are displaying a toast message.
-                Intent intentCI = new Intent(getContext(), EditItemActivity.class);
+                Intent intentCI = new Intent(getContext(), ShowItemActivity.class);
                 intentCI.putExtra("type","warranty");
                 intentCI.putExtra("obj", (Serializable) warrantyI);
                 context.startActivity(intentCI);
             }
         });
-
-
-
         return view;
     }
 }

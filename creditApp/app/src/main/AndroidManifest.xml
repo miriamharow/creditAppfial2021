@@ -12,10 +12,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".AddActivity" />
+        <activity android:name=".EditItemActivity" />
         <activity android:name=".ResetPasswordActivity" />
         <activity android:name=".HomeActivity" />
         <activity android:name=".SignUpActivity" />
-        <activity android:name=".EditItemActivity" />
+        <activity android:name=".ShowItemActivity" />
         <activity android:name=".LogInActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

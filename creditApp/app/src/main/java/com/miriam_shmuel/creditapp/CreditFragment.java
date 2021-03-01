@@ -75,7 +75,6 @@ public class CreditFragment extends Fragment  {
 
                     }
                 });
-
         return view;
     }
 }

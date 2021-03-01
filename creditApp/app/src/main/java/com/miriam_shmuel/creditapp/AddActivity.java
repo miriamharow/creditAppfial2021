@@ -36,7 +36,7 @@ import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-public class AddActivity extends AppCompatActivity  implements View.OnClickListener {
+public class AddActivity extends AppCompatActivity implements View.OnClickListener {
     private RadioButton rCredit, rGift;
     private EditText edtShopNameGC, edtCreditBarCodeIDGC, edtvalueIDGC, edtItemW, edtShopNameIDW, edtCreditBarCodeIDW, edtgiftNameIDG;
     private TextView editDateTextGC, editDateTextIDW;
@@ -274,10 +274,6 @@ public class AddActivity extends AppCompatActivity  implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btnPlusShopNameID:
-               // String shopname = edtShopNameGC.getText().toString();
-                //Shop shop = new Shop(shopname);
-                //shopsList.add(shop);
-                //loo.add(shopname);
                 String edtsname = edtShopNameGC.getText().toString();
                 UpdateShopName(edtsname);
                 edtShopNameGC.setText(null);
@@ -442,9 +438,10 @@ public class AddActivity extends AppCompatActivity  implements View.OnClickListe
         }
 
         if ((!shopNameFromEdt.isEmpty()) && (!shopNameExist(shopNameFromEdt)) && (!printShopListFlag)) {
-            String shopname = diaShopName.getText().toString();
+            String shopname = edtShopNameGC.getText().toString();
             Shop shop = new Shop(shopname);
             shopsList.add(shop);
+            Toast.makeText(AddActivity.this, "SHOP NAME "+shopname, Toast.LENGTH_SHORT).show();
             diaListShopNsme.add(shopNameFromEdt);
             adapter.notifyDataSetChanged();
             if ((!shopNameExist(shopNameFromEdt))) {
@@ -473,14 +470,6 @@ public class AddActivity extends AppCompatActivity  implements View.OnClickListe
         btnShowShops.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-              /* String shopname = diaShopName.getText().toString();
-                if (!shopNameExist(shopname) && !shopname.contains(";") && !shopNameExist(shopname)) {
-                    Shop shop = new Shop(shopname);
-                    shopsList.add(shop);
-                   // loo.add(shopname);
-                    savedName = true;
-                }
-               */
                 dialog.dismiss();
                 printShopList();
             }

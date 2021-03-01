@@ -43,7 +43,6 @@ public class AdapterCreditsGifts extends ArrayAdapter<Gift_Credit> {
        LayoutInflater layoutInflater = LayoutInflater.from(context);
         View view = layoutInflater.inflate(resource, null, false);
 
-
         // bind to view elements
         TextView cNameStore = (TextView)view.findViewById(R.id.cNameID);
         TextView cDate = (TextView)view.findViewById(R.id.CphoneID);
@@ -68,31 +67,15 @@ public class AdapterCreditsGifts extends ArrayAdapter<Gift_Credit> {
             public void onClick(View v) {
                 // on the item click on our list view.
                 // we are displaying a toast message.
-                Intent intentCI = new Intent(getContext(), EditItemActivity.class);
+                Intent intentCI = new Intent(getContext(), ShowItemActivity.class);
                 intentCI.putExtra("type",creditI.getType());
                 intentCI.putExtra("obj", (Serializable) creditI);
                 context.startActivity(intentCI);
             }
         });
 
-
         return view;
     }
-
-    /*View row = layoutInflater.inflate(R.layout.item_element,parent,false);
-        row.setOnClickListener(new View.OnClickListener()
-    {
-        @Override
-        public void onClick(View view)
-        {
-                /*Gift_Credit gift = arrayList.get(position);
-                Intent intentCI = new Intent(getActivity(), EditItemActivity.class);
-                intentCI.putExtra("gift", (Parcelable) gift);
-                startActivity(intentCI);
-            Toast.makeText(context, "First Fragment", Toast.LENGTH_LONG).show();
-        }
-    });*/
-
 }
 
 

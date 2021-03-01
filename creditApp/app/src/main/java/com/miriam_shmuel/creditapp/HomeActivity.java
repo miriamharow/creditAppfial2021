@@ -34,8 +34,6 @@ import com.google.firebase.auth.FirebaseAuth;
             //--------------------SCREEN-------------------------
             getSupportActionBar().setTitle("Credit App");
             getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#00264d")));
-
-
             //---------------------------------------------------
 
 
