@@ -12,13 +12,13 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-public class AdapterShop extends ArrayAdapter<String> {
+public class AdapterEdit extends ArrayAdapter<String> {
 
     Context context;
     ArrayList<String> rows;
     AlertDialog dialog;
 
-    AdapterShop(Context c, AlertDialog dialog, ArrayList<String> rows) {
+    AdapterEdit(Context c, AlertDialog dialog, ArrayList<String> rows) {
         super(c, R.layout.item_shop_name, R.id.itemId, rows);
         this.context = c;
         this.dialog = dialog;
@@ -36,9 +36,9 @@ public class AdapterShop extends ArrayAdapter<String> {
         btnRow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AddActivity.instance.diaListShopNsme = DelItemFromList(position);
-                AddActivity.instance.shopsList = DelItemFromListShop(position);
-                AddActivity.instance.UpdateShopName("");
+                EditItemActivity.instance.diaListShopNsme = DelItemFromList(position);
+                EditItemActivity.instance.shopsList = DelItemFromListShop(position);
+                EditItemActivity.instance.UpdateShopName();
 
                 dialog.cancel();
             }

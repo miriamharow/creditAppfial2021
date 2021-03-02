@@ -1,6 +1,7 @@
 package com.miriam_shmuel.creditapp;
 
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
@@ -8,9 +9,11 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -25,14 +28,18 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class EditItemActivity extends AppCompatActivity {
+public class EditItemActivity extends AppCompatActivity implements View.OnClickListener{
     private LinearLayout creditgiftlayout, warrantylayout, giftNameField;
     private EditText CedtGiftName, CedtShopName, Cedtvalue, CedtexpDate, Cedtbarcode, Wedtitem, WedtShopName, WedtexpDate, Wedtbarcode;
     private ImageView CimageView, WWarrantyPic, WReceiptPic;
-    private Button CbtnSave, WbtnSave;
+    private Button CbtnSave, WbtnSave, btnPlusShopName;
+    public static EditItemActivity instance;
+    public ArrayList<Shop> shopsList;
+
     String type;
     Gift_Credit gift_credit;
     Warranty warranty;
@@ -40,6 +47,15 @@ public class EditItemActivity extends AppCompatActivity {
     private FirebaseFirestore db;
     private FirebaseUser user;
     private String email;
+
+    private Calendar calender;
+    private int day, month, year;
+    private int dayED, monthED, yearED;
+    private String dateExp = "";
+
+    ArrayList<String> diaListShopNsme = new ArrayList<String>();
+    ListView listView;
+    AdapterEdit adapter;
 
     public EditItemActivity(){
         user = FirebaseAuth.getInstance().getCurrentUser();
@@ -68,9 +84,19 @@ public class EditItemActivity extends AppCompatActivity {
         CbtnSave = findViewById(R.id.CbtnSave);
         WbtnSave = findViewById(R.id.WbtnSave);
         giftNameField = findViewById(R.id.giftNameField);
+        btnPlusShopName = findViewById(R.id.btnPlusShopNameID);
+        btnPlusShopName.setOnClickListener(this);
+
+        shopsList = new ArrayList<Shop>();
+        instance = this;
 
         type = getIntent().getExtras().getString("type");
         if (type.equals("credit") || type.equals("gift")) {
+            if(type.equals("gift")){
+                btnPlusShopName.setVisibility(View.VISIBLE);
+            }
+            else
+                btnPlusShopName.setVisibility(View.GONE);
             gift_credit = (Gift_Credit) getIntent().getSerializableExtra("obj");
             creditgiftlayout.setVisibility(View.VISIBLE);
             enterGiftCreditInfo();
@@ -81,15 +107,67 @@ public class EditItemActivity extends AppCompatActivity {
             enterWarrantyInfo();
         }
 
+        //-----------------CURRENT DATE---------------------
+        calender = Calendar.getInstance();
+        day = calender.get(Calendar.DAY_OF_MONTH);
+        month = calender.get(Calendar.MONTH);
+        year = calender.get(Calendar.YEAR);
+        //---------------------------------------------------
+
+
+        //-----------------DATE PICKER DIALOG----------------
+        CedtexpDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {makeDate();}});
+        WedtexpDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {makeDate();}});
+        //---------------------------------------------------
+
         CbtnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!inValid()) {
+                if(!inValidGC()) {
                     Toast.makeText(EditItemActivity.this, "ok", Toast.LENGTH_SHORT).show();
                     confirmationData();
                 }
+                else
+                    enterGiftCreditInfo();
             }
         });
+
+        WbtnSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!inValidW()) {
+                    Toast.makeText(EditItemActivity.this, "ok", Toast.LENGTH_SHORT).show();
+                    confirmationData();
+                }
+                else
+                    enterWarrantyInfo();
+            }
+        });
+    }
+
+    public void makeDate(){
+        DatePickerDialog datePickerDialog = new DatePickerDialog(EditItemActivity.this, new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                dateExp = dayOfMonth + "/" + (monthOfYear + 1) + "/" + year;
+                if (type == "Warranty")
+                    WedtexpDate.setText(dateExp);
+                else
+                    CedtexpDate.setText(dateExp);
+
+                dayED = day;
+                monthED = month + 1;
+                yearED = year;
+            }
+        }, year, month, day);
+
+        // disable dates before today
+        datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis());
+        datePickerDialog.show();
     }
 
     private void confirmationData() {
@@ -101,7 +179,7 @@ public class EditItemActivity extends AppCompatActivity {
                 "Yes",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        //updateData(); -> dellete & add
+                        //updateData(); check isExist by name+barcode-> dellete & add
                         //Toast(seccused)
                         dialog.cancel();
                         finish();
@@ -132,16 +210,22 @@ public class EditItemActivity extends AppCompatActivity {
         return hasSpecial.find() || hasSpace.find();
     }
 
-    private boolean inValid() {
+    private boolean inValidGC() {
         if(gift_credit.getType().equals("gift") && CedtGiftName.getText().toString().equals(""))
         {
             CedtGiftName.setError("Please enter  name");
             CedtGiftName.requestFocus();
             return true;
         }
-        else if(CedtShopName.getText().toString().equals(""))
+
+        else if(diaListShopNsme.isEmpty() &&  gift_credit.getType().equals("gift"))
         {
-            CedtShopName.setError("Please enter your name");
+            Toast.makeText((instance), "plese edit shoop name and press +", Toast.LENGTH_SHORT).show();
+            return true;
+        }
+        else if(CedtGiftName.getText().toString().equals("") && gift_credit.getType().equals("credit") )
+        {
+            CedtShopName.setError("Please enter shop name");
             CedtShopName.requestFocus();
             return true;
         }
@@ -166,33 +250,79 @@ public class EditItemActivity extends AppCompatActivity {
         return false;
     }
 
+    private boolean inValidW() {
+        if(Wedtitem.getText().toString().equals(""))
+        {
+            Wedtitem.setError("Please enter  name");
+            Wedtitem.requestFocus();
+            return true;
+        }
+        else if(WedtShopName.getText().toString().equals(""))
+        {
+            WedtShopName.setError("Please enter your name");
+            WedtShopName.requestFocus();
+            return true;
+        }
+        else if(WedtexpDate.getText().toString().equals(""))
+        {
+            WedtexpDate.setError("Please enter your name");
+            WedtexpDate.requestFocus();
+            return true;
+        }
+        else if(Wedtbarcode.getText().toString().equals(""))
+        {
+            Wedtbarcode.setError("Please enter your name");
+            Wedtbarcode.requestFocus();
+            return true;
+        }
+        return false;
+    }
+
     public void enterGiftCreditInfo(){
         String list = "";
         String key = "";
         if (gift_credit.getType().equals("credit"))
         {
-            CedtShopName.setText( gift_credit.getShopName().get(0).getName());
+            if (CedtShopName.getText().toString().equals(""))
+                CedtShopName.setText( gift_credit.getShopName().get(0).getName());
             list = "list of credits";
             key = gift_credit.getKey();
         }
-        else{
+        else {
+            CedtShopName.setVisibility(View.GONE);
             giftNameField.setVisibility(View.VISIBLE);
-            CedtGiftName.setText(gift_credit.getGiftName());
-            CedtShopName.setText(shopList());
+            if (CedtGiftName.getText().toString().equals(""))
+                CedtGiftName.setText(gift_credit.getGiftName());
+            if(diaListShopNsme.isEmpty())
+                restShopListGift();
             list = "list of gifts";
             key = gift_credit.getKey();
         }
-        Cedtvalue.setText(gift_credit.getValue());
-        CedtexpDate.setText(gift_credit.getExpirationDate());
-        Cedtbarcode.setText(gift_credit.getBarCode());
+        if (Cedtvalue.getText().toString().equals(""))
+            Cedtvalue.setText(gift_credit.getValue());
+        if (CedtexpDate.getText().toString().equals(""))
+            CedtexpDate.setText(gift_credit.getExpirationDate());
+        if (Cedtbarcode.getText().toString().equals(""))
+            Cedtbarcode.setText(gift_credit.getBarCode());
         getPicture(list, key, CimageView);
     }
 
+    private void restShopListGift() {
+        for (int i=0; i < gift_credit.getShopName().size(); i++){
+            shopsList.add(gift_credit.getShopName().get(i));
+            diaListShopNsme.add(gift_credit.getShopName().get(i).getName());
+        }
+    }
+
     public void enterWarrantyInfo(){
-        Wedtitem.setText(warranty.getItemName());
-        WedtShopName.setText(warranty.getShopName());
-        WedtexpDate.setText(warranty.getExpirationDate());
-        Wedtbarcode.setText(warranty.getBarCode());
+        if (Wedtitem.getText().toString().equals(""))
+            Wedtitem.setText(warranty.getItemName());
+        if (WedtShopName.getText().toString().equals(""))
+            WedtShopName.setText(warranty.getShopName());
+        if (WedtexpDate.getText().toString().equals(""))
+            WedtexpDate.setText(warranty.getExpirationDate());
+        if (Wedtbarcode.getText().toString().equals(""))
+            Wedtbarcode.setText(warranty.getBarCode());
 
         String list = "list of warranty";
         String key = warranty.getKey();
@@ -236,4 +366,81 @@ public class EditItemActivity extends AppCompatActivity {
         return str;
     }
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.btnPlusShopNameID:
+                UpdateShopName();
+                CedtShopName.setText(null);
+                break;
+        }
+    }
+
+    public void UpdateShopName() {
+        AlertDialog.Builder mBuilder = new AlertDialog.Builder(EditItemActivity.this);
+        final View dialogViewList = getLayoutInflater().inflate(R.layout.dialog_list_shop_name, null);
+        final EditText diaShopName = (EditText) dialogViewList.findViewById(R.id.edtDiaShopNameId);
+        final Button diaBtnAddShop = (Button) dialogViewList.findViewById(R.id.btnDiaPlusShopNameID);
+        final Button btnShowShops = (Button) dialogViewList.findViewById(R.id.showShops);
+        listView = dialogViewList.findViewById(R.id.listViewDiaID);
+        mBuilder.setView(dialogViewList);
+        final AlertDialog dialog = mBuilder.create();
+        dialog.show();
+
+        final View dialogViewItem = getLayoutInflater().inflate(R.layout.item_shop_name, null);
+        final Button diaBtnRemoveShop = (Button) dialogViewItem.findViewById(R.id.btnRemoveId);
+
+        adapter = new AdapterEdit(this, dialog, diaListShopNsme);
+        listView.setAdapter(adapter);
+
+        diaBtnAddShop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if ((!(diaShopName.getText().toString()).isEmpty())) {
+                    String shopname = diaShopName.getText().toString();
+                    if (!shopNameExist(shopname)) {
+                        Shop shop = new Shop(shopname);
+                        shopsList.add(shop);
+                        diaListShopNsme.add(shopname);
+                        adapter.notifyDataSetChanged();
+                    }
+                    else
+                        Toast.makeText(EditItemActivity.this, "SHOP NAME EXISTS!", Toast.LENGTH_SHORT).show();
+                    diaShopName.setText(null);
+                }
+            }
+        });
+
+        btnShowShops.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+                printShopList();
+            }
+        });
+
+    }
+
+    public boolean shopNameExist(String shopname) {
+        if (!diaListShopNsme.isEmpty()) {
+            for (int i = 0; i < diaListShopNsme.size(); i++) {
+                if (diaListShopNsme.get(i).equals(shopname))
+                    return true;
+            }
+        }
+        return false;
+    }
+
+    private void printShopList() {
+        if (!diaListShopNsme.isEmpty()) {
+            String str = "";
+            for (int i = 0; i<diaListShopNsme.size(); i++){
+                if (i != diaListShopNsme.size()-1)
+                    str += diaListShopNsme.get(i)+";  ";
+                else
+                    str += diaListShopNsme.get(i);
+            }
+            CedtShopName.setText(str);
+        }
+    }
 }

@@ -56,6 +56,13 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1" />
 
+            <Button
+                android:id="@+id/btnPlusShopNameID"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:drawableRight="@drawable/ic_add" />
+
         </LinearLayout>
 
         <LinearLayout
@@ -94,7 +101,12 @@
                 android:id="@+id/CedtexpDateID"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:ems="10"
+                android:textAppearance="@style/TextAppearance.AppCompat.Display4"
+                android:textColor="#00264d"
+                android:textSize="15dp"
+                app:fontFamily="casual" />
         </LinearLayout>
 
         <LinearLayout
@@ -194,7 +206,12 @@
                 android:id="@+id/WedtexpDateID"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:ems="10"
+                android:textAppearance="@style/TextAppearance.AppCompat.Display4"
+                android:textColor="#00264d"
+                android:textSize="15dp"
+                app:fontFamily="casual"/>
         </LinearLayout>
 
         <LinearLayout
