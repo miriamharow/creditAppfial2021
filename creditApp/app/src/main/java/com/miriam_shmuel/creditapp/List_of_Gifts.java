@@ -12,6 +12,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
@@ -128,7 +129,7 @@ public class List_of_Gifts {
     }
 
     public boolean iSExist(final String barCode, final String expirationDate, final ArrayList<Shop> shopName, final String value, final String giftName , final Bitmap bitmap) {
-        final String key = giftName + barCode;
+        final String key = ""+ Timestamp.now().getSeconds();
         DocumentReference docRef = db.collection("user").document(email).collection(docGifts).document(key);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override

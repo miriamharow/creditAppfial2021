@@ -10,6 +10,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
@@ -96,7 +97,7 @@ public class List_of_Warranty {
     }
 
     public boolean iSExist(final String barCode, final String expirationDate, final String shopName, final String itemName, final Bitmap picBitmap1, final Bitmap picBitmap2) {
-        final String key = shopName + barCode;
+        final String key = ""+ Timestamp.now().getSeconds();
         DocumentReference docRef = db.collection("user").document(email).collection(docWarranty).document(key);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override

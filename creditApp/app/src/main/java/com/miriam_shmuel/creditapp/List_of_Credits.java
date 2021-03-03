@@ -10,6 +10,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
@@ -55,7 +56,7 @@ public class List_of_Credits {
         return data;
     }
 
-    public void addCredit(String key, String barCode, String expirationDate, ArrayList<Shop> shopName, String value) {
+    public Gift_Credit addCredit(String key, String barCode, String expirationDate, ArrayList<Shop> shopName, String value) {
         Gift_Credit credit = new Gift_Credit(key, barCode, expirationDate, shopName, "credit", value, null);
         db.collection("user").document(email).collection(docCredits).document(key).set(credit)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -70,6 +71,7 @@ public class List_of_Credits {
                         Log.w(TAG, "Error writing document", e);
                     }
                 });
+        return credit;
     }
 
 
@@ -99,7 +101,7 @@ public class List_of_Credits {
     }
 
     public boolean iSExist(final String barCode, final String expirationDate, final ArrayList<Shop> shopName, final String value, final Bitmap bitmap) {
-        final String key = shopName.get(0).getName() + barCode;
+        final String key = ""+Timestamp.now().getSeconds();
         DocumentReference docRef = db.collection("user").document(email).collection(docCredits).document(key);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override

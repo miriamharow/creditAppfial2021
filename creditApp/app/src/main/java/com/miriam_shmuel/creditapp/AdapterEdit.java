@@ -2,7 +2,6 @@ package com.miriam_shmuel.creditapp;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,7 +35,7 @@ public class AdapterEdit extends ArrayAdapter<String> {
         btnRow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                EditItemActivity.instance.diaListShopNsme = DelItemFromList(position);
+                EditItemActivity.instance.diaListShopName = DelItemFromList(position);
                 EditItemActivity.instance.shopsList = DelItemFromListShop(position);
                 EditItemActivity.instance.UpdateShopName();
 

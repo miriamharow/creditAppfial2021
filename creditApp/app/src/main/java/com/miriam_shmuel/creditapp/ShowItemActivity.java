@@ -5,8 +5,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -116,6 +114,28 @@ public class ShowItemActivity extends AppCompatActivity {
         CvalueID.setText(gift_credit.getValue());
         CexpDateID.setText(gift_credit.getExpirationDate());
         CbarcodeID.setText(gift_credit.getBarCode());
+        getPicture(list, key, CimageView);
+    }
+
+    public void updateGiftCreditInfo(Gift_Credit gc_new){
+        String list = "";
+        String key = "";
+        if (gc_new.getType().equals("credit"))
+        {
+            CShopNameID.setText(gc_new.getShopName().get(0).toString());
+            list = "list of credits";
+            key = gc_new.getKey();
+        }
+        else{
+            giftNameField.setVisibility(View.VISIBLE);
+            CGiftNameID.setText(gc_new.getGiftName());
+            CShopNameID.setText(shopList());
+            list = "list of gifts";
+            key = gc_new.getKey();
+        }
+        CvalueID.setText(gc_new.getValue());
+        CexpDateID.setText(gc_new.getExpirationDate());
+        CbarcodeID.setText(gc_new.getBarCode());
         getPicture(list, key, CimageView);
     }
 

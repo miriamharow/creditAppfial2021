@@ -421,7 +421,7 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
         final View dialogViewList = getLayoutInflater().inflate(R.layout.dialog_list_shop_name, null);
         final EditText diaShopName = (EditText) dialogViewList.findViewById(R.id.edtDiaShopNameId);
         final Button diaBtnAddShop = (Button) dialogViewList.findViewById(R.id.btnDiaPlusShopNameID);
-        final Button btnShowShops = (Button) dialogViewList.findViewById(R.id.showShops);
+        final Button btnSaveShops = (Button) dialogViewList.findViewById(R.id.showShops);
         listView = dialogViewList.findViewById(R.id.listViewDiaID);
         mBuilder.setView(dialogViewList);
         final AlertDialog dialog = mBuilder.create();
@@ -467,7 +467,7 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
             }
         });
 
-        btnShowShops.setOnClickListener(new View.OnClickListener() {
+        btnSaveShops.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 dialog.dismiss();

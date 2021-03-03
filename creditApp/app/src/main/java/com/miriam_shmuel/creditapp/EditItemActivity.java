@@ -2,7 +2,6 @@ package com.miriam_shmuel.creditapp;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -53,7 +52,7 @@ public class EditItemActivity extends AppCompatActivity implements View.OnClickL
     private int dayED, monthED, yearED;
     private String dateExp = "";
 
-    ArrayList<String> diaListShopNsme = new ArrayList<String>();
+    ArrayList<String> diaListShopName = new ArrayList<String>();
     ListView listView;
     AdapterEdit adapter;
 
@@ -130,6 +129,7 @@ public class EditItemActivity extends AppCompatActivity implements View.OnClickL
                 if(!inValidGC()) {
                     Toast.makeText(EditItemActivity.this, "ok", Toast.LENGTH_SHORT).show();
                     confirmationData();
+                    updateCreditGift();
                 }
                 else
                     enterGiftCreditInfo();
@@ -142,6 +142,7 @@ public class EditItemActivity extends AppCompatActivity implements View.OnClickL
                 if(!inValidW()) {
                     Toast.makeText(EditItemActivity.this, "ok", Toast.LENGTH_SHORT).show();
                     confirmationData();
+
                 }
                 else
                     enterWarrantyInfo();
@@ -154,7 +155,7 @@ public class EditItemActivity extends AppCompatActivity implements View.OnClickL
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                 dateExp = dayOfMonth + "/" + (monthOfYear + 1) + "/" + year;
-                if (type == "Warranty")
+                if (type.equals("warranty"))
                     WedtexpDate.setText(dateExp);
                 else
                     CedtexpDate.setText(dateExp);
@@ -183,6 +184,7 @@ public class EditItemActivity extends AppCompatActivity implements View.OnClickL
                         //Toast(seccused)
                         dialog.cancel();
                         finish();
+
                     }
                 });
 
@@ -196,6 +198,32 @@ public class EditItemActivity extends AppCompatActivity implements View.OnClickL
 
         AlertDialog alert = builder.create();
         alert.show();
+
+    }
+
+    public void updateCreditGift() {
+        if (type.equals("credit")) {
+            Toast.makeText(instance, "here", Toast.LENGTH_SHORT).show();
+            ArrayList<Shop> shop = new ArrayList<Shop>();
+            Shop s = new Shop(CedtShopName.getText().toString());
+            shop.add(s);
+            db.collection("list of credit").document(gift_credit.getKey())
+                    .delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+
+                        }
+                    });
+            List_of_Credits lc = new List_of_Credits();
+            Gift_Credit gc_new = lc.addCredit(gift_credit.getKey(), Cedtbarcode.getText().toString(),
+                    CedtexpDate.getText().toString(), shop, Cedtvalue.getText().toString());
+        }
 
     }
 
@@ -213,17 +241,17 @@ public class EditItemActivity extends AppCompatActivity implements View.OnClickL
     private boolean inValidGC() {
         if(gift_credit.getType().equals("gift") && CedtGiftName.getText().toString().equals(""))
         {
-            CedtGiftName.setError("Please enter  name");
+            CedtGiftName.setError("Please enter gift name");
             CedtGiftName.requestFocus();
             return true;
         }
 
-        else if(diaListShopNsme.isEmpty() &&  gift_credit.getType().equals("gift"))
+        else if(diaListShopName.isEmpty() &&  gift_credit.getType().equals("gift"))
         {
-            Toast.makeText((instance), "plese edit shoop name and press +", Toast.LENGTH_SHORT).show();
+            Toast.makeText((instance), "Please edit shop name and press +", Toast.LENGTH_SHORT).show();
             return true;
         }
-        else if(CedtGiftName.getText().toString().equals("") && gift_credit.getType().equals("credit") )
+        else if(CedtShopName.getText().toString().equals("") && gift_credit.getType().equals("credit") )
         {
             CedtShopName.setError("Please enter shop name");
             CedtShopName.requestFocus();
@@ -231,13 +259,13 @@ public class EditItemActivity extends AppCompatActivity implements View.OnClickL
         }
         else if(Cedtvalue.getText().toString().equals(""))  // && valid
         {
-            Cedtvalue.setError("Please enter your name");
+            Cedtvalue.setError("Please enter value");
             Cedtvalue.requestFocus();
             return true;
         }
         else if(CedtexpDate.getText().toString().equals(""))
         {
-            CedtexpDate.setError("Please enter your name");
+            CedtexpDate.setError("Please enter expiration date dd/mm/yy");
             CedtexpDate.requestFocus();
             return true;
         }
@@ -253,25 +281,25 @@ public class EditItemActivity extends AppCompatActivity implements View.OnClickL
     private boolean inValidW() {
         if(Wedtitem.getText().toString().equals(""))
         {
-            Wedtitem.setError("Please enter  name");
+            Wedtitem.setError("Please enter item name");
             Wedtitem.requestFocus();
             return true;
         }
         else if(WedtShopName.getText().toString().equals(""))
         {
-            WedtShopName.setError("Please enter your name");
+            WedtShopName.setError("Please enter shop name");
             WedtShopName.requestFocus();
             return true;
         }
         else if(WedtexpDate.getText().toString().equals(""))
         {
-            WedtexpDate.setError("Please enter your name");
+            WedtexpDate.setError("Please enter expiration date dd/mm/yy");
             WedtexpDate.requestFocus();
             return true;
         }
         else if(Wedtbarcode.getText().toString().equals(""))
         {
-            Wedtbarcode.setError("Please enter your name");
+            Wedtbarcode.setError("Please enter barcode");
             Wedtbarcode.requestFocus();
             return true;
         }
@@ -286,18 +314,17 @@ public class EditItemActivity extends AppCompatActivity implements View.OnClickL
             if (CedtShopName.getText().toString().equals(""))
                 CedtShopName.setText( gift_credit.getShopName().get(0).getName());
             list = "list of credits";
-            key = gift_credit.getKey();
         }
         else {
             CedtShopName.setVisibility(View.GONE);
             giftNameField.setVisibility(View.VISIBLE);
             if (CedtGiftName.getText().toString().equals(""))
                 CedtGiftName.setText(gift_credit.getGiftName());
-            if(diaListShopNsme.isEmpty())
+            if(diaListShopName.isEmpty())
                 restShopListGift();
             list = "list of gifts";
-            key = gift_credit.getKey();
         }
+        key = gift_credit.getKey();
         if (Cedtvalue.getText().toString().equals(""))
             Cedtvalue.setText(gift_credit.getValue());
         if (CedtexpDate.getText().toString().equals(""))
@@ -307,10 +334,11 @@ public class EditItemActivity extends AppCompatActivity implements View.OnClickL
         getPicture(list, key, CimageView);
     }
 
+
     private void restShopListGift() {
         for (int i=0; i < gift_credit.getShopName().size(); i++){
             shopsList.add(gift_credit.getShopName().get(i));
-            diaListShopNsme.add(gift_credit.getShopName().get(i).getName());
+            diaListShopName.add(gift_credit.getShopName().get(i).getName());
         }
     }
 
@@ -390,7 +418,7 @@ public class EditItemActivity extends AppCompatActivity implements View.OnClickL
         final View dialogViewItem = getLayoutInflater().inflate(R.layout.item_shop_name, null);
         final Button diaBtnRemoveShop = (Button) dialogViewItem.findViewById(R.id.btnRemoveId);
 
-        adapter = new AdapterEdit(this, dialog, diaListShopNsme);
+        adapter = new AdapterEdit(this, dialog, diaListShopName);
         listView.setAdapter(adapter);
 
         diaBtnAddShop.setOnClickListener(new View.OnClickListener() {
@@ -401,7 +429,7 @@ public class EditItemActivity extends AppCompatActivity implements View.OnClickL
                     if (!shopNameExist(shopname)) {
                         Shop shop = new Shop(shopname);
                         shopsList.add(shop);
-                        diaListShopNsme.add(shopname);
+                        diaListShopName.add(shopname);
                         adapter.notifyDataSetChanged();
                     }
                     else
@@ -422,9 +450,9 @@ public class EditItemActivity extends AppCompatActivity implements View.OnClickL
     }
 
     public boolean shopNameExist(String shopname) {
-        if (!diaListShopNsme.isEmpty()) {
-            for (int i = 0; i < diaListShopNsme.size(); i++) {
-                if (diaListShopNsme.get(i).equals(shopname))
+        if (!diaListShopName.isEmpty()) {
+            for (int i = 0; i < diaListShopName.size(); i++) {
+                if (diaListShopName.get(i).equals(shopname))
                     return true;
             }
         }
@@ -432,13 +460,13 @@ public class EditItemActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private void printShopList() {
-        if (!diaListShopNsme.isEmpty()) {
+        if (!diaListShopName.isEmpty()) {
             String str = "";
-            for (int i = 0; i<diaListShopNsme.size(); i++){
-                if (i != diaListShopNsme.size()-1)
-                    str += diaListShopNsme.get(i)+";  ";
+            for (int i = 0; i< diaListShopName.size(); i++){
+                if (i != diaListShopName.size()-1)
+                    str += diaListShopName.get(i)+";  ";
                 else
-                    str += diaListShopNsme.get(i);
+                    str += diaListShopName.get(i);
             }
             CedtShopName.setText(str);
         }
