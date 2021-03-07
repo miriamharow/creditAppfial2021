@@ -12,8 +12,9 @@ public class Gift_Credit implements Serializable {
     private ArrayList<Shop> shopName;
     private boolean used;
     private String giftName;
+    private String picture;
 
-    public Gift_Credit(String key, String barCode, String expirationDate, ArrayList<Shop> shopName, String type, String value, String giftName) {
+    public Gift_Credit(String key, String barCode, String expirationDate, ArrayList<Shop> shopName, String type, String value, String giftName, String picture) {
         this.type = type;
         this.barCode = barCode;
         this.expirationDate = expirationDate;
@@ -22,6 +23,7 @@ public class Gift_Credit implements Serializable {
         this.value = value;
         this.giftName = giftName;
         this.key = key;
+        this.picture = picture;
     }
 
     public Gift_Credit(){}
@@ -86,6 +88,14 @@ public class Gift_Credit implements Serializable {
 
     public void setKey(String key) {
         this.key = key;
+    }
+
+    public String getPicture() {
+        return picture;
+    }
+
+    public void setPicture(String picture) {
+        this.picture = picture;
     }
 
 }

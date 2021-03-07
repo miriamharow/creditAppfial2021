@@ -10,8 +10,10 @@ public class Warranty implements Serializable {
     private String barCode;
     private String expirationDate;
     private String key;
+    private String pictureItemRecept;
+    private String pictureShop;
 
-    public Warranty(String shopName, String barCode, String expirationDate, String itemName, String key) {
+    public Warranty(String shopName, String barCode, String expirationDate, String itemName, String key, String pictureItem, String pictureShop) {
         this.shopName = shopName;
         this.barCode = barCode;
         this.expirationDate = expirationDate;
@@ -19,6 +21,8 @@ public class Warranty implements Serializable {
         this.key = key;
         this.itemReceipt = key + "itemReceipt";
         this.shopReceipt = key + "shopReceipt";
+        this.pictureItemRecept = pictureItem;
+        this.pictureShop = pictureShop;
     }
 
     public Warranty(){}
@@ -74,4 +78,20 @@ public class Warranty implements Serializable {
     public String getKey() { return key; }
 
     public void setKey(String key) { this.key = key; }
+
+    public String getPictureItem() {
+        return pictureItemRecept;
+    }
+
+    public void setPictureItem(String pictureItem) {
+        this.pictureItemRecept = pictureItem;
+    }
+
+    public String getPictureShop() {
+        return pictureShop;
+    }
+
+    public void setPictureShop(String pictureShop) {
+        this.pictureShop = pictureShop;
+    }
 }

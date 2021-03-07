@@ -66,9 +66,9 @@ public class List_of_Gifts {
         this.type = type;
     }
 
-    public void addGift(String key, String barCode, String expirationDate, ArrayList<Shop> shopName, String value, String giftName) {
-        Gift_Credit gift = new Gift_Credit(key, barCode, expirationDate, shopName, "gift", value, giftName);
-        db.collection("user").document(email).collection(docGifts).document(key).set(gift)
+    public void addGift(Gift_Credit gift) {
+
+        db.collection("user").document(email).collection(docGifts).document(gift.getKey()).set(gift)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
@@ -83,7 +83,7 @@ public class List_of_Gifts {
                 });
     }
 
-    private void savePic(String key, Bitmap bitmap, String email) {
+    private void savePic(String key, Bitmap bitmap) {
         // Create a storage reference from our app
         StorageReference storageRef = FirebaseStorage.getInstance().getReference();
         // Create a reference to "mountains.jpg"
@@ -128,21 +128,40 @@ public class List_of_Gifts {
         return listOfGifts;
     }
 
-    public boolean iSExist(final String barCode, final String expirationDate, final ArrayList<Shop> shopName, final String value, final String giftName , final Bitmap bitmap) {
-        final String key = ""+ Timestamp.now().getSeconds();
+    public void iSExist (final String barCode, final String expirationDate, final ArrayList<Shop> shopList, final String value, final String giftName , final Bitmap bitmap, final String state, final String oldKey) {
+        final String picture = ""+Timestamp.now().getSeconds();
+        final String key = giftName+barCode;
         DocumentReference docRef = db.collection("user").document(email).collection(docGifts).document(key);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-                        Toast.makeText((instance), "the gift is Exist", Toast.LENGTH_SHORT).show();
+                    if (document.exists())
+                    {
+                        if(state.equals("add"))
+                        {
+                            Toast.makeText(AddActivity.instance, "the gift is Exist", Toast.LENGTH_SHORT).show();
+                        }
+                        if(state.equals("update"))
+                        {
+                            Toast.makeText(EditItemActivity.instance, "the gift is Exist", Toast.LENGTH_SHORT).show();
+                        }
+
                     }
                     else {
-                        addGift(key, barCode,  expirationDate, shopName,  value, giftName);
-                        savePic( key, bitmap, email);
-                        Toast.makeText((instance), "save", Toast.LENGTH_SHORT).show();
+                        Gift_Credit gift = new Gift_Credit(key, barCode, expirationDate, shopList, "gift", value, giftName, picture);
+                        addGift(gift);
+                        if(state.equals("add"))
+                        {
+                            savePic(picture, bitmap);
+                            Toast.makeText(instance, "save", Toast.LENGTH_SHORT).show();
+                        }
+                        if(state.equals("update"))
+                        {
+                            dellete(oldKey);
+                            Toast.makeText(EditItemActivity.instance, "save", Toast.LENGTH_SHORT).show();
+                        }
                     }
                 }
                 else {
@@ -150,6 +169,19 @@ public class List_of_Gifts {
                 }
             }
         });
-        return true;
+    }
+
+    public void dellete(String key)
+    {
+        db.collection("user").document(email).collection(docGifts).document(key)
+                .delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+            }})
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                    }
+                });
     }
 }

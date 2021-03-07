@@ -28,6 +28,7 @@ import androidx.core.app.ActivityCompat;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.Timestamp;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -288,14 +289,14 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
                 ArrayList<Shop> shopName = new ArrayList<Shop>();
                 Shop s = new Shop(edtShopNameGC.getText().toString());
                 shopName.add(s);
-                list_of_credits.iSExist(edtCreditBarCodeIDGC.getText().toString(), dateExp, shopName, edtvalueIDGC.getText().toString(),picBitmap);
+                list_of_credits.iSExist(edtCreditBarCodeIDGC.getText().toString(), dateExp, shopName, edtvalueIDGC.getText().toString(), picBitmap,"add", "");
                 finish();
             }
         }
         if (type == "Gift") {
             if(fullFieldsCG()) {
                 List_of_Gifts list_of_gifts = new List_of_Gifts();
-                list_of_gifts.iSExist(edtCreditBarCodeIDGC.getText().toString(), dateExp, shopsList, edtvalueIDGC.getText().toString(), edtgiftNameIDG.getText().toString() ,picBitmap);
+                list_of_gifts.iSExist(edtCreditBarCodeIDGC.getText().toString(), dateExp, shopsList, edtvalueIDGC.getText().toString(), edtgiftNameIDG.getText().toString() ,picBitmap, "add", "");
                 finish();
             }
         }
@@ -351,7 +352,7 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
     private void saveW(){
         if(fullFieldsW()){
             List_of_Warranty list_of_warranty = new List_of_Warranty();
-            list_of_warranty.iSExist(edtCreditBarCodeIDW.getText().toString(), editDateTextIDW.getText().toString(), edtShopNameIDW.getText().toString(), edtItemW.getText().toString(), picBitmap1, picBitmap2 );
+            list_of_warranty.iSExist(edtCreditBarCodeIDW.getText().toString(), editDateTextIDW.getText().toString(), edtShopNameIDW.getText().toString(), edtItemW.getText().toString(), picBitmap1, picBitmap2 , "add", "");
             finish();
         }
     }

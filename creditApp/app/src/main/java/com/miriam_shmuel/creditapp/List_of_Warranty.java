@@ -54,9 +54,8 @@ public class List_of_Warranty {
         this.listOfWarranty = listOfWarranty;
     }
 
-    public void addWarranty(String barCode, String expirationDate, String shopName, String itemName, String key) {
-       Warranty warranty= new Warranty(shopName, barCode, expirationDate, itemName, key);
-        db.collection("user").document(email).collection(docWarranty).document(key).set(warranty)
+    public void addWarranty( Warranty warranty) {
+        db.collection("user").document(email).collection(docWarranty).document(warranty.getKey()).set(warranty)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
@@ -96,22 +95,40 @@ public class List_of_Warranty {
         });
     }
 
-    public boolean iSExist(final String barCode, final String expirationDate, final String shopName, final String itemName, final Bitmap picBitmap1, final Bitmap picBitmap2) {
-        final String key = ""+ Timestamp.now().getSeconds();
+    public boolean iSExist(final String barCode, final String expirationDate, final String shopName, final String itemName, final Bitmap picBitmap1, final Bitmap picBitmap2, final String state, final String oldKey) {
+        final String picture = ""+ Timestamp.now().getSeconds();
+        final String key = shopName+barCode;
         DocumentReference docRef = db.collection("user").document(email).collection(docWarranty).document(key);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-                        Toast.makeText((instance), "the warranty is Exist", Toast.LENGTH_SHORT).show();
+                    if (document.exists())
+                    {
+                        if(state.equals("add"))
+                        {
+                            Toast.makeText(AddActivity.instance, "the warranty is Exist", Toast.LENGTH_SHORT).show();
+                        }
+                        if(state.equals("update"))
+                        {
+                            Toast.makeText(EditItemActivity.instance, "the warranty is Exist", Toast.LENGTH_SHORT).show();
+                        }
                     }
                     else {
-                        addWarranty(barCode, expirationDate, shopName, itemName, key);
-                        savePic(key, "itemReceipt", picBitmap1);
-                        savePic(key, "shopReceipt", picBitmap2);
-                        Toast.makeText((instance), "save", Toast.LENGTH_SHORT).show();
+                        Warranty warranty = new Warranty(shopName, barCode, expirationDate, itemName, key, picture+"itemReceipt" ,picture+"shopReceipt");
+                        addWarranty(warranty);
+                        if(state.equals("add"))
+                        {
+                            savePic(picture, "itemReceipt", picBitmap1);
+                            savePic(picture, "shopReceipt", picBitmap2);
+                            Toast.makeText((instance), "save", Toast.LENGTH_SHORT).show();
+                        }
+                        if(state.equals("update"))
+                        {
+                            dellete(oldKey);
+                            Toast.makeText(EditItemActivity.instance, "save", Toast.LENGTH_SHORT).show();
+                        }
                     }
                 }
                 else {
@@ -120,6 +137,20 @@ public class List_of_Warranty {
             }
         });
         return true;
+    }
+
+    public void dellete(String key)
+    {
+        db.collection("user").document(email).collection(docWarranty).document(key)
+                .delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+            }})
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                    }
+                });
     }
 
 }

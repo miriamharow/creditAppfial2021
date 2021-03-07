@@ -56,9 +56,8 @@ public class List_of_Credits {
         return data;
     }
 
-    public Gift_Credit addCredit(String key, String barCode, String expirationDate, ArrayList<Shop> shopName, String value) {
-        Gift_Credit credit = new Gift_Credit(key, barCode, expirationDate, shopName, "credit", value, null);
-        db.collection("user").document(email).collection(docCredits).document(key).set(credit)
+    public Gift_Credit addCredit( Gift_Credit credit) {
+        db.collection("user").document(email).collection(docCredits).document(credit.getKey()).set(credit)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
@@ -100,8 +99,9 @@ public class List_of_Credits {
         });
     }
 
-    public boolean iSExist(final String barCode, final String expirationDate, final ArrayList<Shop> shopName, final String value, final Bitmap bitmap) {
-        final String key = ""+Timestamp.now().getSeconds();
+    public void iSExist(final String barCode, final String expirationDate, final ArrayList<Shop> shopName, final String value, final Bitmap bitmap, final String state, final String oldKey) {
+        final String picture = ""+Timestamp.now().getSeconds();
+        final String key =shopName.get(0).getName()+barCode;
         DocumentReference docRef = db.collection("user").document(email).collection(docCredits).document(key);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -109,12 +109,30 @@ public class List_of_Credits {
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
-                        Toast.makeText((instance), "the credit is Exist", Toast.LENGTH_SHORT).show();
+                        if(state.equals("add"))
+                        {
+                            Toast.makeText(AddActivity.instance, "the credit is Exist", Toast.LENGTH_SHORT).show();
+                        }
+                        if(state.equals("update"))
+                        {
+                            Toast.makeText(EditItemActivity.instance, "the credit is Exist", Toast.LENGTH_SHORT).show();
+                        }
                     }
                     else {
-                        addCredit(key, barCode,  expirationDate, shopName,  value);
-                        savePic( key, bitmap);
-                        Toast.makeText((instance), "save", Toast.LENGTH_SHORT).show();
+                       if(state.equals("add"))
+                       {
+                           Gift_Credit credit = new Gift_Credit(key, barCode, expirationDate, shopName, "credit", value, null,picture);
+                           addCredit(credit);
+                           savePic( picture, bitmap);
+                           Toast.makeText((instance), "save", Toast.LENGTH_SHORT).show();
+                       }
+                       if(state.equals("update"))
+                       {
+                           dellete(oldKey);
+                           Gift_Credit credit = new Gift_Credit(key, barCode, expirationDate, shopName, "credit", value, null,picture);
+                           addCredit(credit);
+                           Toast.makeText(EditItemActivity.instance, "save", Toast.LENGTH_SHORT).show();
+                       }
                     }
                 }
                 else {
@@ -122,6 +140,20 @@ public class List_of_Credits {
                 }
             }
         });
-            return true;
+    }
+
+    public void dellete(String key)
+    {
+        db.collection("user").document(email).collection(docCredits).document(key)
+                .delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+          Log.d("debug", "dellete");
+            }})
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                    }
+                });
     }
 }

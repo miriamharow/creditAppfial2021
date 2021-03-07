@@ -129,7 +129,6 @@ public class EditItemActivity extends AppCompatActivity implements View.OnClickL
                 if(!inValidGC()) {
                     Toast.makeText(EditItemActivity.this, "ok", Toast.LENGTH_SHORT).show();
                     confirmationData();
-                    updateCreditGift();
                 }
                 else
                     enterGiftCreditInfo();
@@ -142,7 +141,6 @@ public class EditItemActivity extends AppCompatActivity implements View.OnClickL
                 if(!inValidW()) {
                     Toast.makeText(EditItemActivity.this, "ok", Toast.LENGTH_SHORT).show();
                     confirmationData();
-
                 }
                 else
                     enterWarrantyInfo();
@@ -180,8 +178,7 @@ public class EditItemActivity extends AppCompatActivity implements View.OnClickL
                 "Yes",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        //updateData(); check isExist by name+barcode-> dellete & add
-                        //Toast(seccused)
+                        update();//updateData(); check isExist by name+barcode-> dellete & add
                         dialog.cancel();
                         finish();
 
@@ -201,30 +198,73 @@ public class EditItemActivity extends AppCompatActivity implements View.OnClickL
 
     }
 
-    public void updateCreditGift() {
+    public void update() {
         if (type.equals("credit")) {
-            Toast.makeText(instance, "here", Toast.LENGTH_SHORT).show();
             ArrayList<Shop> shop = new ArrayList<Shop>();
             Shop s = new Shop(CedtShopName.getText().toString());
             shop.add(s);
-            db.collection("list of credit").document(gift_credit.getKey())
-                    .delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-
-                        }
-                    });
+            String newKeyC = shop.get(0).getName() + Cedtbarcode.getText().toString();
             List_of_Credits lc = new List_of_Credits();
-            Gift_Credit gc_new = lc.addCredit(gift_credit.getKey(), Cedtbarcode.getText().toString(),
-                    CedtexpDate.getText().toString(), shop, Cedtvalue.getText().toString());
+            Gift_Credit newCredit = new Gift_Credit(newKeyC, Cedtbarcode.getText().toString(),
+                    CedtexpDate.getText().toString(), shop, "credit", Cedtvalue.getText().toString(), null,gift_credit.getPicture());
+            if(newKeyC.equals(gift_credit.getKey()))
+            {
+                lc.dellete(gift_credit.getKey());
+                lc.addCredit(newCredit);
+                Toast.makeText(instance, "save", Toast.LENGTH_SHORT).show();
+            }
+            else
+            {
+                Toast.makeText(instance, "no = ", Toast.LENGTH_SHORT).show();
+                Bitmap picBitmap = null;
+                lc.iSExist(Cedtbarcode.getText().toString(),  CedtexpDate.getText().toString(), shop, Cedtvalue.getText().toString(), picBitmap ,"update", gift_credit.getKey());
+            }
+        }
+        else if (type.equals("gift")) {
+            String newKeyG = CedtGiftName.getText().toString() + Cedtbarcode.getText().toString();
+            List_of_Gifts lg = new List_of_Gifts();
+            Gift_Credit newGift = new Gift_Credit(newKeyG, Cedtbarcode.getText().toString(),
+                    CedtexpDate.getText().toString(), shopsListNew() , "gift", Cedtvalue.getText().toString(), CedtGiftName.getText().toString(),gift_credit.getPicture());
+            if(newKeyG.equals(gift_credit.getKey()))
+            {
+                lg.dellete(gift_credit.getKey());
+                lg.addGift(newGift);
+                Toast.makeText(instance, "save", Toast.LENGTH_SHORT).show();
+            }
+            else
+            {
+                Toast.makeText(instance, "no = ", Toast.LENGTH_SHORT).show();
+                Bitmap picBitmap = null;
+                lg.iSExist(Cedtbarcode.getText().toString(), CedtexpDate.getText().toString(), shopsListNew(), Cedtvalue.getText().toString(), CedtGiftName.getText().toString(),picBitmap, "update" ,gift_credit.getKey());
+            }
+        }
+        else if (type.equals("warranty")) {
+            String newKeyW = WedtShopName.getText().toString() + Wedtbarcode.getText().toString();
+            Warranty newWarranty = new Warranty(WedtShopName.getText().toString(), Wedtbarcode.getText().toString(), WedtexpDate.getText().toString(), Wedtitem.getText().toString(), newKeyW, warranty.getPictureItem(), warranty.getPictureShop());
+            List_of_Warranty lw = new List_of_Warranty();
+            if(newKeyW.equals(warranty.getKey()))
+            {
+                lw.dellete(warranty.getKey());
+                lw.addWarranty(newWarranty);
+                Toast.makeText(instance, "save", Toast.LENGTH_SHORT).show();
+            }
+            else
+            {
+                Bitmap picBitmap = null;
+                lw.iSExist(Wedtbarcode.getText().toString(), WedtexpDate.getText().toString(),WedtShopName.getText().toString(), Wedtitem.getText().toString(), picBitmap, picBitmap, "update" ,warranty.getKey());
+            }
         }
 
+    }
+
+    private ArrayList<Shop> shopsListNew() {
+        ArrayList<Shop> shoListNew = new ArrayList<>();
+        for(int i =0; i<diaListShopName.size(); i++)
+        {
+            Shop s = new Shop (diaListShopName.get(i));
+            shoListNew.add(s);
+        }
+        return  shoListNew;
     }
 
     private boolean specialCharters(int length, String str) {
