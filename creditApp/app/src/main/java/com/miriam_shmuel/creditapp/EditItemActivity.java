@@ -240,7 +240,7 @@ public class EditItemActivity extends AppCompatActivity implements View.OnClickL
         }
         else if (type.equals("warranty")) {
             String newKeyW = WedtShopName.getText().toString() + Wedtbarcode.getText().toString();
-            Warranty newWarranty = new Warranty(WedtShopName.getText().toString(), Wedtbarcode.getText().toString(), WedtexpDate.getText().toString(), Wedtitem.getText().toString(), newKeyW, warranty.getPictureItem(), warranty.getPictureShop());
+            Warranty newWarranty = new Warranty(WedtShopName.getText().toString(), Wedtbarcode.getText().toString(), WedtexpDate.getText().toString(), Wedtitem.getText().toString(), newKeyW, warranty.getPictureItem(), warranty.getPictureShop(), warranty.getFolder());
             List_of_Warranty lw = new List_of_Warranty();
             if(newKeyW.equals(warranty.getKey()))
             {
@@ -256,6 +256,7 @@ public class EditItemActivity extends AppCompatActivity implements View.OnClickL
         }
 
     }
+
 
     private ArrayList<Shop> shopsListNew() {
         ArrayList<Shop> shoListNew = new ArrayList<>();
@@ -348,7 +349,7 @@ public class EditItemActivity extends AppCompatActivity implements View.OnClickL
 
     public void enterGiftCreditInfo(){
         String list = "";
-        String key = "";
+        String picture = "";
         if (gift_credit.getType().equals("credit"))
         {
             if (CedtShopName.getText().toString().equals(""))
@@ -364,14 +365,14 @@ public class EditItemActivity extends AppCompatActivity implements View.OnClickL
                 restShopListGift();
             list = "list of gifts";
         }
-        key = gift_credit.getKey();
+        picture = gift_credit.getPicture();
         if (Cedtvalue.getText().toString().equals(""))
             Cedtvalue.setText(gift_credit.getValue());
         if (CedtexpDate.getText().toString().equals(""))
             CedtexpDate.setText(gift_credit.getExpirationDate());
         if (Cedtbarcode.getText().toString().equals(""))
             Cedtbarcode.setText(gift_credit.getBarCode());
-        getPicture(list, key, CimageView);
+        getPicture(list, picture, CimageView);
     }
 
 
@@ -393,18 +394,18 @@ public class EditItemActivity extends AppCompatActivity implements View.OnClickL
             Wedtbarcode.setText(warranty.getBarCode());
 
         String list = "list of warranty";
-        String key = warranty.getKey();
-        Toast.makeText(this, key, Toast.LENGTH_SHORT).show();
-        String key1 = key + "/"+ key + "itemReceipt";
-        String key2 = key + "/"+ key + "shopReceipt";
+        String folder = warranty.getFolder();
+        Toast.makeText(this, folder, Toast.LENGTH_SHORT).show();
+        String picture1 = folder + "/"+ folder + "itemReceipt";
+        String picture2 = folder + "/"+ folder + "shopReceipt";
 
-        getPicture(list, key1, WReceiptPic);
-        getPicture(list, key2, WWarrantyPic);
+        getPicture(list, picture1, WReceiptPic);
+        getPicture(list, picture2, WWarrantyPic);
 
     }
 
-    public void getPicture(String list, String key, final ImageView imageView){
-        StorageReference mImageRef = FirebaseStorage.getInstance().getReference(email+"/"+list+"/"+key+".jpg");
+    public void getPicture(String list, String picture, final ImageView imageView){
+        StorageReference mImageRef = FirebaseStorage.getInstance().getReference(email+"/"+list+"/"+picture+".jpg");
         final long FIVE_MEGABYTE = 5 * 1024 * 1024;
         mImageRef.getBytes(FIVE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>()  {
             @Override

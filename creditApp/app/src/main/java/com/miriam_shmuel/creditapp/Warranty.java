@@ -5,24 +5,22 @@ import java.io.Serializable;
 public class Warranty implements Serializable {
     private String shopName;
     private String itemName;
-    private String itemReceipt;
-    private String shopReceipt;
     private String barCode;
     private String expirationDate;
     private String key;
     private String pictureItemRecept;
     private String pictureShop;
+    private String folder;
 
-    public Warranty(String shopName, String barCode, String expirationDate, String itemName, String key, String pictureItem, String pictureShop) {
+    public Warranty(String shopName, String barCode, String expirationDate, String itemName, String key, String pictureItem, String pictureShop, String folder) {
         this.shopName = shopName;
         this.barCode = barCode;
         this.expirationDate = expirationDate;
         this.itemName = itemName;
         this.key = key;
-        this.itemReceipt = key + "itemReceipt";
-        this.shopReceipt = key + "shopReceipt";
         this.pictureItemRecept = pictureItem;
         this.pictureShop = pictureShop;
+        this.folder = folder;
     }
 
     public Warranty(){}
@@ -35,28 +33,12 @@ public class Warranty implements Serializable {
         this.itemName = itemName;
     }
 
-    public String getItemReceipt() {
-        return itemReceipt;
-    }
-
-    public void setItemReceipt(String itemReceipt) {
-        this.itemReceipt = itemReceipt;
-    }
-
     public String getShopName() {
         return shopName;
     }
 
     public void setShopName(String shopName) {
         this.shopName = shopName;
-    }
-
-    public String getShopReceipt() {
-        return shopReceipt;
-    }
-
-    public void setShopReceipt(String shopReceipt) {
-        this.shopReceipt = shopReceipt;
     }
 
     public String getBarCode() {
@@ -93,5 +75,13 @@ public class Warranty implements Serializable {
 
     public void setPictureShop(String pictureShop) {
         this.pictureShop = pictureShop;
+    }
+
+    public String getFolder() {
+        return folder;
+    }
+
+    public void setFolder(String folder) {
+        this.folder = folder;
     }
 }

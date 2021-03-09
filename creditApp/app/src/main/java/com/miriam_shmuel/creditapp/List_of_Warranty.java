@@ -116,7 +116,7 @@ public class List_of_Warranty {
                         }
                     }
                     else {
-                        Warranty warranty = new Warranty(shopName, barCode, expirationDate, itemName, key, picture+"itemReceipt" ,picture+"shopReceipt");
+                        Warranty warranty = new Warranty(shopName, barCode, expirationDate, itemName, key, picture+"itemReceipt" ,picture+"shopReceipt", picture);
                         addWarranty(warranty);
                         if(state.equals("add"))
                         {

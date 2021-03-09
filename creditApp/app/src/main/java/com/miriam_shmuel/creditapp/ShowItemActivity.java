@@ -97,46 +97,23 @@ public class ShowItemActivity extends AppCompatActivity {
 
     public void enterGiftCreditInfo(){
         String list = "";
-        String key = "";
+        String picture = "";
         if (gift_credit.getType().equals("credit"))
         {
             CShopNameID.setText(gift_credit.getShopName().get(0).toString());
             list = "list of credits";
-            key = gift_credit.getKey();
         }
         else{
             giftNameField.setVisibility(View.VISIBLE);
             CGiftNameID.setText(gift_credit.getGiftName());
             CShopNameID.setText(shopList());
             list = "list of gifts";
-            key = gift_credit.getKey();
         }
+        picture = gift_credit.getPicture();
         CvalueID.setText(gift_credit.getValue());
         CexpDateID.setText(gift_credit.getExpirationDate());
         CbarcodeID.setText(gift_credit.getBarCode());
-        getPicture(list, key, CimageView);
-    }
-
-    public void updateGiftCreditInfo(Gift_Credit gc_new){
-        String list = "";
-        String key = "";
-        if (gc_new.getType().equals("credit"))
-        {
-            CShopNameID.setText(gc_new.getShopName().get(0).toString());
-            list = "list of credits";
-            key = gc_new.getKey();
-        }
-        else{
-            giftNameField.setVisibility(View.VISIBLE);
-            CGiftNameID.setText(gc_new.getGiftName());
-            CShopNameID.setText(shopList());
-            list = "list of gifts";
-            key = gc_new.getKey();
-        }
-        CvalueID.setText(gc_new.getValue());
-        CexpDateID.setText(gc_new.getExpirationDate());
-        CbarcodeID.setText(gc_new.getBarCode());
-        getPicture(list, key, CimageView);
+        getPicture(list, picture, CimageView);
     }
 
     public void enterWarrantyInfo(){
@@ -146,18 +123,18 @@ public class ShowItemActivity extends AppCompatActivity {
         WbarcodeID.setText(warranty.getBarCode());
 
         String list = "list of warranty";
-        String key = warranty.getKey();
-        Toast.makeText(this, key, Toast.LENGTH_SHORT).show();
-        String key1 = key + "/"+ key + "itemReceipt";
-        String key2 = key + "/"+ key + "shopReceipt";
+        String folder = warranty.getFolder();
+        Toast.makeText(this, folder, Toast.LENGTH_SHORT).show();
+        String picture1 = folder + "/"+ folder + "itemReceipt";
+        String picture2 = folder + "/"+ folder + "shopReceipt";
 
-        getPicture(list, key1, WReceiptPic);
-        getPicture(list, key2, WWarrantyPic);
+        getPicture(list, picture1, WReceiptPic);
+        getPicture(list, picture2, WWarrantyPic);
 
     }
 
-    public void getPicture(String list, String key, final ImageView imageView){
-        StorageReference mImageRef = FirebaseStorage.getInstance().getReference(email+"/"+list+"/"+key+".jpg");
+    public void getPicture(String list, String picture, final ImageView imageView){
+        StorageReference mImageRef = FirebaseStorage.getInstance().getReference(email+"/"+list+"/"+picture+".jpg");
         final long FIVE_MEGABYTE = 5 * 1024 * 1024;
         mImageRef.getBytes(FIVE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>()  {
                     @Override
