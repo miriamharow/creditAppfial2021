@@ -25,7 +25,7 @@ import static android.content.ContentValues.TAG;
 
 public class WarrantyFragment extends Fragment {
     public View view;
-    private AdapterWarranties cAdpter;
+    private AdapterWarranties Adapter;
     private ListView listView;
     private ArrayList<Warranty> arrayList;
     private FirebaseFirestore db;
@@ -58,10 +58,10 @@ public class WarrantyFragment extends Fragment {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 arrayList.add(document.toObject(Warranty.class));
                             }
-                            cAdpter = new AdapterWarranties(getActivity(), R.layout.item_element, arrayList);
+                            Adapter = new AdapterWarranties(getActivity(), R.layout.item_element, arrayList);
                             //view = getLayoutInflater().inflate(R.layout.fragment_credit, null);
                             listView = (ListView)view.findViewById(R.id.listViewID);
-                            listView.setAdapter(cAdpter);
+                            listView.setAdapter(Adapter);
                         } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());
                         }
@@ -69,5 +69,13 @@ public class WarrantyFragment extends Fragment {
                 });
 
         return view;}
+
+    public AdapterWarranties getAdapter() {
+        return Adapter;
+    }
+
+    public void setAdapter(AdapterWarranties adapter) {
+        Adapter = adapter;
+    }
 
 }

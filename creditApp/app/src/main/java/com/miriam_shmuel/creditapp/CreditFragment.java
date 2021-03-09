@@ -29,7 +29,10 @@ public class CreditFragment extends Fragment  {
     private List_of_Credits listCredit;
     private Map<String, Object> data;
     public View view;
-    private AdapterCreditsGifts cAdpter;
+
+
+
+    private AdapterCreditsGifts Adapter;
     public ListView listView;
     public ArrayList<Gift_Credit> arrayList;
     private FirebaseFirestore db;
@@ -67,8 +70,8 @@ public class CreditFragment extends Fragment  {
                                 arrayList.add(document.toObject(Gift_Credit.class));
                                 Log.d("test","number array "+i++);
                             }
-                            cAdpter = new AdapterCreditsGifts(getActivity(), R.layout.item_element, arrayList);
-                            listView.setAdapter(cAdpter);
+                            Adapter = new AdapterCreditsGifts(getActivity(), R.layout.item_element, arrayList);
+                            listView.setAdapter(Adapter);
                         } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());
                         }
@@ -76,5 +79,12 @@ public class CreditFragment extends Fragment  {
                     }
                 });
         return view;
+    }
+    public AdapterCreditsGifts getAdapter() {
+        return Adapter;
+    }
+
+    public void setAdapter(AdapterCreditsGifts adapter) {
+        Adapter = adapter;
     }
 }

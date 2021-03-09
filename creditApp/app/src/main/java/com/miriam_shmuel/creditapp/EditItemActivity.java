@@ -209,7 +209,7 @@ public class EditItemActivity extends AppCompatActivity implements View.OnClickL
                     CedtexpDate.getText().toString(), shop, "credit", Cedtvalue.getText().toString(), null,gift_credit.getPicture());
             if(newKeyC.equals(gift_credit.getKey()))
             {
-                lc.dellete(gift_credit.getKey());
+                lc.delete(gift_credit.getKey());
                 lc.addCredit(newCredit);
                 Toast.makeText(instance, "save", Toast.LENGTH_SHORT).show();
             }
@@ -227,7 +227,7 @@ public class EditItemActivity extends AppCompatActivity implements View.OnClickL
                     CedtexpDate.getText().toString(), shopsListNew() , "gift", Cedtvalue.getText().toString(), CedtGiftName.getText().toString(),gift_credit.getPicture());
             if(newKeyG.equals(gift_credit.getKey()))
             {
-                lg.dellete(gift_credit.getKey());
+                lg.delete(gift_credit.getKey());
                 lg.addGift(newGift);
                 Toast.makeText(instance, "save", Toast.LENGTH_SHORT).show();
             }
@@ -244,7 +244,7 @@ public class EditItemActivity extends AppCompatActivity implements View.OnClickL
             List_of_Warranty lw = new List_of_Warranty();
             if(newKeyW.equals(warranty.getKey()))
             {
-                lw.dellete(warranty.getKey());
+                lw.delete(warranty.getKey());
                 lw.addWarranty(newWarranty);
                 Toast.makeText(instance, "save", Toast.LENGTH_SHORT).show();
             }

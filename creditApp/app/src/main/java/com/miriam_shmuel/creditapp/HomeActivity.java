@@ -1,6 +1,7 @@
 package com.miriam_shmuel.creditapp;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -8,6 +9,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
@@ -21,9 +23,12 @@ import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
 
     public class HomeActivity extends AppCompatActivity {
+        public static Context instance;
         private FloatingActionButton goAddPage;
         FrameLayout simpleFrameLayout;
         TabLayout tabLayout;
+        EditText edtSearch;
+        Fragment fragment;
 
         FirebaseAuth mFirebaseAuth;
         private FirebaseAuth.AuthStateListener mAuthStateListener;
@@ -34,8 +39,37 @@ import com.google.firebase.auth.FirebaseAuth;
             //--------------------SCREEN-------------------------
             getSupportActionBar().setTitle("Credit App");
             getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#00264d")));
+
+
+            fragment = new GiftFragment();
+            FragmentManager fm = getSupportFragmentManager();
+            FragmentTransaction ft = fm.beginTransaction();
+            ft.replace(R.id.simpleFrameLayout, fragment);
+            ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+            ft.commit();
             //---------------------------------------------------
 
+            /*edtSearch = findViewById(R.id.edtSearchID);
+            edtSearch.addTextChangedListener(new TextWatcher() {
+
+                @Override
+                public void onTextChanged(CharSequence cs, int arg1, int arg2, int arg3) {
+                    // When user changed the Text
+                    //HomeActivity.this.adapter.getFilter().filter(cs);
+                }
+
+                @Override
+                public void beforeTextChanged(CharSequence arg0, int arg1, int arg2,
+                                              int arg3) {
+                    // TODO Auto-generated method stub
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable arg0) {
+                    // TODO Auto-generated method stub
+                }
+            });*/
 
             //--------------------GO ADD PAGE--------------------
             goAddPage = findViewById(R.id.goAddPageID);
@@ -56,7 +90,7 @@ import com.google.firebase.auth.FirebaseAuth;
                 @Override
                 public void onTabSelected(TabLayout.Tab tab) {
 // get the current selected tab's position and replace the fragment accordingly
-                    Fragment fragment = null;
+                    fragment = null;
                     switch (tab.getPosition()) {
                         case 0:
                             fragment = new GiftFragment();
@@ -125,6 +159,9 @@ import com.google.firebase.auth.FirebaseAuth;
             Intent intToLogIn = new Intent(HomeActivity.this, LogInActivity.class);
             startActivity(intToLogIn);
         }
+
+
+
     }
 
 

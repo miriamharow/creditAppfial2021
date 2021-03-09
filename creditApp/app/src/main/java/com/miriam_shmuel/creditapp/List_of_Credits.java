@@ -78,7 +78,7 @@ public class List_of_Credits {
         // Create a storage reference from our app
         StorageReference storageRef = FirebaseStorage.getInstance().getReference();
         // Create a reference to "mountains.jpg"
-        StorageReference imageRef = storageRef.child(email+"/"+"list of credits/"+key + ".jpg");
+        StorageReference imageRef = storageRef.child(email+"/"+docCredits+"/"+key + ".jpg");
         // Create a reference to 'images/mountains.jpg'
         StorageReference documentImagesRef = storageRef.child("images/" + key + ".jpg");
 
@@ -128,7 +128,7 @@ public class List_of_Credits {
                        }
                        if(state.equals("update"))
                        {
-                           dellete(oldKey);
+                           delete(oldKey);
                            Gift_Credit credit = new Gift_Credit(key, barCode, expirationDate, shopName, "credit", value, null,picture);
                            addCredit(credit);
                            Toast.makeText(EditItemActivity.instance, "save", Toast.LENGTH_SHORT).show();
@@ -142,7 +142,7 @@ public class List_of_Credits {
         });
     }
 
-    public void dellete(String key)
+    public void delete(String key)
     {
         db.collection("user").document(email).collection(docCredits).document(key)
                 .delete().addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -155,5 +155,27 @@ public class List_of_Credits {
                     public void onFailure(@NonNull Exception e) {
                     }
                 });
+
+    }
+
+    public void deletePicture(String picture){
+        // Create a storage reference from our app
+        StorageReference storageRef = FirebaseStorage.getInstance().getReference();
+
+// Create a reference to the file to delete
+        StorageReference desertRef = storageRef.child(email+"/"+docCredits+"/"+picture+".jpg");
+
+// Delete the file
+        desertRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                // File deleted successfully
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                // Uh-oh, an error occurred!
+            }
+        });
     }
 }

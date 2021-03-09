@@ -87,9 +87,8 @@ public class List_of_Gifts {
         // Create a storage reference from our app
         StorageReference storageRef = FirebaseStorage.getInstance().getReference();
         // Create a reference to "mountains.jpg"
-        StorageReference imageRef = storageRef.child(email+"/"+"list of gifts/"+key + ".jpg");
+        StorageReference imageRef = storageRef.child(email+"/"+docGifts+"/"+key + ".jpg");
         // Create a reference to 'images/mountains.jpg'
-        StorageReference documentImagesRef = storageRef.child("images/" + key + ".jpg");
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
@@ -159,7 +158,7 @@ public class List_of_Gifts {
                         }
                         if(state.equals("update"))
                         {
-                            dellete(oldKey);
+                            delete(oldKey);
                             Toast.makeText(EditItemActivity.instance, "save", Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -171,7 +170,7 @@ public class List_of_Gifts {
         });
     }
 
-    public void dellete(String key)
+    public void delete(String key)
     {
         db.collection("user").document(email).collection(docGifts).document(key)
                 .delete().addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -183,5 +182,26 @@ public class List_of_Gifts {
                     public void onFailure(@NonNull Exception e) {
                     }
                 });
+    }
+
+    public void deletePicture(String picture){
+        // Create a storage reference from our app
+        StorageReference storageRef = FirebaseStorage.getInstance().getReference();
+
+// Create a reference to the file to delete
+        StorageReference desertRef = storageRef.child(email+"/"+docGifts+"/"+picture+".jpg");
+
+// Delete the file
+        desertRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                // File deleted successfully
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                // Uh-oh, an error occurred!
+            }
+        });
     }
 }

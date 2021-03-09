@@ -14,7 +14,9 @@
         <activity android:name=".AddActivity" />
         <activity android:name=".EditItemActivity" />
         <activity android:name=".ResetPasswordActivity" />
-        <activity android:name=".HomeActivity" />
+        <activity
+            android:name=".HomeActivity"
+            android:windowSoftInputMode="stateHidden"/>
         <activity android:name=".SignUpActivity" />
         <activity android:name=".ShowItemActivity" />
         <activity android:name=".LogInActivity">

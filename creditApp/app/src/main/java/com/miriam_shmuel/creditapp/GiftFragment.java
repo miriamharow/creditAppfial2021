@@ -27,7 +27,7 @@ import static android.content.ContentValues.TAG;
 
 public class GiftFragment extends Fragment {
     //public View view;
-    private AdapterCreditsGifts cAdpter;
+    private AdapterCreditsGifts Adapter;
     private ListView listView;
     private ArrayList<Gift_Credit> arrayList;
     private FirebaseFirestore db;
@@ -63,8 +63,8 @@ public class GiftFragment extends Fragment {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 arrayList.add(document.toObject(Gift_Credit.class));
                             }
-                            cAdpter = new AdapterCreditsGifts(getActivity(), R.layout.item_element, arrayList);
-                            listView.setAdapter(cAdpter);
+                            Adapter = new AdapterCreditsGifts(getActivity(), R.layout.item_element, arrayList);
+                            listView.setAdapter(Adapter);
                         } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());
                         }
@@ -87,6 +87,13 @@ public class GiftFragment extends Fragment {
         return view;
 
 
+    }
+    public AdapterCreditsGifts getAdapter() {
+        return Adapter;
+    }
+
+    public void setAdapter(AdapterCreditsGifts adapter) {
+        Adapter = adapter;
     }
 
 }

@@ -89,7 +89,9 @@ public class AdapterWarranties extends ArrayAdapter<Warranty> {
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 List_of_Warranty list_of_warranty = new List_of_Warranty();
-                                list_of_warranty.dellete(warrantyI.getKey());
+                                list_of_warranty.delete(warrantyI.getKey());
+                                list_of_warranty.deletePicture(warrantyI.getFolder(), warrantyI.getPictureItem());
+                                list_of_warranty.deletePicture(warrantyI.getFolder(), warrantyI.getPictureShop());
                                 Toast.makeText(context.getApplicationContext(), "delete", LENGTH_SHORT).show();
                                 dialog.cancel();
                             }

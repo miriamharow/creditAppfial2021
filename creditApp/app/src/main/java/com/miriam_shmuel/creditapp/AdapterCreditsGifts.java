@@ -1,6 +1,5 @@
 package com.miriam_shmuel.creditapp;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -90,10 +89,23 @@ public class AdapterCreditsGifts extends ArrayAdapter<Gift_Credit> {
                         "Yes",
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-                                List_of_Credits list_of_credit = new List_of_Credits();
-                                list_of_credit.dellete(creditI.getKey());
-                                Toast.makeText(context.getApplicationContext(), "delete" , LENGTH_SHORT).show();
-                                dialog.cancel();
+                               if(creditI.getType().equals("credit"))
+                               {
+                                   List_of_Credits list_of_credit = new List_of_Credits();
+                                   list_of_credit.delete(creditI.getKey());
+                                   list_of_credit.deletePicture(creditI.getPicture());
+                                   Toast.makeText(context.getApplicationContext(), "delete" , LENGTH_SHORT).show();
+                                   dialog.cancel();
+                               }
+                               else if(creditI.getType().equals("gift"))
+                               {
+                                   List_of_Gifts list_of_gifts = new List_of_Gifts();
+                                   list_of_gifts.delete(creditI.getKey());
+                                   list_of_gifts.deletePicture(creditI.getPicture());
+                                   Toast.makeText(context.getApplicationContext(), "delete" , LENGTH_SHORT).show();
+                                   dialog.cancel();
+                               }
+
                             }
                         });
 
