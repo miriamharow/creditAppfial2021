@@ -1,28 +1,34 @@
 package com.miriam_shmuel.creditapp;
 
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import static android.widget.Toast.LENGTH_SHORT;
+
 public class AdapterCreditsGifts extends ArrayAdapter<Gift_Credit> {
     Context context; // The current context. Used to inflate the layout file.
     ArrayList <Gift_Credit> creditlist; //A List of AndroidFlavor objects to display in a list
     int resource; // layout file
 
-    public AdapterCreditsGifts(Context context, int resource, ArrayList<Gift_Credit> contactlist) {
-        super(context, R.layout.item_element, R.id.itemId, contactlist);
+    public AdapterCreditsGifts(Context context, int resource, ArrayList<Gift_Credit> creditlist) {
+        super(context, R.layout.item_element, R.id.itemId, creditlist);
         this.context = context;
         this.resource = resource;
-        this.creditlist = contactlist;
+        this.creditlist = creditlist;
     }
 
     /**
@@ -40,7 +46,7 @@ public class AdapterCreditsGifts extends ArrayAdapter<Gift_Credit> {
     public View getView(int position, @Nullable View convertView, @Nullable ViewGroup parent)
     {
         // get view
-       LayoutInflater layoutInflater = LayoutInflater.from(context);
+       final LayoutInflater layoutInflater = LayoutInflater.from(context);
         View view = layoutInflater.inflate(resource, null, false);
 
         // bind to view elements
@@ -71,6 +77,38 @@ public class AdapterCreditsGifts extends ArrayAdapter<Gift_Credit> {
                 intentCI.putExtra("type",creditI.getType());
                 intentCI.putExtra("obj", (Serializable) creditI);
                 context.startActivity(intentCI);
+            }
+        });
+
+        view.setOnLongClickListener(new View.OnLongClickListener() {
+            public boolean onLongClick(View arg0) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                builder.setMessage("Are you sure to want to delete the receipt?");
+                builder.setCancelable(true);
+
+                builder.setPositiveButton(
+                        "Yes",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                List_of_Credits list_of_credit = new List_of_Credits();
+                                list_of_credit.dellete(creditI.getKey());
+                                Toast.makeText(context.getApplicationContext(), "delete" , LENGTH_SHORT).show();
+                                dialog.cancel();
+                            }
+                        });
+
+                builder.setNegativeButton(
+                        "No",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+
+                AlertDialog alert = builder.create();
+                alert.show();
+
+                return true;    // <- set to true
             }
         });
 

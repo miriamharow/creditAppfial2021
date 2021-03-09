@@ -1,17 +1,22 @@
 package com.miriam_shmuel.creditapp;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+
+import static android.widget.Toast.LENGTH_SHORT;
 
 public class AdapterWarranties extends ArrayAdapter<Warranty> {
     /*
@@ -72,6 +77,38 @@ public class AdapterWarranties extends ArrayAdapter<Warranty> {
                 context.startActivity(intentCI);
             }
         });
+
+        view.setOnLongClickListener(new View.OnLongClickListener() {
+            public boolean onLongClick(View arg0) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                builder.setMessage("Are you sure to want to delete the receipt?");
+                builder.setCancelable(true);
+
+                builder.setPositiveButton(
+                        "Yes",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                List_of_Warranty list_of_warranty = new List_of_Warranty();
+                                list_of_warranty.dellete(warrantyI.getKey());
+                                Toast.makeText(context.getApplicationContext(), "delete", LENGTH_SHORT).show();
+                                dialog.cancel();
+                            }
+                        });
+
+                builder.setNegativeButton(
+                        "No",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+
+                AlertDialog alert = builder.create();
+                alert.show();
+                return true;
+            }
+        });
+
         return view;
     }
 }
