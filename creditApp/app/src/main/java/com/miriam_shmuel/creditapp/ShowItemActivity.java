@@ -89,9 +89,30 @@ public class ShowItemActivity extends AppCompatActivity {
                     intentObj.putExtra("type","warranty");
                     intentObj.putExtra("obj", (Serializable)warranty);
                 }
-                ShowItemActivity.this.startActivity(intentObj);
+                ShowItemActivity.this.startActivityForResult(intentObj, 1);
             }
         });
+    }
+
+    protected void onActivityResult(final int requestCode, int resultCode, final Intent data)
+    {
+        super.onActivityResult(requestCode, resultCode, data);
+        // check if the request code is same as what is passed  here it is 1
+        if(requestCode==1)
+        {
+            String message=data.getStringExtra("type");
+            if (message.equals("gift") || message.equals("credit")){
+                gift_credit = (Gift_Credit) data.getSerializableExtra("object");
+                enterGiftCreditInfo();
+            }
+
+            else {
+                warranty = (Warranty) data.getSerializableExtra("object");
+                enterWarrantyInfo();
+            }
+
+            //get the result
+        }
     }
 
 

@@ -1,11 +1,14 @@
 package com.miriam_shmuel.creditapp;
 
 import android.app.AlertDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,6 +20,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
@@ -29,6 +33,7 @@ import com.google.firebase.auth.FirebaseAuth;
         TabLayout tabLayout;
         EditText edtSearch;
         Fragment fragment;
+        int position;
 
         FirebaseAuth mFirebaseAuth;
         private FirebaseAuth.AuthStateListener mAuthStateListener;
@@ -39,14 +44,9 @@ import com.google.firebase.auth.FirebaseAuth;
             //--------------------SCREEN-------------------------
             getSupportActionBar().setTitle("Credit App");
             getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#00264d")));
+            openTab(0);
+            LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver,new IntentFilter("message_subject_intent"));
 
-
-            fragment = new GiftFragment();
-            FragmentManager fm = getSupportFragmentManager();
-            FragmentTransaction ft = fm.beginTransaction();
-            ft.replace(R.id.simpleFrameLayout, fragment);
-            ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-            ft.commit();
             //---------------------------------------------------
 
             /*edtSearch = findViewById(R.id.edtSearchID);
@@ -78,9 +78,13 @@ import com.google.firebase.auth.FirebaseAuth;
                 public void onClick(View view) {
                     //threadOff = false;
                     Intent intent = new Intent(HomeActivity.this, AddActivity.class);
-                    startActivity(intent);
+                    startActivityForResult(intent,1);
                 }
             });
+            //---------------------------------------------------
+
+
+
             //---------------------------------------------------
 
             simpleFrameLayout = (FrameLayout) findViewById(R.id.simpleFrameLayout);
@@ -91,22 +95,8 @@ import com.google.firebase.auth.FirebaseAuth;
                 public void onTabSelected(TabLayout.Tab tab) {
 // get the current selected tab's position and replace the fragment accordingly
                     fragment = null;
-                    switch (tab.getPosition()) {
-                        case 0:
-                            fragment = new GiftFragment();
-                            break;
-                        case 1:
-                            fragment = new CreditFragment();
-                            break;
-                        case 2:
-                            fragment = new WarrantyFragment();
-                            break;
-                    }
-                    FragmentManager fm = getSupportFragmentManager();
-                    FragmentTransaction ft = fm.beginTransaction();
-                    ft.replace(R.id.simpleFrameLayout, fragment);
-                    ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-                    ft.commit();
+                    openTab(tab.getPosition());
+
                 }
 
                 @Override
@@ -119,6 +109,90 @@ import com.google.firebase.auth.FirebaseAuth;
 
                 }
             });
+        }
+
+        public void openTab(int tab){
+                switch (tab) {
+                    case 0:
+                        fragment = new GiftFragment();
+                        break;
+                    case 1:
+                        fragment = new CreditFragment();
+                        break;
+                    case 2:
+                        fragment = new WarrantyFragment();
+                        break;
+                }
+                FragmentManager fm = getSupportFragmentManager();
+                FragmentTransaction ft = fm.beginTransaction();
+                ft.replace(R.id.simpleFrameLayout, fragment);
+                ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+                ft.commit();
+                position = tab;
+            }
+
+        public BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                String type= intent.getStringExtra("type");
+                switch (type){
+                    case "gift":
+                        tabLayout.getTabAt(0).select();
+                        if (position == 0);
+                        openTab(0);
+                        break;
+                    case "credit":
+                        tabLayout.getTabAt(1).select();
+                        if (position == 1);
+                        openTab(1);
+                        break;
+                    case "warranty":
+                        tabLayout.getTabAt(2).select();
+                        if (position == 2);
+                        openTab(2);
+                        break;
+                }
+
+            }
+        };
+
+
+
+        protected void onActivityResult(int requestCode, int resultCode, Intent data)
+        {
+            super.onActivityResult(requestCode, resultCode, data);
+            // check if the request code is same as what is passed  here it is 1
+            if(requestCode==1)
+            {
+                final String message=data.getStringExtra("message");
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    public void run() {
+                        switch (message){
+                            case "add gift":
+                                tabLayout.getTabAt(0).select();
+                                if (position == 0);
+                                openTab(0);
+                                break;
+                            case "add credit":
+                                tabLayout.getTabAt(1).select();
+                                if (position == 1);
+                                openTab(1);
+                                break;
+                            case "add warranty":
+                                tabLayout.getTabAt(2).select();
+                                if (position == 2);
+                                openTab(2);
+                                break;
+                        }
+                        //get the result
+                    }
+                }, 1000);
+
+
+
+
+            }
         }
 
         @Override

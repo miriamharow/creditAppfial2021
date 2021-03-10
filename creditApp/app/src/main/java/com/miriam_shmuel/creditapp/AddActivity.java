@@ -28,7 +28,6 @@ import androidx.core.app.ActivityCompat;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.firebase.Timestamp;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -290,6 +289,7 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
                 Shop s = new Shop(edtShopNameGC.getText().toString());
                 shopName.add(s);
                 list_of_credits.iSExist(edtCreditBarCodeIDGC.getText().toString(), dateExp, shopName, edtvalueIDGC.getText().toString(), picBitmap,"add", "");
+                updateHome("add credit");
                 finish();
             }
         }
@@ -297,9 +297,16 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
             if(fullFieldsCG()) {
                 List_of_Gifts list_of_gifts = new List_of_Gifts();
                 list_of_gifts.iSExist(edtCreditBarCodeIDGC.getText().toString(), dateExp, shopsList, edtvalueIDGC.getText().toString(), edtgiftNameIDG.getText().toString() ,picBitmap, "add", "");
+                updateHome("add gift");
                 finish();
             }
         }
+    }
+
+    private void updateHome(String message){
+        Intent intent = new Intent();
+        intent.putExtra("message", message);
+        setResult(RESULT_OK, intent);
     }
 
     private boolean fullFieldsCG() {
@@ -353,6 +360,7 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
         if(fullFieldsW()){
             List_of_Warranty list_of_warranty = new List_of_Warranty();
             list_of_warranty.iSExist(edtCreditBarCodeIDW.getText().toString(), editDateTextIDW.getText().toString(), edtShopNameIDW.getText().toString(), edtItemW.getText().toString(), picBitmap1, picBitmap2 , "add", "");
+            updateHome("add warranty");
             finish();
         }
     }

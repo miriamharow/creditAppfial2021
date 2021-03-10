@@ -3,6 +3,7 @@ package com.miriam_shmuel.creditapp;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -26,6 +27,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.regex.Matcher;
@@ -41,7 +43,9 @@ public class EditItemActivity extends AppCompatActivity implements View.OnClickL
 
     String type;
     Gift_Credit gift_credit;
+    Gift_Credit newgc;
     Warranty warranty;
+    Warranty neww;
 
     private FirebaseFirestore db;
     private FirebaseUser user;
@@ -178,8 +182,15 @@ public class EditItemActivity extends AppCompatActivity implements View.OnClickL
                 "Yes",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        update();//updateData(); check isExist by name+barcode-> dellete & add
+                        update();//updateData(); check isExist by name+barcode-> delete & add
                         dialog.cancel();
+                        Intent intent = new Intent();
+                        intent.putExtra("type", type);
+                        if (type.equals("credit") || type.equals("gift"))
+                            intent.putExtra("object", (Serializable) newgc);
+                        else
+                            intent.putExtra("object", (Serializable) neww);
+                        setResult(RESULT_OK, intent);
                         finish();
 
                     }
@@ -211,13 +222,14 @@ public class EditItemActivity extends AppCompatActivity implements View.OnClickL
             {
                 lc.delete(gift_credit.getKey());
                 lc.addCredit(newCredit);
+                newgc = newCredit;
                 Toast.makeText(instance, "save", Toast.LENGTH_SHORT).show();
             }
             else
             {
                 Toast.makeText(instance, "no = ", Toast.LENGTH_SHORT).show();
                 Bitmap picBitmap = null;
-                lc.iSExist(Cedtbarcode.getText().toString(),  CedtexpDate.getText().toString(), shop, Cedtvalue.getText().toString(), picBitmap ,"update", gift_credit.getKey());
+                newgc = lc.iSExist(Cedtbarcode.getText().toString(),  CedtexpDate.getText().toString(), shop, Cedtvalue.getText().toString(), picBitmap ,"update", gift_credit.getKey());
             }
         }
         else if (type.equals("gift")) {
@@ -229,13 +241,14 @@ public class EditItemActivity extends AppCompatActivity implements View.OnClickL
             {
                 lg.delete(gift_credit.getKey());
                 lg.addGift(newGift);
+                newgc = newGift;
                 Toast.makeText(instance, "save", Toast.LENGTH_SHORT).show();
             }
             else
             {
                 Toast.makeText(instance, "no = ", Toast.LENGTH_SHORT).show();
                 Bitmap picBitmap = null;
-                lg.iSExist(Cedtbarcode.getText().toString(), CedtexpDate.getText().toString(), shopsListNew(), Cedtvalue.getText().toString(), CedtGiftName.getText().toString(),picBitmap, "update" ,gift_credit.getKey());
+                newgc = lg.iSExist(Cedtbarcode.getText().toString(), CedtexpDate.getText().toString(), shopsListNew(), Cedtvalue.getText().toString(), CedtGiftName.getText().toString(),picBitmap, "update" ,gift_credit.getKey());
             }
         }
         else if (type.equals("warranty")) {
@@ -246,15 +259,15 @@ public class EditItemActivity extends AppCompatActivity implements View.OnClickL
             {
                 lw.delete(warranty.getKey());
                 lw.addWarranty(newWarranty);
+                neww = newWarranty;
                 Toast.makeText(instance, "save", Toast.LENGTH_SHORT).show();
             }
             else
             {
                 Bitmap picBitmap = null;
-                lw.iSExist(Wedtbarcode.getText().toString(), WedtexpDate.getText().toString(),WedtShopName.getText().toString(), Wedtitem.getText().toString(), picBitmap, picBitmap, "update" ,warranty.getKey());
+                neww = lw.iSExist(Wedtbarcode.getText().toString(), WedtexpDate.getText().toString(),WedtShopName.getText().toString(), Wedtitem.getText().toString(), picBitmap, picBitmap, "update" ,warranty.getKey());
             }
         }
-
     }
 
 

@@ -99,9 +99,10 @@ public class List_of_Credits {
         });
     }
 
-    public void iSExist(final String barCode, final String expirationDate, final ArrayList<Shop> shopName, final String value, final Bitmap bitmap, final String state, final String oldKey) {
+    public Gift_Credit iSExist(final String barCode, final String expirationDate, final ArrayList<Shop> shopName, final String value, final Bitmap bitmap, final String state, final String oldKey) {
         final String picture = ""+Timestamp.now().getSeconds();
         final String key =shopName.get(0).getName()+barCode;
+        final Gift_Credit credit = new Gift_Credit(key, barCode, expirationDate, shopName, "credit", value, null,picture);
         DocumentReference docRef = db.collection("user").document(email).collection(docCredits).document(key);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -121,7 +122,6 @@ public class List_of_Credits {
                     else {
                        if(state.equals("add"))
                        {
-                           Gift_Credit credit = new Gift_Credit(key, barCode, expirationDate, shopName, "credit", value, null,picture);
                            addCredit(credit);
                            savePic( picture, bitmap);
                            Toast.makeText((instance), "save", Toast.LENGTH_SHORT).show();
@@ -129,7 +129,6 @@ public class List_of_Credits {
                        if(state.equals("update"))
                        {
                            delete(oldKey);
-                           Gift_Credit credit = new Gift_Credit(key, barCode, expirationDate, shopName, "credit", value, null,picture);
                            addCredit(credit);
                            Toast.makeText(EditItemActivity.instance, "save", Toast.LENGTH_SHORT).show();
                        }
@@ -140,6 +139,7 @@ public class List_of_Credits {
                 }
             }
         });
+        return credit;
     }
 
     public void delete(String key)

@@ -12,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -96,6 +97,10 @@ public class AdapterCreditsGifts extends ArrayAdapter<Gift_Credit> {
                                    list_of_credit.deletePicture(creditI.getPicture());
                                    Toast.makeText(context.getApplicationContext(), "delete" , LENGTH_SHORT).show();
                                    dialog.cancel();
+                                   Intent intent = new Intent("message_subject_intent");
+                                   intent.putExtra("type" , String.valueOf("credit"));
+                                   LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+
                                }
                                else if(creditI.getType().equals("gift"))
                                {
@@ -104,6 +109,9 @@ public class AdapterCreditsGifts extends ArrayAdapter<Gift_Credit> {
                                    list_of_gifts.deletePicture(creditI.getPicture());
                                    Toast.makeText(context.getApplicationContext(), "delete" , LENGTH_SHORT).show();
                                    dialog.cancel();
+                                   Intent intent = new Intent("message_subject_intent");
+                                   intent.putExtra("type" , String.valueOf("gift"));
+                                   LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
                                }
 
                             }

@@ -95,9 +95,10 @@ public class List_of_Warranty {
         });
     }
 
-    public boolean iSExist(final String barCode, final String expirationDate, final String shopName, final String itemName, final Bitmap picBitmap1, final Bitmap picBitmap2, final String state, final String oldKey) {
+    public Warranty iSExist(final String barCode, final String expirationDate, final String shopName, final String itemName, final Bitmap picBitmap1, final Bitmap picBitmap2, final String state, final String oldKey) {
         final String picture = ""+ Timestamp.now().getSeconds();
         final String key = shopName+barCode;
+        final Warranty warranty = new Warranty(shopName, barCode, expirationDate, itemName, key, picture+"itemReceipt" ,picture+"shopReceipt", picture);
         DocumentReference docRef = db.collection("user").document(email).collection(docWarranty).document(key);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -116,7 +117,6 @@ public class List_of_Warranty {
                         }
                     }
                     else {
-                        Warranty warranty = new Warranty(shopName, barCode, expirationDate, itemName, key, picture+"itemReceipt" ,picture+"shopReceipt", picture);
                         addWarranty(warranty);
                         if(state.equals("add"))
                         {
@@ -136,7 +136,7 @@ public class List_of_Warranty {
                 }
             }
         });
-        return true;
+        return warranty;
     }
 
     public void delete(String key)

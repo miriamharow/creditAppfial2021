@@ -127,9 +127,10 @@ public class List_of_Gifts {
         return listOfGifts;
     }
 
-    public void iSExist (final String barCode, final String expirationDate, final ArrayList<Shop> shopList, final String value, final String giftName , final Bitmap bitmap, final String state, final String oldKey) {
+    public Gift_Credit iSExist (final String barCode, final String expirationDate, final ArrayList<Shop> shopList, final String value, final String giftName , final Bitmap bitmap, final String state, final String oldKey) {
         final String picture = ""+Timestamp.now().getSeconds();
         final String key = giftName+barCode;
+        final Gift_Credit gift = new Gift_Credit(key, barCode, expirationDate, shopList, "gift", value, giftName, picture);
         DocumentReference docRef = db.collection("user").document(email).collection(docGifts).document(key);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -149,7 +150,6 @@ public class List_of_Gifts {
 
                     }
                     else {
-                        Gift_Credit gift = new Gift_Credit(key, barCode, expirationDate, shopList, "gift", value, giftName, picture);
                         addGift(gift);
                         if(state.equals("add"))
                         {
@@ -168,6 +168,7 @@ public class List_of_Gifts {
                 }
             }
         });
+        return gift;
     }
 
     public void delete(String key)
