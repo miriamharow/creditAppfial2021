@@ -101,13 +101,13 @@ public class ShowItemActivity extends AppCompatActivity {
         if (gift_credit.getType().equals("credit"))
         {
             CShopNameID.setText(gift_credit.getShopName().get(0).toString());
-            list = "list of credits";
+            list = "list of credit";
         }
         else{
             giftNameField.setVisibility(View.VISIBLE);
             CGiftNameID.setText(gift_credit.getGiftName());
             CShopNameID.setText(shopList());
-            list = "list of gifts";
+            list = "list of gift";
         }
         picture = gift_credit.getPicture();
         CvalueID.setText(gift_credit.getValue());
