@@ -128,8 +128,9 @@ import com.google.firebase.auth.FirebaseAuth;
                 ft.replace(R.id.simpleFrameLayout, fragment);
                 ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
                 ft.commit();
-                position = tab;
-            }
+
+
+        }
 
         public BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
             @Override
@@ -152,7 +153,6 @@ import com.google.firebase.auth.FirebaseAuth;
                         openTab(2);
                         break;
                 }
-
             }
         };
 
@@ -171,18 +171,21 @@ import com.google.firebase.auth.FirebaseAuth;
                         switch (message){
                             case "add gift":
                                 tabLayout.getTabAt(0).select();
-                                if (position == 0);
-                                openTab(0);
+                                if (position == 0)
+                                    openTab(0);
+                                position = 0;
                                 break;
                             case "add credit":
                                 tabLayout.getTabAt(1).select();
-                                if (position == 1);
-                                openTab(1);
+                                if (position == 1)
+                                    openTab(1);
+                                position = 1;
                                 break;
                             case "add warranty":
                                 tabLayout.getTabAt(2).select();
-                                if (position == 2);
-                                openTab(2);
+                                if (position == 2)
+                                    openTab(2);
+                                position = 2;
                                 break;
                         }
                         //get the result
