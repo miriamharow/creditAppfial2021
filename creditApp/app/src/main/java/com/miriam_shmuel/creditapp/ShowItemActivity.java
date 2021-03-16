@@ -36,12 +36,12 @@ public class ShowItemActivity extends AppCompatActivity {
     private FirebaseUser user;
     private String email;
 
-    public ShowItemActivity(){
+    public ShowItemActivity() {
         user = FirebaseAuth.getInstance().getCurrentUser();
         email = user.getEmail();
         db = FirebaseFirestore.getInstance();
     }
-    
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_item);
@@ -68,8 +68,7 @@ public class ShowItemActivity extends AppCompatActivity {
             gift_credit = (Gift_Credit) getIntent().getSerializableExtra("obj");
             creditgiftlayout.setVisibility(View.VISIBLE);
             enterGiftCreditInfo();
-        }
-        else {
+        } else {
             warranty = (Warranty) getIntent().getSerializableExtra("obj");
             warrantylayout.setVisibility(View.VISIBLE);
             enterWarrantyInfo();
@@ -81,50 +80,45 @@ public class ShowItemActivity extends AppCompatActivity {
                 Intent intentObj = new Intent(ShowItemActivity.this, EditItemActivity.class);
                 if (type.equals("credit") || type.equals("gift")) {
                     gift_credit = (Gift_Credit) getIntent().getSerializableExtra("obj");
-                    intentObj.putExtra("type",gift_credit.getType());
+                    intentObj.putExtra("type", gift_credit.getType());
                     intentObj.putExtra("obj", (Serializable) gift_credit);
-                }
-                else {
+                } else {
                     warranty = (Warranty) getIntent().getSerializableExtra("obj");
-                    intentObj.putExtra("type","warranty");
-                    intentObj.putExtra("obj", (Serializable)warranty);
+                    intentObj.putExtra("type", "warranty");
+                    intentObj.putExtra("obj", (Serializable) warranty);
                 }
                 ShowItemActivity.this.startActivityForResult(intentObj, 1);
             }
         });
     }
 
-    protected void onActivityResult(final int requestCode, int resultCode, final Intent data)
-    {
+    protected void onActivityResult(final int requestCode, int resultCode, final Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         // check if the request code is same as what is passed  here it is 1
-        if(requestCode==1)
-        {
-            String message=data.getStringExtra("type");
-            if (message.equals("gift") || message.equals("credit")){
-                gift_credit = (Gift_Credit) data.getSerializableExtra("object");
-                enterGiftCreditInfo();
-            }
+        if (resultCode != RESULT_CANCELED) {
+            if (requestCode == 1) {
+                String message = data.getStringExtra("type");
+                if (message.equals("gift") || message.equals("credit")) {
+                    gift_credit = (Gift_Credit) data.getSerializableExtra("object");
+                    enterGiftCreditInfo();
+                } else {
+                    warranty = (Warranty) data.getSerializableExtra("object");
+                    enterWarrantyInfo();
+                }
 
-            else {
-                warranty = (Warranty) data.getSerializableExtra("object");
-                enterWarrantyInfo();
+                //get the result
             }
-
-            //get the result
         }
     }
 
 
-    public void enterGiftCreditInfo(){
+    public void enterGiftCreditInfo() {
         String list = "";
         String picture = "";
-        if (gift_credit.getType().equals("credit"))
-        {
+        if (gift_credit.getType().equals("credit")) {
             CShopNameID.setText(gift_credit.getShopName().get(0).toString());
             list = "list of credit";
-        }
-        else{
+        } else {
             giftNameField.setVisibility(View.VISIBLE);
             CGiftNameID.setText(gift_credit.getGiftName());
             CShopNameID.setText(shopList());
@@ -137,7 +131,7 @@ public class ShowItemActivity extends AppCompatActivity {
         getPicture(list, picture, CimageView);
     }
 
-    public void enterWarrantyInfo(){
+    public void enterWarrantyInfo() {
         WitemID.setText(warranty.getItemName());
         WShopNameID.setText(warranty.getShopName());
         WexpDateID.setText(warranty.getExpirationDate());
@@ -146,25 +140,25 @@ public class ShowItemActivity extends AppCompatActivity {
         String list = "list of warranty";
         String folder = warranty.getFolder();
         Toast.makeText(this, folder, Toast.LENGTH_SHORT).show();
-        String picture1 = folder + "/"+ folder + "itemReceipt";
-        String picture2 = folder + "/"+ folder + "shopReceipt";
+        String picture1 = folder + "/" + folder + "itemReceipt";
+        String picture2 = folder + "/" + folder + "shopReceipt";
 
         getPicture(list, picture1, WReceiptPic);
         getPicture(list, picture2, WWarrantyPic);
 
     }
 
-    public void getPicture(String list, String picture, final ImageView imageView){
-        StorageReference mImageRef = FirebaseStorage.getInstance().getReference(email+"/"+list+"/"+picture+".jpg");
+    public void getPicture(String list, String picture, final ImageView imageView) {
+        StorageReference mImageRef = FirebaseStorage.getInstance().getReference(email + "/" + list + "/" + picture + ".jpg");
         final long FIVE_MEGABYTE = 5 * 1024 * 1024;
-        mImageRef.getBytes(FIVE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>()  {
-                    @Override
-                    public void onSuccess(byte[] bytes) {
-                        ImageView iView = imageView;
-                        Bitmap bm = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-                        iView.setImageBitmap(bm);
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
+        mImageRef.getBytes(FIVE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+            @Override
+            public void onSuccess(byte[] bytes) {
+                ImageView iView = imageView;
+                Bitmap bm = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                iView.setImageBitmap(bm);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception) {
                 // Handle any errors
@@ -172,16 +166,16 @@ public class ShowItemActivity extends AppCompatActivity {
         });
     }
 
-    public String shopList(){
+    public String shopList() {
         String str = "";
         ArrayList<Shop> shopName = gift_credit.getShopName();
-        for (int i = 0; i < shopName.size(); i++){
-            if (i != shopName.size()-1)
-                str += shopName.get(i).getName().toString()+", ";
+        for (int i = 0; i < shopName.size(); i++) {
+            if (i != shopName.size() - 1)
+                str += shopName.get(i).getName().toString() + ", ";
             else
                 str += shopName.get(i).toString();
         }
-        Toast.makeText(ShowItemActivity.this,""+str, Toast.LENGTH_LONG).show();
+        Toast.makeText(ShowItemActivity.this, "" + str, Toast.LENGTH_LONG).show();
         return str;
     }
 }

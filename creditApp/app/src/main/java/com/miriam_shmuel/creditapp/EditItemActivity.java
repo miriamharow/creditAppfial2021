@@ -367,7 +367,7 @@ public class EditItemActivity extends AppCompatActivity implements View.OnClickL
         {
             if (CedtShopName.getText().toString().equals(""))
                 CedtShopName.setText( gift_credit.getShopName().get(0).getName());
-            list = "list of credits";
+            list = "list of credit";
         }
         else {
             CedtShopName.setVisibility(View.GONE);
@@ -376,7 +376,7 @@ public class EditItemActivity extends AppCompatActivity implements View.OnClickL
                 CedtGiftName.setText(gift_credit.getGiftName());
             if(diaListShopName.isEmpty())
                 restShopListGift();
-            list = "list of gifts";
+            list = "list of gift";
         }
         picture = gift_credit.getPicture();
         if (Cedtvalue.getText().toString().equals(""))
