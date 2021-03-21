@@ -1,6 +1,10 @@
 package com.miriam_shmuel.creditapp;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Intent;
 import android.graphics.Bitmap;
+import android.os.Build;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -21,7 +25,9 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -124,6 +130,7 @@ public class List_of_Credits {
                        {
                            addCredit(credit);
                            savePic( picture, bitmap);
+                           sendNotification();
                            Toast.makeText((instance), "save", Toast.LENGTH_SHORT).show();
                        }
                        if(state.equals("update"))
@@ -138,8 +145,31 @@ public class List_of_Credits {
                     Log.d(TAG, "get failed with ", task.getException());
                 }
             }
+
+
         });
         return credit;
+    }
+
+    public void sendNotification(Calendar alarmTime) {
+            // Date formatter
+            SimpleDateFormat dateTimeFormatter = new SimpleDateFormat("HH:mm:ss dd/MM/yyyy");
+            String alarmTimeStr = dateTimeFormatter.format(alarmTime.getTime());
+
+            Intent intent = new Intent(this, AlarmReceiver.class);
+            intent.putExtra("title", "My Gift!");
+            intent.putExtra("msg", edtStoreName.getText().toString() + "'s credit ID: " + edtCreditBarCodeID.getText().toString() +
+                    " expires on: " + editDateText.getText().toString() + "!");
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(this, ONETIME_ALARM_CODE,
+                    intent, PendingIntent.FLAG_UPDATE_CURRENT);
+            long wakeupTime = alarmTime.getTimeInMillis();
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+                alarmManager.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, wakeupTime, pendingIntent);
+            else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
+                alarmManager.setExact(AlarmManager.RTC_WAKEUP, wakeupTime, pendingIntent);
+            else
+                alarmManager.set(AlarmManager.RTC_WAKEUP, wakeupTime, pendingIntent);
     }
 
     public void delete(String key)
