@@ -9,6 +9,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -33,6 +34,8 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -217,6 +220,28 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
         }
     }
 
+    private void showTimeDialog() throws ParseException {
+        //Given Date in String format
+        String expDate=dayED+"/"+monthED+"/"+yearED;
+
+        //Specifying date format that matches the given date
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(sdf.parse(expDate));
+
+        //Number of Days to add
+        calender.add(Calendar.DAY_OF_MONTH, -5);
+
+        //oneTimeAlarm(calendar);
+    }
+
+
+    public void createOneTimeAlarmInPickedTime() throws ParseException {
+        Log.d("debug", "createOneTimeAlarmInPickedTime()");
+        showTimeDialog();
+    }
+
+
     // get a picture from camera
     public void takePicture() {
         // check CAMERA permission
@@ -289,6 +314,7 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
                 Shop s = new Shop(edtShopNameGC.getText().toString());
                 shopName.add(s);
                 list_of_credits.iSExist(edtCreditBarCodeIDGC.getText().toString(), dateExp, shopName, edtvalueIDGC.getText().toString(), picBitmap,"add", "");
+                Toast.makeText(instance, ""+list_of_credits.isEx(), Toast.LENGTH_LONG).show();
                 updateHome("add credit");
                 finish();
             }

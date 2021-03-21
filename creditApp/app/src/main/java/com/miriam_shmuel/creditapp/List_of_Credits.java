@@ -1,10 +1,7 @@
 package com.miriam_shmuel.creditapp;
 
 import android.app.AlarmManager;
-import android.app.PendingIntent;
-import android.content.Intent;
 import android.graphics.Bitmap;
-import android.os.Build;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -25,9 +22,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -40,6 +35,14 @@ public class List_of_Credits {
     private FirebaseFirestore db;
     private FirebaseUser user;
     private String email, docCredits;
+    public static final int ONETIME_ALARM_CODE = 0;
+    private AlarmManager alarmManager;
+    private boolean ex;
+
+
+
+
+
 
     public List_of_Credits() {
         this.listOfCredit = new ArrayList<Gift_Credit>();
@@ -118,11 +121,12 @@ public class List_of_Credits {
                     if (document.exists()) {
                         if(state.equals("add"))
                         {
-                            Toast.makeText(AddActivity.instance, "the credit is Exist", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(AddActivity.instance, "the credit exists", Toast.LENGTH_SHORT).show();
+                            setEx(true);
                         }
                         if(state.equals("update"))
                         {
-                            Toast.makeText(EditItemActivity.instance, "the credit is Exist", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(EditItemActivity.instance, "the credit exists", Toast.LENGTH_SHORT).show();
                         }
                     }
                     else {
@@ -130,7 +134,8 @@ public class List_of_Credits {
                        {
                            addCredit(credit);
                            savePic( picture, bitmap);
-                           sendNotification();
+                           setEx(false);
+                           //sendNotification();
                            Toast.makeText((instance), "save", Toast.LENGTH_SHORT).show();
                        }
                        if(state.equals("update"))
@@ -151,15 +156,15 @@ public class List_of_Credits {
         return credit;
     }
 
-    public void sendNotification(Calendar alarmTime) {
+    /*public void sendNotification(Calendar alarmTime) {
             // Date formatter
             SimpleDateFormat dateTimeFormatter = new SimpleDateFormat("HH:mm:ss dd/MM/yyyy");
             String alarmTimeStr = dateTimeFormatter.format(alarmTime.getTime());
 
             Intent intent = new Intent(this, AlarmReceiver.class);
             intent.putExtra("title", "My Gift!");
-            intent.putExtra("msg", edtStoreName.getText().toString() + "'s credit ID: " + edtCreditBarCodeID.getText().toString() +
-                    " expires on: " + editDateText.getText().toString() + "!");
+            intent.putExtra("msg", "edtStoreName.getText().toString()" + "'s credit ID: " + "edtCreditBarCodeID.getText().toString()" +
+                    " expires on: " + "editDateText.getText().toString()" + "!");
             PendingIntent pendingIntent = PendingIntent.getBroadcast(this, ONETIME_ALARM_CODE,
                     intent, PendingIntent.FLAG_UPDATE_CURRENT);
             long wakeupTime = alarmTime.getTimeInMillis();
@@ -170,7 +175,7 @@ public class List_of_Credits {
                 alarmManager.setExact(AlarmManager.RTC_WAKEUP, wakeupTime, pendingIntent);
             else
                 alarmManager.set(AlarmManager.RTC_WAKEUP, wakeupTime, pendingIntent);
-    }
+    }*/
 
     public void delete(String key)
     {
@@ -186,6 +191,14 @@ public class List_of_Credits {
                     }
                 });
 
+    }
+
+    public boolean isEx() {
+        return ex;
+    }
+
+    public void setEx(boolean ex) {
+        this.ex = ex;
     }
 
     public void deletePicture(String picture){
@@ -209,3 +222,6 @@ public class List_of_Credits {
         });
     }
 }
+
+
+
