@@ -7,17 +7,21 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.widget.Toast;
 
 import androidx.core.app.NotificationCompat;
+
+import com.google.firebase.Timestamp;
+
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class AlarmReceiver extends BroadcastReceiver
 {
     private static final String NOTIFICATION_CHANNEL_ID = "Alarm Notification Chanel";
-    private static final int repeatingNotificationID = 9999;
-    private int notificationID = 1;
-
+    private int notificationID;
+    private static String CHANNEL_ID = "channel1";
+    private static String CHANNEL_NAME = "Channel Credit App";
     private NotificationManager notificationManager;
-    private NotificationChannel notificationChannel;
 
     @Override
     public void onReceive(Context context, Intent intent)
@@ -25,11 +29,12 @@ public class AlarmReceiver extends BroadcastReceiver
         // get intent extra info
         String title = intent.getStringExtra("title");
         String msg = intent.getStringExtra("msg");
+        String notification= intent.getStringExtra("notificationID");
+        notificationID = Integer.parseInt(notification);
 
         // create the Notification Channel
         createNotificationChannel(context);
 
-        //send noti
         showOneTimeAlarmNotification(context, title, msg);
     }
 
@@ -42,10 +47,15 @@ public class AlarmReceiver extends BroadcastReceiver
         // So, add a check on SDK version.
         if (android.os.Build.VERSION.SDK_INT >=  android.os.Build.VERSION_CODES.O)
         {
-            // Create the NotificationChannel with all the parameters.
-            notificationChannel = new NotificationChannel(NOTIFICATION_CHANNEL_ID, NOTIFICATION_CHANNEL_ID, NotificationManager.IMPORTANCE_HIGH);
-            notificationChannel.setDescription(NOTIFICATION_CHANNEL_ID);
-            notificationManager.createNotificationChannel(notificationChannel);
+            if (notificationManager.getNotificationChannel(CHANNEL_ID) == null)
+            {
+                NotificationChannel notificationChannel = new NotificationChannel(
+                        CHANNEL_ID,
+                        CHANNEL_NAME,
+                        NotificationManager.IMPORTANCE_DEFAULT); // NotificationManager.IMPORTANCE_HIGH
+
+                notificationManager.createNotificationChannel(notificationChannel);
+            }
         }
     }
 
@@ -63,10 +73,11 @@ public class AlarmReceiver extends BroadcastReceiver
                 .setContentIntent(tapPendingIntent)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setAutoCancel(true)
+                .setOngoing(true)
                 .build();
 
         // Deliver the notification
         notificationManager.notify(notificationID, notification);
-        notificationID++;
+        Toast.makeText(AddActivity.instance,""+notificationID,  Toast.LENGTH_LONG).show();
     }
 }

@@ -1,12 +1,15 @@
 package com.miriam_shmuel.creditapp;
 
 import android.Manifest;
+import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -39,6 +42,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+import static com.miriam_shmuel.creditapp.List_of_Credits.ONETIME_ALARM_CODE;
+
 public class AddActivity extends AppCompatActivity implements View.OnClickListener {
     private RadioButton rCredit, rGift;
     private EditText edtShopNameGC, edtCreditBarCodeIDGC, edtvalueIDGC, edtItemW, edtShopNameIDW, edtCreditBarCodeIDW, edtgiftNameIDG;
@@ -59,6 +64,9 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
 
     private String dateExp = "";
     private String type = "";
+
+    public static final int ONETIME_ALARM_CODE = 0;
+    private AlarmManager alarmManager;
 
     public Uri ImageUri;
 
@@ -140,6 +148,8 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
         shopsList = new ArrayList<Shop>();
         instance = this;
 
+        alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+
         //--------------------FULL SCREEN--------------------
         // Hide the Activity Status Bar
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
@@ -220,28 +230,6 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
         }
     }
 
-    private void showTimeDialog() throws ParseException {
-        //Given Date in String format
-        String expDate=dayED+"/"+monthED+"/"+yearED;
-
-        //Specifying date format that matches the given date
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(sdf.parse(expDate));
-
-        //Number of Days to add
-        calender.add(Calendar.DAY_OF_MONTH, -5);
-
-        //oneTimeAlarm(calendar);
-    }
-
-
-    public void createOneTimeAlarmInPickedTime() throws ParseException {
-        Log.d("debug", "createOneTimeAlarmInPickedTime()");
-        showTimeDialog();
-    }
-
-
     // get a picture from camera
     public void takePicture() {
         // check CAMERA permission
@@ -314,7 +302,7 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
                 Shop s = new Shop(edtShopNameGC.getText().toString());
                 shopName.add(s);
                 list_of_credits.iSExist(edtCreditBarCodeIDGC.getText().toString(), dateExp, shopName, edtvalueIDGC.getText().toString(), picBitmap,"add", "");
-                Toast.makeText(instance, ""+list_of_credits.isEx(), Toast.LENGTH_LONG).show();
+                //Toast.makeText(instance, ""+list_of_credits.isEx(), Toast.LENGTH_LONG).show();
                 updateHome("add credit");
                 finish();
             }
@@ -533,6 +521,53 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
                     str += diaListShopNsme.get(i);
             }
             edtShopNameGC.setText(str);
+        }
+    }
+
+    public void oneTimeAlarm(Calendar alarmTime, int notification) {
+        Intent intent = new Intent(this, AlarmReceiver.class);
+        intent.putExtra("title", "My Gift!");
+        intent.putExtra("msg", "massage");
+        intent.putExtra("notificationID", Integer.toString(notification));
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, ONETIME_ALARM_CODE,
+                intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        long wakeupTime = alarmTime.getTimeInMillis();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+            alarmManager.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, wakeupTime, pendingIntent);
+        else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP, wakeupTime, pendingIntent);
+        else
+            alarmManager.set(AlarmManager.RTC_WAKEUP, wakeupTime, pendingIntent);
+    }
+
+    private void showTimeDialog(int notification) throws ParseException {
+        //Given Date in String format
+        String expDate=dayED+"/"+monthED+"/"+yearED;
+
+        //Specifying date format that matches the given date
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(sdf.parse(expDate));
+
+        //Number of Days to add
+        calender.add(Calendar.DAY_OF_MONTH, -5);
+
+        oneTimeAlarm(calendar, notification);
+    }
+
+    public void createOneTimeAlarmInPickedTime(int notification) throws ParseException {
+        Log.d("debug", "createOneTimeAlarmInPickedTime()");
+        showTimeDialog(notification);
+    }
+
+    public void sendNoti(int notification){
+        try
+        {
+            createOneTimeAlarmInPickedTime(notification);
+        } catch (ParseException e)
+        {
+            e.printStackTrace();
         }
     }
 }

@@ -1,5 +1,7 @@
 package com.miriam_shmuel.creditapp;
 
+import com.google.firebase.Timestamp;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -13,6 +15,7 @@ public class Gift_Credit implements Serializable {
     private boolean used;
     private String giftName;
     private String picture;
+    private int notificationID;
 
     public Gift_Credit(String key, String barCode, String expirationDate, ArrayList<Shop> shopName, String type, String value, String giftName, String picture) {
         this.type = type;
@@ -24,6 +27,7 @@ public class Gift_Credit implements Serializable {
         this.giftName = giftName;
         this.key = key;
         this.picture = picture;
+        this.notificationID = (int) Timestamp.now().getSeconds();;
     }
 
     public Gift_Credit(){}
@@ -96,6 +100,14 @@ public class Gift_Credit implements Serializable {
 
     public void setPicture(String picture) {
         this.picture = picture;
+    }
+
+    public int getNotificationID() {
+        return notificationID;
+    }
+
+    public void setNotificationID(int notificationID) {
+        this.notificationID = notificationID;
     }
 
 }
