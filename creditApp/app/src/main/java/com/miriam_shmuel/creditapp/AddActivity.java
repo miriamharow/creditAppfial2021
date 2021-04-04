@@ -42,8 +42,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-import static com.miriam_shmuel.creditapp.List_of_Credits.ONETIME_ALARM_CODE;
-
 public class AddActivity extends AppCompatActivity implements View.OnClickListener {
     private RadioButton rCredit, rGift;
     private EditText edtShopNameGC, edtCreditBarCodeIDGC, edtvalueIDGC, edtItemW, edtShopNameIDW, edtCreditBarCodeIDW, edtgiftNameIDG;
@@ -524,11 +522,13 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
         }
     }
 
-    public void oneTimeAlarm(Calendar alarmTime, int notification) {
+    public void oneTimeAlarm(Calendar alarmTime, int notification, String key, String type) {
         Intent intent = new Intent(this, AlarmReceiver.class);
         intent.putExtra("title", "My Gift!");
         intent.putExtra("msg", "massage");
         intent.putExtra("notificationID", Integer.toString(notification));
+        intent.putExtra("key", key);
+        intent.putExtra("type", type);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, ONETIME_ALARM_CODE,
                 intent, PendingIntent.FLAG_UPDATE_CURRENT);
         long wakeupTime = alarmTime.getTimeInMillis();
@@ -541,7 +541,7 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
             alarmManager.set(AlarmManager.RTC_WAKEUP, wakeupTime, pendingIntent);
     }
 
-    private void showTimeDialog(int notification) throws ParseException {
+    private void showTimeDialog(int notification, String key, String type) throws ParseException {
         //Given Date in String format
         String expDate=dayED+"/"+monthED+"/"+yearED;
 
@@ -553,18 +553,18 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
         //Number of Days to add
         calender.add(Calendar.DAY_OF_MONTH, -5);
 
-        oneTimeAlarm(calendar, notification);
+        oneTimeAlarm(calendar, notification, key, type);
     }
 
-    public void createOneTimeAlarmInPickedTime(int notification) throws ParseException {
+    public void createOneTimeAlarmInPickedTime(int notification, String key, String type) throws ParseException {
         Log.d("debug", "createOneTimeAlarmInPickedTime()");
-        showTimeDialog(notification);
+        showTimeDialog(notification, key, type);
     }
 
-    public void sendNoti(int notification){
+    public void sendNoti(int notification, String key, String type){
         try
         {
-            createOneTimeAlarmInPickedTime(notification);
+            createOneTimeAlarmInPickedTime(notification, key, type);
         } catch (ParseException e)
         {
             e.printStackTrace();

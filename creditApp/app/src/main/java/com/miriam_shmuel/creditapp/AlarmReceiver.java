@@ -7,30 +7,38 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.widget.Toast;
+import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 
-import com.google.firebase.Timestamp;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.util.concurrent.atomic.AtomicInteger;
+import static android.content.ContentValues.TAG;
 
 public class AlarmReceiver extends BroadcastReceiver
 {
     private static final String NOTIFICATION_CHANNEL_ID = "Alarm Notification Chanel";
-    private int notificationID;
+    private String key, type;
     private static String CHANNEL_ID = "channel1";
     private static String CHANNEL_NAME = "Channel Credit App";
     private NotificationManager notificationManager;
-
+    private FirebaseFirestore db;
+    private FirebaseUser user;
     @Override
     public void onReceive(Context context, Intent intent)
     {
         // get intent extra info
         String title = intent.getStringExtra("title");
         String msg = intent.getStringExtra("msg");
-        String notification= intent.getStringExtra("notificationID");
-        notificationID = Integer.parseInt(notification);
+        key = intent.getStringExtra("key");
+        type = intent.getStringExtra("type");
 
         // create the Notification Channel
         createNotificationChannel(context);
@@ -59,25 +67,46 @@ public class AlarmReceiver extends BroadcastReceiver
         }
     }
 
-    private void showOneTimeAlarmNotification(Context context, String title, String msg)
+    private void showOneTimeAlarmNotification(final Context context, final String title, final String msg)
     {
-        // Create the content intent for the notification, which launches MainActivity activity
-        Intent tapIntent = new Intent(context, HomeActivity.class);
-        PendingIntent tapPendingIntent = PendingIntent.getActivity(context, 0, tapIntent, 0);
+        db = FirebaseFirestore.getInstance();
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        String email = user.getEmail();
+        DocumentReference docRef = db.collection("user").document(email).collection("list of "+type).document(key);
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        Gift_Credit gift_credit = document.toObject(Gift_Credit.class);
+                        // Create the content intent for the notification, which launches MainActivity activity
+                        Intent tapIntent = new Intent(context, ShowItemActivity.class);
+                        tapIntent.putExtra("type", type);
+                        tapIntent.putExtra("obj", gift_credit);
+                        tapIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        PendingIntent tapPendingIntent = PendingIntent.getActivity(context, 0, tapIntent, 0);
 
-        // create the notification
-        Notification notification = new NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID)
-                .setContentTitle(title)
-                .setContentText(msg)
-                .setSmallIcon(R.drawable.ic_receipt)
-                .setContentIntent(tapPendingIntent)
-                .setPriority(NotificationCompat.PRIORITY_HIGH)
-                .setAutoCancel(true)
-                .setOngoing(true)
-                .build();
+                        // create the notification
+                        Notification notification = new NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID)
+                                .setContentTitle(title)
+                                .setContentText(msg)
+                                .setSmallIcon(R.drawable.ic_receipt)
+                                .setContentIntent(tapPendingIntent)
+                                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                                .setAutoCancel(true)
+                                .setOngoing(true)
+                                .build();
 
-        // Deliver the notification
-        notificationManager.notify(notificationID, notification);
-        Toast.makeText(AddActivity.instance,""+notificationID,  Toast.LENGTH_LONG).show();
+                        // Deliver the notification
+                        notificationManager.notify(gift_credit.getNotificationID(), notification);
+                    } else {
+                        Log.d(TAG, "No such document");
+                    }
+                } else {
+                    Log.d(TAG, "get failed with ", task.getException());
+                }
+            }
+        });
     }
 }

@@ -1,6 +1,5 @@
 package com.miriam_shmuel.creditapp;
 
-import android.app.AlarmManager;
 import android.graphics.Bitmap;
 import android.util.Log;
 import android.widget.Toast;
@@ -22,7 +21,6 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -127,7 +125,7 @@ public class List_of_Credits {
                        {
                            addCredit(credit);
                            savePic( picture, bitmap);
-                           AddActivity.instance.sendNoti(credit.getNotificationID());
+                           AddActivity.instance.sendNoti(credit.getNotificationID(), credit.getKey(), credit.getType());
                            Toast.makeText((instance), "save", Toast.LENGTH_SHORT).show();
                        }
                        if(state.equals("update"))

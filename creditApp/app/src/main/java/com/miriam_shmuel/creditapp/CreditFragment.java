@@ -64,11 +64,8 @@ public class CreditFragment extends Fragment  {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
-                            int i=0;
-                            Log.d("test","in 1");
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 arrayList.add(document.toObject(Gift_Credit.class));
-                                Log.d("test","number array "+i++);
                             }
                             Adapter = new AdapterCreditsGifts(getActivity(), R.layout.item_element, arrayList);
                             listView.setAdapter(Adapter);
