@@ -155,6 +155,7 @@ public class List_of_Gifts {
                         {
                             savePic(picture, bitmap);
                             Toast.makeText(instance, "save", Toast.LENGTH_SHORT).show();
+                            AddActivity.instance.sendNoti(gift.getKey(), gift.getType());
                         }
                         if(state.equals("update"))
                         {

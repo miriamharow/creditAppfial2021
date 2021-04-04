@@ -125,7 +125,7 @@ public class List_of_Credits {
                        {
                            addCredit(credit);
                            savePic( picture, bitmap);
-                           AddActivity.instance.sendNoti(credit.getNotificationID(), credit.getKey(), credit.getType());
+                           AddActivity.instance.sendNoti(credit.getKey(), credit.getType());
                            Toast.makeText((instance), "save", Toast.LENGTH_SHORT).show();
                        }
                        if(state.equals("update"))

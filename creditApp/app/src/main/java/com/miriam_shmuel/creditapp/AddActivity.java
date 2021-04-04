@@ -522,11 +522,10 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
         }
     }
 
-    public void oneTimeAlarm(Calendar alarmTime, int notification, String key, String type) {
+    public void oneTimeAlarm(Calendar alarmTime, String key, String type) {
         Intent intent = new Intent(this, AlarmReceiver.class);
         intent.putExtra("title", "My Gift!");
-        intent.putExtra("msg", "massage");
-        intent.putExtra("notificationID", Integer.toString(notification));
+        intent.putExtra("msg", "Your "+type+" is about to expire");
         intent.putExtra("key", key);
         intent.putExtra("type", type);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, ONETIME_ALARM_CODE,
@@ -541,7 +540,7 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
             alarmManager.set(AlarmManager.RTC_WAKEUP, wakeupTime, pendingIntent);
     }
 
-    private void showTimeDialog(int notification, String key, String type) throws ParseException {
+    private void showTimeDialog(String key, String type) throws ParseException {
         //Given Date in String format
         String expDate=dayED+"/"+monthED+"/"+yearED;
 
@@ -553,18 +552,18 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
         //Number of Days to add
         calender.add(Calendar.DAY_OF_MONTH, -5);
 
-        oneTimeAlarm(calendar, notification, key, type);
+        oneTimeAlarm(calendar, key, type);
     }
 
-    public void createOneTimeAlarmInPickedTime(int notification, String key, String type) throws ParseException {
+    public void createOneTimeAlarmInPickedTime(String key, String type) throws ParseException {
         Log.d("debug", "createOneTimeAlarmInPickedTime()");
-        showTimeDialog(notification, key, type);
+        showTimeDialog(key, type);
     }
 
-    public void sendNoti(int notification, String key, String type){
+    public void sendNoti(String key, String type){
         try
         {
-            createOneTimeAlarmInPickedTime(notification, key, type);
+            createOneTimeAlarmInPickedTime(key, type);
         } catch (ParseException e)
         {
             e.printStackTrace();
