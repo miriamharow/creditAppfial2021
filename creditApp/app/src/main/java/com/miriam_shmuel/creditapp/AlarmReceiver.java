@@ -8,6 +8,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
@@ -19,6 +20,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.ThrowOnExtraProperties;
 
 import static android.content.ContentValues.TAG;
 
@@ -28,6 +30,7 @@ public class AlarmReceiver extends BroadcastReceiver
     private String key, type;
     private static String CHANNEL_ID = "channel1";
     private static String CHANNEL_NAME = "Channel Credit App";
+    private  int  notificationID ;
     private NotificationManager notificationManager;
     private FirebaseFirestore db;
     private FirebaseUser user;
@@ -39,6 +42,7 @@ public class AlarmReceiver extends BroadcastReceiver
         String msg = intent.getStringExtra("msg");
         key = intent.getStringExtra("key");
         type = intent.getStringExtra("type");
+
 
         // create the Notification Channel
         createNotificationChannel(context);
@@ -80,17 +84,19 @@ public class AlarmReceiver extends BroadcastReceiver
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
                         Gift_Credit gift_credit = document.toObject(Gift_Credit.class);
+                        notificationID = gift_credit.getNotificationID();
+
                         // Create the content intent for the notification, which launches MainActivity activity
                         Intent tapIntent = new Intent(context, ShowItemActivity.class);
                         tapIntent.putExtra("type", type);
                         tapIntent.putExtra("obj", gift_credit);
-                        tapIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        PendingIntent tapPendingIntent = PendingIntent.getActivity(context, 0, tapIntent, 0);
+                       // tapIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        PendingIntent tapPendingIntent = PendingIntent.getActivity(context, 0, tapIntent,  PendingIntent.FLAG_UPDATE_CURRENT);
 
                         // create the notification
                         Notification notification = new NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID)
                                 .setContentTitle(title)
-                                .setContentText(msg)
+                                .setContentText(msg+notificationID)
                                 .setSmallIcon(R.drawable.ic_receipt)
                                 .setContentIntent(tapPendingIntent)
                                 .setPriority(NotificationCompat.PRIORITY_HIGH)
@@ -99,7 +105,8 @@ public class AlarmReceiver extends BroadcastReceiver
                                 .build();
 
                         // Deliver the notification
-                        notificationManager.notify(gift_credit.getNotificationID(), notification);
+                        Log.d(TAG, "notificationID "+notificationID);
+                        notificationManager.notify(notificationID, notification);
                     } else {
                         Log.d(TAG, "No such document");
                     }

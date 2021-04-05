@@ -524,7 +524,7 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
 
     public void oneTimeAlarm(Calendar alarmTime, String key, String type) {
         Intent intent = new Intent(this, AlarmReceiver.class);
-        intent.putExtra("title", "My Gift!");
+        intent.putExtra("title", "Credit APP!");
         intent.putExtra("msg", "Your "+type+" is about to expire");
         intent.putExtra("key", key);
         intent.putExtra("type", type);
