@@ -71,7 +71,6 @@ public class List_of_Credits {
                         Log.w(TAG, "Error writing document", e);
                     }
                 });
-        AddActivity.instance.sendNoti(credit.getKey(), credit.getType());
         return credit;
     }
 
@@ -127,6 +126,7 @@ public class List_of_Credits {
                            addCredit(credit);
                            savePic( picture, bitmap);
                            Toast.makeText((instance), "save", Toast.LENGTH_SHORT).show();
+                           AddActivity.instance.sendNoti(credit.getKey(), credit.getType());
                        }
                        if(state.equals("update"))
                        {

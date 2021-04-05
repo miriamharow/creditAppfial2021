@@ -1,12 +1,16 @@
 package com.miriam_shmuel.creditapp;
 
+import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.PendingIntent;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -28,6 +32,8 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.io.Serializable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.regex.Matcher;
@@ -50,6 +56,9 @@ public class EditItemActivity extends AppCompatActivity implements View.OnClickL
     private FirebaseFirestore db;
     private FirebaseUser user;
     private String email;
+
+    public static final int ONETIME_ALARM_CODE = 0;
+    private AlarmManager alarmManager;
 
     private Calendar calender;
     private int day, month, year;
@@ -206,7 +215,6 @@ public class EditItemActivity extends AppCompatActivity implements View.OnClickL
 
         AlertDialog alert = builder.create();
         alert.show();
-
     }
 
     public void update() {
@@ -269,7 +277,6 @@ public class EditItemActivity extends AppCompatActivity implements View.OnClickL
             }
         }
     }
-
 
     private ArrayList<Shop> shopsListNew() {
         ArrayList<Shop> shoListNew = new ArrayList<>();
@@ -523,6 +530,54 @@ public class EditItemActivity extends AppCompatActivity implements View.OnClickL
                     str += diaListShopName.get(i);
             }
             CedtShopName.setText(str);
+        }
+    }
+
+    public void oneTimeAlarm(Calendar alarmTime, String key, String type) {
+        Intent intent = new Intent(this, AlarmReceiver.class);
+        intent.putExtra("title", "Credit APP!");
+        intent.putExtra("msg", "Your "+type+" is about to expire");
+        intent.putExtra("key", key);
+        intent.putExtra("type", type);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, ONETIME_ALARM_CODE,
+                intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        long wakeupTime = alarmTime.getTimeInMillis();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+            alarmManager.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, wakeupTime, pendingIntent);
+        else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP, wakeupTime, pendingIntent);
+        else
+            alarmManager.set(AlarmManager.RTC_WAKEUP, wakeupTime, pendingIntent);
+    }
+
+    private void showTimeDialog(String key, String type) throws ParseException {
+        //Given Date in String format
+        String expDate=dayED+"/"+monthED+"/"+yearED;
+
+        //Specifying date format that matches the given date
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(sdf.parse(expDate));
+
+        //Number of Days to add
+        calender.add(Calendar.DAY_OF_MONTH, -5);
+
+        oneTimeAlarm(calendar, key, type);
+    }
+
+    public void createOneTimeAlarmInPickedTime(String key, String type) throws ParseException {
+        Log.d("debug", "createOneTimeAlarmInPickedTime()");
+        showTimeDialog(key, type);
+    }
+
+    public void sendNoti(String key, String type){
+        try
+        {
+            createOneTimeAlarmInPickedTime(key, type);
+        } catch (ParseException e)
+        {
+            e.printStackTrace();
         }
     }
 }
