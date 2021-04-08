@@ -16,19 +16,22 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Locale;
 
 import static android.widget.Toast.LENGTH_SHORT;
 
 public class AdapterCreditsGifts extends ArrayAdapter<Gift_Credit> {
     Context context; // The current context. Used to inflate the layout file.
-    ArrayList <Gift_Credit> creditlist; //A List of AndroidFlavor objects to display in a list
+    ArrayList <Gift_Credit> gift_credit_list; //A List of AndroidFlavor objects to display in a list
+    private ArrayList<Gift_Credit> searchResult = null;
     int resource; // layout file
 
     public AdapterCreditsGifts(Context context, int resource, ArrayList<Gift_Credit> creditlist) {
         super(context, R.layout.item_element, R.id.itemId, creditlist);
         this.context = context;
         this.resource = resource;
-        this.creditlist = creditlist;
+        this.gift_credit_list = creditlist;
+        this.searchResult = creditlist;
     }
 
     /**
@@ -55,7 +58,7 @@ public class AdapterCreditsGifts extends ArrayAdapter<Gift_Credit> {
         TextView cbarCode = (TextView)view.findViewById(R.id.CbarbarcodeID);
 
         // add contact to list in specific position
-        final Gift_Credit creditI = creditlist.get(position);
+        final Gift_Credit creditI = gift_credit_list.get(position);
         if(creditI.getType().equals("credit")) {
             cNameStore.setText(creditI.getShopName().get(0).getName());
             cDate.setText(creditI.getExpirationDate());
@@ -132,8 +135,34 @@ public class AdapterCreditsGifts extends ArrayAdapter<Gift_Credit> {
             }
         });
 
+
+
         return view;
     }
+
+    public void filter(String characterText) {
+        characterText = characterText.toLowerCase(Locale.getDefault());
+        searchResult.clear();
+        if (characterText.length() == 0) {
+            searchResult.addAll(gift_credit_list);
+            notifyDataSetChanged();
+        } else {
+            for (Gift_Credit gift_credit : gift_credit_list) {
+                if (gift_credit.getType().equals("credit"))
+                    if (gift_credit.getShopName().get(0).toString().toLowerCase(Locale.getDefault()).contains(characterText)) {
+                        searchResult.add(gift_credit);
+                    }
+                else
+                    if (gift_credit.getGiftName().toLowerCase(Locale.getDefault()).contains(characterText)) {
+                        searchResult.add(gift_credit);
+                    }
+
+            }
+            notifyDataSetChanged();
+        }
+
+    }
+
 }
 
 

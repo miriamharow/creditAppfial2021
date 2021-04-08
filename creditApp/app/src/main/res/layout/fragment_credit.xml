@@ -7,6 +7,34 @@
     tools:context=".CreditFragment"
     android:orientation="vertical">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/edtSearchID"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:hint="Search"
+            android:textAppearance="@style/TextAppearance.AppCompat.Display4"
+            android:textSize="18dp"
+            app:fontFamily="casual" />
+
+        <ImageButton
+            android:id="@+id/btnSearchID"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="10dp"
+            android:background="#FAFAFA"
+            app:srcCompat="@drawable/ic_search" />
+    </LinearLayout>
+
     <ListView
             android:id="@+id/listViewID"
             android:layout_width="match_parent"

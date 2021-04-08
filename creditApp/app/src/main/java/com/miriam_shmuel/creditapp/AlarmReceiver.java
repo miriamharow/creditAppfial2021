@@ -4,11 +4,11 @@ import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.app.TaskStackBuilder;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
@@ -20,7 +20,6 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.ThrowOnExtraProperties;
 
 import static android.content.ContentValues.TAG;
 
@@ -34,6 +33,8 @@ public class AlarmReceiver extends BroadcastReceiver
     private NotificationManager notificationManager;
     private FirebaseFirestore db;
     private FirebaseUser user;
+    private TaskStackBuilder stackBuilder;
+
     @Override
     public void onReceive(Context context, Intent intent)
     {
@@ -42,6 +43,7 @@ public class AlarmReceiver extends BroadcastReceiver
         String msg = intent.getStringExtra("msg");
         key = intent.getStringExtra("key");
         type = intent.getStringExtra("type");
+        stackBuilder = TaskStackBuilder.create(context);
 
 
         // create the Notification Channel
@@ -91,12 +93,18 @@ public class AlarmReceiver extends BroadcastReceiver
                         tapIntent.putExtra("type", type);
                         tapIntent.putExtra("obj", gift_credit);
                        // tapIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        PendingIntent tapPendingIntent = PendingIntent.getActivity(context, 0, tapIntent,  PendingIntent.FLAG_UPDATE_CURRENT);
+
+                        stackBuilder.addNextIntentWithParentStack(tapIntent);
+                        tapIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        PendingIntent tapPendingIntent = PendingIntent.getActivity(context, notificationID, tapIntent,  PendingIntent.FLAG_UPDATE_CURRENT);
+
+
+                        //PendingIntent tapPendingIntent = PendingIntent.getActivity(context, 0, tapIntent,  PendingIntent.FLAG_UPDATE_CURRENT);
 
                         // create the notification
                         Notification notification = new NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID)
                                 .setContentTitle(title)
-                                .setContentText(msg+notificationID)
+                                .setContentText(msg+key)
                                 .setSmallIcon(R.drawable.ic_receipt)
                                 .setContentIntent(tapPendingIntent)
                                 .setPriority(NotificationCompat.PRIORITY_HIGH)

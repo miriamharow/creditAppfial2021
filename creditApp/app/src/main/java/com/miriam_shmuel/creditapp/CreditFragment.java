@@ -1,10 +1,13 @@
 package com.miriam_shmuel.creditapp;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ListView;
 
 import androidx.annotation.NonNull;
@@ -20,6 +23,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.Map;
 
 import static android.content.ContentValues.TAG;
@@ -29,6 +33,7 @@ public class CreditFragment extends Fragment  {
     private List_of_Credits listCredit;
     private Map<String, Object> data;
     public View view;
+    private EditText SearchBar;
 
 
 
@@ -47,6 +52,8 @@ public class CreditFragment extends Fragment  {
         user = FirebaseAuth.getInstance().getCurrentUser();
         email = user.getEmail();
         db = FirebaseFirestore.getInstance();
+
+
     }
 
     @Override
@@ -56,6 +63,8 @@ public class CreditFragment extends Fragment  {
         final View view = inflater.inflate(R.layout.fragment_credit, container, false);
         arrayList = new  ArrayList<>();
         listView = (ListView)view.findViewById(R.id.listViewID);
+        SearchBar = view.findViewById(R.id.edtSearchID);
+
 
         CollectionReference ColRef = db.collection("user").document(email).collection("list of credit");
         //asynchronously retrieve all documents
@@ -75,6 +84,26 @@ public class CreditFragment extends Fragment  {
 
                     }
                 });
+
+        SearchBar.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                String text = SearchBar.getText().toString().toLowerCase(Locale.getDefault());
+                Adapter.filter(text);
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+        listView.setAdapter(Adapter);
+
         return view;
     }
     public AdapterCreditsGifts getAdapter() {
@@ -84,4 +113,6 @@ public class CreditFragment extends Fragment  {
     public void setAdapter(AdapterCreditsGifts adapter) {
         Adapter = adapter;
     }
+
+
 }
