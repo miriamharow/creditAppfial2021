@@ -127,42 +127,13 @@ public class AdapterCreditsGifts extends ArrayAdapter<Gift_Credit> {
                                 dialog.cancel();
                             }
                         });
-
                 AlertDialog alert = builder.create();
                 alert.show();
-
                 return true;    // <- set to true
             }
         });
-
-
-
         return view;
     }
-
-    public void filter(String characterText) {
-        characterText = characterText.toLowerCase(Locale.getDefault());
-        searchResult.clear();
-        if (characterText.length() == 0) {
-            searchResult.addAll(gift_credit_list);
-            notifyDataSetChanged();
-        } else {
-            for (Gift_Credit gift_credit : gift_credit_list) {
-                if (gift_credit.getType().equals("credit"))
-                    if (gift_credit.getShopName().get(0).toString().toLowerCase(Locale.getDefault()).contains(characterText)) {
-                        searchResult.add(gift_credit);
-                    }
-                else
-                    if (gift_credit.getGiftName().toLowerCase(Locale.getDefault()).contains(characterText)) {
-                        searchResult.add(gift_credit);
-                    }
-
-            }
-            notifyDataSetChanged();
-        }
-
-    }
-
 }
 
 

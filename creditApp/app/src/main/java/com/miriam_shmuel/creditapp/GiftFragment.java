@@ -1,11 +1,14 @@
 package com.miriam_shmuel.creditapp;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -22,6 +25,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 import static android.content.ContentValues.TAG;
 
@@ -33,6 +37,8 @@ public class GiftFragment extends Fragment {
     private FirebaseFirestore db;
     private FirebaseUser user;
     private String email;
+    private EditText SearchBar;
+    private String characterText;
 
     public GiftFragment() {
         user = FirebaseAuth.getInstance().getCurrentUser();
@@ -43,8 +49,6 @@ public class GiftFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
     }
 
     @Override
@@ -53,6 +57,40 @@ public class GiftFragment extends Fragment {
         final View view = inflater.inflate(R.layout.fragment_gift, container, false);
         listView = (ListView)view.findViewById(R.id.listViewID);
         arrayList = new ArrayList<>();
+        SearchBar = view.findViewById(R.id.edtSearchID);
+
+        Adapter = new AdapterCreditsGifts(getActivity(), R.layout.item_element, arrayList);
+        loadGift();
+
+        SearchBar.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                String text = SearchBar.getText().toString().toLowerCase(Locale.getDefault());
+                characterText = text.toLowerCase(Locale.getDefault());
+                if (characterText.length() == 0) {
+                    arrayList.clear();
+                    loadGift();
+                }
+                else {
+                    arrayList.clear();
+                    searchGift();
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) { }
+        });
+        //listView.setAdapter(Adapter);
+
+        return view;
+
+
+    }
+
+    private void loadGift() {
         CollectionReference ColRef = db.collection("user").document(email).collection("list of gift");
         //asynchronously retrieve all documents
         ColRef.get()
@@ -63,7 +101,6 @@ public class GiftFragment extends Fragment {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 arrayList.add(document.toObject(Gift_Credit.class));
                             }
-                            Adapter = new AdapterCreditsGifts(getActivity(), R.layout.item_element, arrayList);
                             listView.setAdapter(Adapter);
                         } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());
@@ -76,18 +113,41 @@ public class GiftFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id)
             {
-                /*Gift_Credit gift = arrayList.get(position);
-                Intent intentCI = new Intent(getActivity(), EditItemActivity.class);
-                intentCI.putExtra("gift", (Parcelable) gift);
-                startActivity(intentCI);*/
                 Toast.makeText(getActivity(), "First Fragment", Toast.LENGTH_LONG).show();
             }
         });
-
-        return view;
-
-
     }
+
+    private void searchGift() {
+        CollectionReference ColRef = db.collection("user").document(email).collection("list of gift");
+        //asynchronously retrieve all documents
+        ColRef.get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                if (document.toObject(Gift_Credit.class).getGiftName().toLowerCase(Locale.getDefault()).contains(characterText)) {
+                                    arrayList.add(document.toObject(Gift_Credit.class));
+                                }
+                            }
+                            listView.setAdapter(Adapter);
+                        } else {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
+        {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+            {
+                Toast.makeText(getActivity(), "First Fragment", Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
     public AdapterCreditsGifts getAdapter() {
         return Adapter;
     }

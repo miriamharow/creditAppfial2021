@@ -95,22 +95,18 @@ public class HomeActivity extends AppCompatActivity {
         tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-// get the current selected tab's position and replace the fragment accordingly
+            // get the current selected tab's position and replace the fragment accordingly
                 fragment = null;
                 newPosition = tab.getPosition();
                 openTab(newPosition);
-
-
             }
 
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
-
             }
 
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
-
             }
         });
     }
@@ -132,8 +128,6 @@ public class HomeActivity extends AppCompatActivity {
         ft.replace(R.id.simpleFrameLayout, fragment);
         ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         ft.commit();
-
-
     }
 
     public BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
@@ -190,10 +184,7 @@ public class HomeActivity extends AppCompatActivity {
                         //get the result
                     }
                 }, 2000);
-
             }
-
-
         }
     }
 
@@ -235,8 +226,6 @@ public class HomeActivity extends AppCompatActivity {
         Intent intToLogIn = new Intent(HomeActivity.this, LogInActivity.class);
         startActivity(intToLogIn);
     }
-
-
 }
 
 
