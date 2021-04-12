@@ -32,7 +32,7 @@ public class WarrantyFragment extends Fragment {
     private EditText SearchBar;
     private AdapterWarranties Adapter;
     private ListView listView;
-    private ArrayList<Warranty> arrayList;
+    private ArrayList<Warranty> arrayList, fullList;
     private FirebaseFirestore db;
     private FirebaseUser user;
     private String email;
@@ -54,6 +54,7 @@ public class WarrantyFragment extends Fragment {
                              Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_credit, container, false);
         arrayList = new  ArrayList<>();
+        fullList = new  ArrayList<>();
         listView = (ListView)view.findViewById(R.id.listViewID);
         SearchBar = view.findViewById(R.id.edtSearchID);
 
@@ -71,24 +72,23 @@ public class WarrantyFragment extends Fragment {
                 characterText = text.toLowerCase(Locale.getDefault());
                 if (characterText.length() == 0) {
                     arrayList.clear();
-                    loadWarranty();
+                    arrayList.addAll(fullList);
                 }
                 else {
-                    arrayList.clear();
                     searchWarranty();
                 }
+                listView.setAdapter(Adapter);
             }
 
             @Override
             public void afterTextChanged(Editable s) {}
         });
 
-        //listView.setAdapter(Adapter);
         return view;
     }
 
     private void loadWarranty() {
-        Log.d(TAG, "TAG READ");
+        fullList.clear();
         CollectionReference ColRef = db.collection("user").document(email).collection("list of warranty");
         //asynchronously retrieve all documents
         ColRef.get()
@@ -99,6 +99,7 @@ public class WarrantyFragment extends Fragment {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                // Adapter = new AdapterWarranties(getActivity(), R.layout.item_element, arrayList);
                                 arrayList.add(document.toObject(Warranty.class));
+                                fullList.add(document.toObject(Warranty.class));
                             }
                             listView.setAdapter(Adapter);
                         } else {
@@ -109,27 +110,15 @@ public class WarrantyFragment extends Fragment {
     }
 
     private void searchWarranty() {
-        Log.d(TAG, "TAG SERCH");
-        //arrayList.clear();
-        CollectionReference ColRef = db.collection("user").document(email).collection("list of warranty");
-        //asynchronously retrieve all documents
-        ColRef.get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                if (document.toObject(Warranty.class).getItemName().toLowerCase(Locale.getDefault()).contains(characterText)) {
-                                 //   Adapter = new AdapterWarranties(getActivity(), R.layout.item_element, arrayList);
-                                    arrayList.add(document.toObject(Warranty.class));
-                                }
-                            }
-                            listView.setAdapter(Adapter);
-                        } else {
-                            Log.d(TAG, "Error getting documents: ", task.getException());
-                        }
-                    }
-                });
+        ArrayList<Warranty> temp = new  ArrayList<>();
+        for (int i = 0; i < fullList.size(); i++) {
+            if ((fullList.get(i).getItemName().toLowerCase(Locale.getDefault()).contains(characterText))) {
+                temp.add(fullList.get(i));
+            }
+        }
+
+        arrayList.clear();
+        arrayList.addAll(temp);
     }
 
     public AdapterWarranties getAdapter() {
