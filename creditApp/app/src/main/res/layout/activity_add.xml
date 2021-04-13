@@ -111,9 +111,11 @@
 
                 <Button
                     android:id="@+id/btnPlusShopNameID"
-                    android:layout_width="wrap_content"
+                    android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:text="SHOP NAME"
+                    android:textSize="15dp"
                     android:drawableRight="@drawable/ic_add" />
             </LinearLayout>
 
@@ -253,7 +255,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:gravity="center"
-                android:hint="BAR CODE NUMBER"
+                android:hint="WARRANTY'S BARCODE"
                 android:inputType="number"
                 android:textAppearance="@style/TextAppearance.AppCompat.Display4"
                 android:textColor="#00264d"
@@ -267,7 +269,19 @@
                 android:layout_marginTop="10dp"
                 android:ems="10"
                 android:gravity="center"
-                android:hint="EXPIRATION DATE"
+                android:hint="WARRANTY'S EXPIRATION DATE"
+                android:textAppearance="@style/TextAppearance.AppCompat.Display4"
+                android:textColor="#00264d"
+                android:textSize="15dp"
+                app:fontFamily="casual" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:ems="10"
+                android:gravity="left"
+                android:hint="Warranty's pic"
                 android:textAppearance="@style/TextAppearance.AppCompat.Display4"
                 android:textColor="#00264d"
                 android:textSize="15dp"
@@ -286,7 +300,8 @@
                     android:layout_weight="1"
                     android:gravity="center"
                     android:scaleType="fitXY"
-                    android:src="@drawable/ic_receipt" />
+                    android:src="@drawable/ic_receipt"
+                    />
 
                 <com.google.android.material.floatingactionbutton.FloatingActionButton
                     android:id="@+id/fabItemW"
@@ -301,8 +316,21 @@
                     android:layout_marginRight="16dp"
                     android:layout_marginBottom="16dp"
                     android:layout_weight="1"
-                    android:src="@drawable/ic_camera" />
+                    android:src="@drawable/ic_camera"
+                    />
             </RelativeLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:ems="10"
+                android:gravity="left"
+                android:hint="Receipt's pic"
+                android:textAppearance="@style/TextAppearance.AppCompat.Display4"
+                android:textColor="#00264d"
+                android:textSize="15dp"
+                app:fontFamily="casual" />
 
             <RelativeLayout
                 android:layout_width="wrap_content"
@@ -317,7 +345,8 @@
                     android:layout_weight="1"
                     android:gravity="center"
                     android:scaleType="fitXY"
-                    android:src="@drawable/ic_receipt" />
+                    android:src="@drawable/ic_receipt"
+                    />
 
                 <com.google.android.material.floatingactionbutton.FloatingActionButton
                     android:id="@+id/fabReceiptW"

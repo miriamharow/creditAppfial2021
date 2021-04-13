@@ -25,18 +25,12 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 
-import java.io.ByteArrayOutputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -206,6 +200,7 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
                     warranty_view.setVisibility(View.GONE);
                     btnPlusShopName.setVisibility(View.GONE);
                     edtgiftNameIDG.setVisibility(View.GONE);
+                    edtShopNameGC.setVisibility(View.VISIBLE);
                     type = "Credit";
                 }
                 break;
@@ -215,6 +210,7 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
                     warranty_view.setVisibility(View.GONE);
                     btnPlusShopName.setVisibility(View.VISIBLE);
                     edtgiftNameIDG.setVisibility(View.VISIBLE);
+                    edtShopNameGC.setVisibility(View.GONE);
                     type = "Gift";
                 }
                 break;
@@ -285,9 +281,9 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btnPlusShopNameID:
-                String edtsname = edtShopNameGC.getText().toString();
-                UpdateShopName(edtsname);
-                edtShopNameGC.setText(null);
+                //String edtsname = edtShopNameGC.getText().toString();
+                UpdateShopName();
+                //edtShopNameGC.setText(null);
                 break;
         }
     }
@@ -412,37 +408,12 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
         return true;
     }
 
-    private void savePic(String key, Bitmap bitmap) {
-        // Create a storage reference from our app
-        StorageReference storageRef = FirebaseStorage.getInstance().getReference();
-        // Create a reference to "mountains.jpg"
-        StorageReference imageRef = storageRef.child(key + ".jpg");
-        // Create a reference to 'images/mountains.jpg'
-        StorageReference documentImagesRef = storageRef.child("images/" + key + ".jpg");
 
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-        byte[] data = baos.toByteArray();
-
-        UploadTask uploadTask = imageRef.putBytes(data);
-        uploadTask.addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                // Handle unsuccessful uploads
-            }
-        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-            }
-        });
-    }
-
-    public void UpdateShopName(String shopNameFromEdt) {
+    public void UpdateShopName() {
         AlertDialog.Builder mBuilder = new AlertDialog.Builder(AddActivity.this);
         final View dialogViewList = getLayoutInflater().inflate(R.layout.dialog_list_shop_name, null);
         final EditText diaShopName = (EditText) dialogViewList.findViewById(R.id.edtDiaShopNameId);
         final Button diaBtnAddShop = (Button) dialogViewList.findViewById(R.id.btnDiaPlusShopNameID);
-        final Button btnSaveShops = (Button) dialogViewList.findViewById(R.id.showShops);
         listView = dialogViewList.findViewById(R.id.listViewDiaID);
         mBuilder.setView(dialogViewList);
         final AlertDialog dialog = mBuilder.create();
@@ -458,7 +429,7 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
             printShopListFlag = false;
         }
 
-        if ((!shopNameFromEdt.isEmpty()) && (!shopNameExist(shopNameFromEdt)) && (!printShopListFlag)) {
+        /*if ((!shopNameFromEdt.isEmpty()) && (!shopNameExist(shopNameFromEdt)) && (!printShopListFlag)) {
             String shopname = edtShopNameGC.getText().toString();
             Shop shop = new Shop(shopname);
             shopsList.add(shop);
@@ -468,7 +439,7 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
             if ((!shopNameExist(shopNameFromEdt))) {
                 Toast.makeText(AddActivity.this, "SHOP NAME EXISTS!", Toast.LENGTH_SHORT).show();
             }
-        }
+        }*/
 
         diaBtnAddShop.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -480,6 +451,8 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
                         shopsList.add(shop);
                         diaListShopNsme.add(shopname);
                         adapter.notifyDataSetChanged();
+                        printShopList();
+
                     }
                     else
                         Toast.makeText(AddActivity.this, "SHOP NAME EXISTS!", Toast.LENGTH_SHORT).show();
@@ -488,15 +461,11 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
             }
         });
 
-        btnSaveShops.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog.dismiss();
-                printShopList();
-            }
-        });
+
 
     }
+
+
 
     public boolean shopNameExist(String shopname) {
         if (!diaListShopNsme.isEmpty()) {
@@ -508,27 +477,31 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
         return false;
     }
 
-    private void printShopList() {
+    public void printShopList() {
         printShopListFlag = true;
-        if (!diaListShopNsme.isEmpty()) {
-            String str = "";
-            for (int i = 0; i<diaListShopNsme.size(); i++){
-                if (i != diaListShopNsme.size()-1)
-                    str += diaListShopNsme.get(i)+";  ";
+        String str = "";
+        if (shopsList.size() == 0)
+            str = "SHOPNAME";
+        else{
+            for (int i = 0; i<shopsList.size(); i++) {
+                if (i != shopsList.size() - 1)
+                    str += shopsList.get(i) + ",  ";
                 else
-                    str += diaListShopNsme.get(i);
+                    str += shopsList.get(i);
             }
-            edtShopNameGC.setText(str);
         }
+        btnPlusShopName.setText(str);
     }
 
     public void oneTimeAlarm(Calendar alarmTime, String key, String type) {
         Intent intent = new Intent(this, AlarmReceiver.class);
         String str = "";
         if (type.equals("credit"))
-            str += "Your "+type+" from "
+            str += "Your "+type+" from "+edtShopNameGC.getText().toString()+" is about to expire !";
+        else
+            str += "Your "+type+" from "+edtgiftNameIDG.getText().toString()+" is about to expire !";
         intent.putExtra("title", "Credit APP!");
-        intent.putExtra("msg", "Your "+type+" is about to expire ");
+        intent.putExtra("msg", str);
         intent.putExtra("key", key);
         intent.putExtra("type", type);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, ONETIME_ALARM_CODE,

@@ -8,7 +8,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -139,7 +138,6 @@ public class ShowItemActivity extends AppCompatActivity {
 
         String list = "list of warranty";
         String folder = warranty.getFolder();
-        Toast.makeText(this, folder, Toast.LENGTH_SHORT).show();
         String picture1 = folder + "/" + folder + "itemReceipt";
         String picture2 = folder + "/" + folder + "shopReceipt";
 
@@ -175,7 +173,6 @@ public class ShowItemActivity extends AppCompatActivity {
             else
                 str += shopName.get(i).toString();
         }
-        Toast.makeText(ShowItemActivity.this, "" + str, Toast.LENGTH_LONG).show();
         return str;
     }
 }

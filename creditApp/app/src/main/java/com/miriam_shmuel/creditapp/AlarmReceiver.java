@@ -104,7 +104,7 @@ public class AlarmReceiver extends BroadcastReceiver
                         // create the notification
                         Notification notification = new NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID)
                                 .setContentTitle(title)
-                                .setContentText(msg+key)
+                                .setContentText(msg)
                                 .setSmallIcon(R.drawable.ic_receipt)
                                 .setContentIntent(tapPendingIntent)
                                 .setPriority(NotificationCompat.PRIORITY_HIGH)

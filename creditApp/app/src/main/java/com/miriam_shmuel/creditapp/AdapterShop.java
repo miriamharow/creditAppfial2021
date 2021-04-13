@@ -2,7 +2,6 @@ package com.miriam_shmuel.creditapp;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,8 +37,8 @@ public class AdapterShop extends ArrayAdapter<String> {
             public void onClick(View view) {
                 AddActivity.instance.diaListShopNsme = DelItemFromList(position);
                 AddActivity.instance.shopsList = DelItemFromListShop(position);
-                AddActivity.instance.UpdateShopName("");
-
+                AddActivity.instance.UpdateShopName();
+                AddActivity.instance.printShopList();
                 dialog.cancel();
             }
         });
@@ -54,6 +53,7 @@ public class AdapterShop extends ArrayAdapter<String> {
                 newListArray.add(rows.get(i));
             }
         }
+
         return newListArray;
     }
 
