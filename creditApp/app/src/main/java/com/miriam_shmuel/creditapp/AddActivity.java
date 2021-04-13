@@ -383,30 +383,30 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
         String barCode = edtCreditBarCodeIDW.getText().toString();
         String expDate = editDateTextIDW.getText().toString();
         if(itemName.isEmpty()){
-            edtItemW.setError("Please enter item name warrenty");
+            edtItemW.setError("Please enter item name warranty");
             edtItemW.requestFocus();
             return false;
         }
         else if(shopName.isEmpty()){
-            edtShopNameIDW.setError("Please enter shop name warrenty");
+            edtShopNameIDW.setError("Please enter shop name warranty");
             edtShopNameIDW.requestFocus();
             return false;
         }
         else if(barCode.isEmpty()){
-            edtCreditBarCodeIDW.setError("Please enter bar code warrenty");
+            edtCreditBarCodeIDW.setError("Please enter barcode warranty");
             edtCreditBarCodeIDW.requestFocus();
             return false;
         }
         else if(expDate.isEmpty()){
-            Toast.makeText((instance), "plese enter experiton date of warrenty", Toast.LENGTH_SHORT).show();
+            Toast.makeText((instance), "please enter expiration date of warranty", Toast.LENGTH_SHORT).show();
             return false;
         }
         else if(!isPICAP1){
-            Toast.makeText((instance), "plese take a picture of warrenty", Toast.LENGTH_SHORT).show();
+            Toast.makeText((instance), "please take a picture of warranty", Toast.LENGTH_SHORT).show();
             return false;
         }
         else if(!isPICAP2){
-            Toast.makeText((instance), "plese take a picture of shop receipt", Toast.LENGTH_SHORT).show();
+            Toast.makeText((instance), "please take a picture of shop receipt", Toast.LENGTH_SHORT).show();
             return false;
         }
         return true;
@@ -524,8 +524,11 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
 
     public void oneTimeAlarm(Calendar alarmTime, String key, String type) {
         Intent intent = new Intent(this, AlarmReceiver.class);
+        String str = "";
+        if (type.equals("credit"))
+            str += "Your "+type+" from "
         intent.putExtra("title", "Credit APP!");
-        intent.putExtra("msg", "Your "+type+" is about to expire");
+        intent.putExtra("msg", "Your "+type+" is about to expire ");
         intent.putExtra("key", key);
         intent.putExtra("type", type);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, ONETIME_ALARM_CODE,
@@ -541,16 +544,15 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
     }
 
     private void showTimeDialog(String key, String type) throws ParseException {
-        //Given Date in String format
-        String expDate=dayED+"/"+monthED+"/"+yearED;
-
         //Specifying date format that matches the given date
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         Calendar calendar = Calendar.getInstance();
-        calendar.setTime(sdf.parse(expDate));
+        calendar.setTime(sdf.parse(dateExp));
+        Log.d("debug", "TAG expDate"+sdf.parse(dateExp));
 
         //Number of Days to add
-        calender.add(Calendar.DAY_OF_MONTH, -5);
+        calendar.add(Calendar.DAY_OF_MONTH, -5);
+        Log.d("debug", "TAG"+calendar.toString());
 
         oneTimeAlarm(calendar, key, type);
     }
