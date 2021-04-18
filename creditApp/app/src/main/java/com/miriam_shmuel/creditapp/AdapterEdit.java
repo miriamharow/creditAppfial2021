@@ -38,6 +38,7 @@ public class AdapterEdit extends ArrayAdapter<String> {
                 EditItemActivity.instance.diaListShopName = DelItemFromList(position);
                 EditItemActivity.instance.shopsList = DelItemFromListShop(position);
                 EditItemActivity.instance.UpdateShopName();
+                EditItemActivity.instance.printShopList();
 
                 dialog.cancel();
             }

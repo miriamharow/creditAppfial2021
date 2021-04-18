@@ -174,10 +174,12 @@
         <ImageView
             android:id="@+id/CimageView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginTop="10dp"
             android:layout_weight="1"
-            android:src="@drawable/ic_receipt"
-            android:visibility="visible"/>
+            android:gravity="center"
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_receipt"/>
     </LinearLayout>
 
     <LinearLayout
@@ -304,13 +306,17 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_receipt"
-            android:visibility="visible"/>
+            android:visibility="visible"
+            android:gravity="center"
+            android:scaleType="fitXY"/>
         <ImageView
             android:id="@+id/WWarrantyPic"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_receipt"
             android:visibility="visible"
-            android:layout_marginTop="10dp"/>
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:scaleType="fitXY"/>
     </LinearLayout>
 </LinearLayout>

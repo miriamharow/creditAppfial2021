@@ -383,6 +383,7 @@ public class EditItemActivity extends AppCompatActivity implements View.OnClickL
                 CedtGiftName.setText(gift_credit.getGiftName());
             if(diaListShopName.isEmpty())
                 restShopListGift();
+            printShopList();
             list = "list of gift";
         }
         picture = gift_credit.getPicture();
@@ -491,6 +492,8 @@ public class EditItemActivity extends AppCompatActivity implements View.OnClickL
                         Shop shop = new Shop(shopname);
                         shopsList.add(shop);
                         diaListShopName.add(shopname);
+                        Toast.makeText(EditItemActivity.this, shopsList.toString(), Toast.LENGTH_SHORT).show();
+                        printShopList();
                         adapter.notifyDataSetChanged();
                     }
                     else
@@ -510,6 +513,8 @@ public class EditItemActivity extends AppCompatActivity implements View.OnClickL
 
     }
 
+
+
     public boolean shopNameExist(String shopname) {
         if (!diaListShopName.isEmpty()) {
             for (int i = 0; i < diaListShopName.size(); i++) {
@@ -520,17 +525,19 @@ public class EditItemActivity extends AppCompatActivity implements View.OnClickL
         return false;
     }
 
-    private void printShopList() {
-        if (!diaListShopName.isEmpty()) {
-            String str = "";
-            for (int i = 0; i< diaListShopName.size(); i++){
-                if (i != diaListShopName.size()-1)
-                    str += diaListShopName.get(i)+";  ";
+    public void printShopList() {
+        String str = "";
+        if (shopsList.size() == 0)
+            str = "SHOPNAME";
+        else{
+            for (int i = 0; i<shopsList.size(); i++) {
+                if (i != shopsList.size() - 1)
+                    str += shopsList.get(i) + ",  ";
                 else
-                    str += diaListShopName.get(i);
+                    str += shopsList.get(i);
             }
-            CedtShopName.setText(str);
         }
+        btnPlusShopName.setText(str);
     }
 
     public void oneTimeAlarm(Calendar alarmTime, String key, String type) {
