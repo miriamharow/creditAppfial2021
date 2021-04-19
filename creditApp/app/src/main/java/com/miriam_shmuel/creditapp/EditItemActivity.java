@@ -98,7 +98,7 @@ public class EditItemActivity extends AppCompatActivity implements View.OnClickL
         giftNameField = findViewById(R.id.giftNameField);
         btnPlusShopName = findViewById(R.id.btnPlusShopNameID);
         btnPlusShopName.setOnClickListener(this);
-
+        alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
         shopsList = new ArrayList<Shop>();
         instance = this;
 
@@ -230,6 +230,7 @@ public class EditItemActivity extends AppCompatActivity implements View.OnClickL
             {
                 lc.delete(gift_credit.getKey());
                 lc.addCredit(newCredit);
+                sendNoti(newCredit.getKey(), newCredit.getType());
                 newgc = newCredit;
                 Toast.makeText(instance, "save", Toast.LENGTH_SHORT).show();
             }
@@ -249,6 +250,7 @@ public class EditItemActivity extends AppCompatActivity implements View.OnClickL
             {
                 lg.delete(gift_credit.getKey());
                 lg.addGift(newGift);
+                sendNoti(newGift.getKey(), newGift.getType());
                 newgc = newGift;
                 Toast.makeText(instance, "save", Toast.LENGTH_SHORT).show();
             }
@@ -513,8 +515,6 @@ public class EditItemActivity extends AppCompatActivity implements View.OnClickL
 
     }
 
-
-
     public boolean shopNameExist(String shopname) {
         if (!diaListShopName.isEmpty()) {
             for (int i = 0; i < diaListShopName.size(); i++) {
@@ -542,8 +542,13 @@ public class EditItemActivity extends AppCompatActivity implements View.OnClickL
 
     public void oneTimeAlarm(Calendar alarmTime, String key, String type) {
         Intent intent = new Intent(this, AlarmReceiver.class);
+        String str = "";
+        if (type.equals("credit"))
+            str += "Your "+type+" from "+CedtShopName.getText().toString()+" is about to expire !";
+        else
+            str += "Your "+type+" from "+CedtGiftName.getText().toString()+" is about to expire !";
         intent.putExtra("title", "Credit APP!");
-        intent.putExtra("msg", "Your "+type+" is about to expire");
+        intent.putExtra("msg", str);
         intent.putExtra("key", key);
         intent.putExtra("type", type);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, ONETIME_ALARM_CODE,
@@ -559,16 +564,15 @@ public class EditItemActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private void showTimeDialog(String key, String type) throws ParseException {
-        //Given Date in String format
-        String expDate=dayED+"/"+monthED+"/"+yearED;
-
         //Specifying date format that matches the given date
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         Calendar calendar = Calendar.getInstance();
-        calendar.setTime(sdf.parse(expDate));
+        calendar.setTime(sdf.parse(dateExp));
+        Log.d("debug", "TAG expDate"+sdf.parse(dateExp));
 
         //Number of Days to add
-        calender.add(Calendar.DAY_OF_MONTH, -5);
+        calendar.add(Calendar.DAY_OF_MONTH, -5);
+        Log.d("debug", "TAG"+calendar.toString());
 
         oneTimeAlarm(calendar, key, type);
     }

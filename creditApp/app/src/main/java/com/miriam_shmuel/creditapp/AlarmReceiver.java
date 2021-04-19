@@ -49,7 +49,8 @@ public class AlarmReceiver extends BroadcastReceiver
         // create the Notification Channel
         createNotificationChannel(context);
 
-        showOneTimeAlarmNotification(context, title, msg);
+        if(key!=null && type!=null)
+            showOneTimeAlarmNotification(context, title, msg);
     }
 
     private void createNotificationChannel(Context context)
@@ -96,7 +97,7 @@ public class AlarmReceiver extends BroadcastReceiver
 
                         stackBuilder.addNextIntentWithParentStack(tapIntent);
                         tapIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        PendingIntent tapPendingIntent = PendingIntent.getActivity(context, notificationID, tapIntent,  PendingIntent.FLAG_UPDATE_CURRENT);
+                        PendingIntent tapPendingIntent = PendingIntent.getActivity(context, notificationID, tapIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
 
                         //PendingIntent tapPendingIntent = PendingIntent.getActivity(context, 0, tapIntent,  PendingIntent.FLAG_UPDATE_CURRENT);

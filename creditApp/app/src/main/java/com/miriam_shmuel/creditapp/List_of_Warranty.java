@@ -26,7 +26,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static android.content.ContentValues.TAG;
-import static com.miriam_shmuel.creditapp.AddActivity.instance;
 
 public class List_of_Warranty {
 
@@ -36,6 +35,7 @@ public class List_of_Warranty {
     private FirebaseFirestore db;
     private FirebaseUser user;
     private String email, docWarranty = "list of warranty";
+    private AddActivity addActivity = AddActivity.instance;
 
     public List_of_Warranty() {
         this.listOfWarranty = new ArrayList<Warranty>();
@@ -122,7 +122,7 @@ public class List_of_Warranty {
                         {
                             savePic(picture, "itemReceipt", picBitmap1);
                             savePic(picture, "shopReceipt", picBitmap2);
-                            Toast.makeText((instance), "save", Toast.LENGTH_SHORT).show();
+                            Toast.makeText((addActivity), "save", Toast.LENGTH_SHORT).show();
                         }
                         if(state.equals("update"))
                         {

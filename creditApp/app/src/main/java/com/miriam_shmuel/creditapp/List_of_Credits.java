@@ -1,5 +1,7 @@
 package com.miriam_shmuel.creditapp;
 
+import android.app.NotificationManager;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.util.Log;
 import android.widget.Toast;
@@ -26,7 +28,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static android.content.ContentValues.TAG;
-import static com.miriam_shmuel.creditapp.AddActivity.instance;
 
 public class List_of_Credits {
     private ArrayList<Gift_Credit> listOfCredit;
@@ -34,6 +35,8 @@ public class List_of_Credits {
     private FirebaseFirestore db;
     private FirebaseUser user;
     private String email, docCredits;
+    private EditItemActivity editItemActivity = EditItemActivity.instance;
+    private AddActivity addActivity = AddActivity.instance;
     public static final int ONETIME_ALARM_CODE = 0;
 
     public List_of_Credits() {
@@ -113,7 +116,7 @@ public class List_of_Credits {
                     if (document.exists()) {
                         if(state.equals("add"))
                         {
-                            Toast.makeText(AddActivity.instance, "the credit exists", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(addActivity, "the credit exists", Toast.LENGTH_SHORT).show();
                         }
                         if(state.equals("update"))
                         {
@@ -125,14 +128,15 @@ public class List_of_Credits {
                        {
                            addCredit(credit);
                            savePic( picture, bitmap);
-                           Toast.makeText((instance), "save", Toast.LENGTH_SHORT).show();
-                           AddActivity.instance.sendNoti(credit.getKey(), credit.getType());
+                           Toast.makeText((addActivity), "save", Toast.LENGTH_SHORT).show();
+                           addActivity.sendNoti(credit.getKey(), credit.getType());
                        }
                        if(state.equals("update"))
                        {
                            delete(oldKey);
                            addCredit(credit);
                            Toast.makeText(EditItemActivity.instance, "save", Toast.LENGTH_SHORT).show();
+                           editItemActivity.sendNoti(credit.getKey(), credit.getType());
                        }
                     }
                 }
@@ -182,6 +186,12 @@ public class List_of_Credits {
             }
         });
     }
+
+    /*public void deleteNotification (int notification_id)
+    {
+        NotificationManager notificationManager = getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.cancel(notification_id);
+    }*/
 }
 
 

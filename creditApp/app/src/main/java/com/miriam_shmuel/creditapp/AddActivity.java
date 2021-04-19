@@ -408,7 +408,6 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
         return true;
     }
 
-
     public void UpdateShopName() {
         AlertDialog.Builder mBuilder = new AlertDialog.Builder(AddActivity.this);
         final View dialogViewList = getLayoutInflater().inflate(R.layout.dialog_list_shop_name, null);
@@ -465,8 +464,6 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
 
     }
 
-
-
     public boolean shopNameExist(String shopname) {
         if (!diaListShopNsme.isEmpty()) {
             for (int i = 0; i < diaListShopNsme.size(); i++) {
@@ -498,7 +495,7 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
         String str = "";
         if (type.equals("credit"))
             str += "Your "+type+" from "+edtShopNameGC.getText().toString()+" is about to expire !";
-        else
+        else if (type.equals("gift"))
             str += "Your "+type+" from "+edtgiftNameIDG.getText().toString()+" is about to expire !";
         intent.putExtra("title", "Credit APP!");
         intent.putExtra("msg", str);

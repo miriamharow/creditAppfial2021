@@ -31,7 +31,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static android.content.ContentValues.TAG;
-import static com.miriam_shmuel.creditapp.AddActivity.instance;
 
 public class List_of_Gifts {
     private ArrayList<Gift_Credit> listOfGifts;
@@ -40,6 +39,8 @@ public class List_of_Gifts {
     private FirebaseFirestore db;
     private FirebaseUser user;
     private String email, docGifts;
+    private EditItemActivity editItemActivity = EditItemActivity.instance;
+    private AddActivity addActivity = AddActivity.instance;
 
     public List_of_Gifts() {
         this.listOfGifts = new ArrayList<Gift_Credit>();
@@ -154,13 +155,14 @@ public class List_of_Gifts {
                         if(state.equals("add"))
                         {
                             savePic(picture, bitmap);
-                            Toast.makeText(instance, "save", Toast.LENGTH_SHORT).show();
-                            AddActivity.instance.sendNoti(gift.getKey(), gift.getType());
+                            Toast.makeText(addActivity, "save", Toast.LENGTH_SHORT).show();
+                            addActivity.instance.sendNoti(gift.getKey(), gift.getType());
                         }
                         if(state.equals("update"))
                         {
                             delete(oldKey);
                             Toast.makeText(EditItemActivity.instance, "save", Toast.LENGTH_SHORT).show();
+                            editItemActivity.instance.sendNoti(gift.getKey(), gift.getType());
                         }
                     }
                 }
