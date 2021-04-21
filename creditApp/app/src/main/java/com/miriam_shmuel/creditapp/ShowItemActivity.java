@@ -66,6 +66,7 @@ public class ShowItemActivity extends AppCompatActivity {
         if (type.equals("credit") || type.equals("gift")) {
             gift_credit = (Gift_Credit) getIntent().getSerializableExtra("obj");
             creditgiftlayout.setVisibility(View.VISIBLE);
+            warrantylayout.setVisibility(View.GONE);
             enterGiftCreditInfo();
         } else {
             warranty = (Warranty) getIntent().getSerializableExtra("obj");
@@ -104,8 +105,6 @@ public class ShowItemActivity extends AppCompatActivity {
                     warranty = (Warranty) data.getSerializableExtra("object");
                     enterWarrantyInfo();
                 }
-
-                //get the result
             }
         }
     }

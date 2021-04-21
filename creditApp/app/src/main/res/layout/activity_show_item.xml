@@ -25,7 +25,7 @@
         android:id="@+id/creditgiftlayout"
         android:visibility="gone"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical">
 
         <LinearLayout
@@ -177,7 +177,6 @@
             android:layout_height="match_parent"
             android:layout_marginTop="10dp"
             android:layout_weight="1"
-            android:gravity="center"
             android:scaleType="fitXY"
             android:src="@drawable/ic_receipt"/>
     </LinearLayout>
@@ -186,7 +185,7 @@
         android:id="@+id/warrantylayout"
         android:visibility="gone"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical">
 
         <LinearLayout
@@ -242,10 +241,7 @@
                 android:hint="Exemple"
                 android:layout_weight="1"
                 android:visibility="gone"/>
-
         </LinearLayout>
-
-
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -305,18 +301,19 @@
             android:id="@+id/WReceiptPic"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:src="@drawable/ic_receipt"
             android:visibility="visible"
-            android:gravity="center"
             android:scaleType="fitXY"/>
+
         <ImageView
             android:id="@+id/WWarrantyPic"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:src="@drawable/ic_receipt"
             android:visibility="visible"
             android:layout_marginTop="10dp"
-            android:gravity="center"
             android:scaleType="fitXY"/>
     </LinearLayout>
 </LinearLayout>

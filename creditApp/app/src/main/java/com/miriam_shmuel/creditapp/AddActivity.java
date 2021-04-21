@@ -36,6 +36,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+import static android.content.ContentValues.TAG;
+
 public class AddActivity extends AppCompatActivity implements View.OnClickListener {
     private RadioButton rCredit, rGift;
     private EditText edtShopNameGC, edtCreditBarCodeIDGC, edtvalueIDGC, edtItemW, edtShopNameIDW, edtCreditBarCodeIDW, edtgiftNameIDG;
@@ -504,6 +506,7 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, ONETIME_ALARM_CODE,
                 intent, PendingIntent.FLAG_UPDATE_CURRENT);
         long wakeupTime = alarmTime.getTimeInMillis();
+        Log.d(TAG, "TSG WAKEUP"+wakeupTime);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
             alarmManager.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, wakeupTime, pendingIntent);
