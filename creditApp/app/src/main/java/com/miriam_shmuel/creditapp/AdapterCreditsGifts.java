@@ -10,15 +10,12 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.annotation.Nullable;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
-
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Locale;
-
 import static android.widget.Toast.LENGTH_SHORT;
+
 
 public class AdapterCreditsGifts extends ArrayAdapter<Gift_Credit> {
     Context context; // The current context. Used to inflate the layout file.

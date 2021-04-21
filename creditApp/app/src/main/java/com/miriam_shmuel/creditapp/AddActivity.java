@@ -298,7 +298,6 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
                 Shop s = new Shop(edtShopNameGC.getText().toString());
                 shopName.add(s);
                 list_of_credits.iSExist(edtCreditBarCodeIDGC.getText().toString(), dateExp, shopName, edtvalueIDGC.getText().toString(), picBitmap,"add", "");
-                //Toast.makeText(instance, ""+list_of_credits.isEx(), Toast.LENGTH_LONG).show();
                 updateHome("add credit");
                 finish();
             }
@@ -525,13 +524,11 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
 
         //Number of Days to add
         calendar.add(Calendar.DAY_OF_MONTH, -5);
-        Log.d("debug", "TAG"+calendar.toString());
 
         oneTimeAlarm(calendar, key, type);
     }
 
     public void createOneTimeAlarmInPickedTime(String key, String type) throws ParseException {
-        Log.d("debug", "createOneTimeAlarmInPickedTime()");
         showTimeDialog(key, type);
     }
 

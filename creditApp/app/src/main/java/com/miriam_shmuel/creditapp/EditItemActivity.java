@@ -140,7 +140,7 @@ public class EditItemActivity extends AppCompatActivity implements View.OnClickL
             @Override
             public void onClick(View v) {
                 if(!inValidGC()) {
-                    Toast.makeText(EditItemActivity.this, "ok", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(EditItemActivity.this, "ok", Toast.LENGTH_SHORT).show();
                     confirmationData();
                 }
                 else
@@ -152,7 +152,7 @@ public class EditItemActivity extends AppCompatActivity implements View.OnClickL
             @Override
             public void onClick(View v) {
                 if(!inValidW()) {
-                    Toast.makeText(EditItemActivity.this, "ok", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(EditItemActivity.this, "ok", Toast.LENGTH_SHORT).show();
                     confirmationData();
                 }
                 else
@@ -236,7 +236,7 @@ public class EditItemActivity extends AppCompatActivity implements View.OnClickL
             }
             else
             {
-                Toast.makeText(instance, "no = ", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(instance, "no = ", Toast.LENGTH_SHORT).show();
                 Bitmap picBitmap = null;
                 newgc = lc.iSExist(Cedtbarcode.getText().toString(),  CedtexpDate.getText().toString(), shop, Cedtvalue.getText().toString(), picBitmap ,"update", gift_credit.getKey());
             }
@@ -256,7 +256,7 @@ public class EditItemActivity extends AppCompatActivity implements View.OnClickL
             }
             else
             {
-                Toast.makeText(instance, "no = ", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(instance, "no = ", Toast.LENGTH_SHORT).show();
                 Bitmap picBitmap = null;
                 newgc = lg.iSExist(Cedtbarcode.getText().toString(), CedtexpDate.getText().toString(), shopsListNew(), Cedtvalue.getText().toString(), CedtGiftName.getText().toString(),picBitmap, "update" ,gift_credit.getKey());
             }
@@ -297,7 +297,7 @@ public class EditItemActivity extends AppCompatActivity implements View.OnClickL
         Pattern space = Pattern.compile ("[\n]*");
         Matcher hasSpace = space.matcher(str);
 
-        Toast.makeText(EditItemActivity.this, "click" + hasSpecial.find(), Toast.LENGTH_SHORT).show();
+        //Toast.makeText(EditItemActivity.this, "click" + hasSpecial.find(), Toast.LENGTH_SHORT).show();
         return hasSpecial.find() || hasSpace.find();
     }
 
@@ -418,7 +418,7 @@ public class EditItemActivity extends AppCompatActivity implements View.OnClickL
 
         String list = "list of warranty";
         String folder = warranty.getFolder();
-        Toast.makeText(this, folder, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, folder, Toast.LENGTH_SHORT).show();
         String picture1 = folder + "/"+ folder + "itemReceipt";
         String picture2 = folder + "/"+ folder + "shopReceipt";
 
@@ -454,7 +454,7 @@ public class EditItemActivity extends AppCompatActivity implements View.OnClickL
             else
                 str += shopName.get(i).toString();
         }
-        Toast.makeText(EditItemActivity.this,""+str, Toast.LENGTH_LONG).show();
+        //Toast.makeText(EditItemActivity.this,""+str, Toast.LENGTH_LONG).show();
         return str;
     }
 
@@ -494,7 +494,7 @@ public class EditItemActivity extends AppCompatActivity implements View.OnClickL
                         Shop shop = new Shop(shopname);
                         shopsList.add(shop);
                         diaListShopName.add(shopname);
-                        Toast.makeText(EditItemActivity.this, shopsList.toString(), Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(EditItemActivity.this, shopsList.toString(), Toast.LENGTH_SHORT).show();
                         printShopList();
                         adapter.notifyDataSetChanged();
                     }

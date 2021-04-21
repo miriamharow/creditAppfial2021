@@ -156,7 +156,7 @@ public class List_of_Credits {
                 .delete().addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-          Log.d("debug", "dellete");
+         // Log.d("debug", "dellete");
             }})
                 .addOnFailureListener(new OnFailureListener() {
                     @Override

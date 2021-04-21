@@ -114,7 +114,7 @@ public class AlarmReceiver extends BroadcastReceiver
                                 .build();
 
                         // Deliver the notification
-                        Log.d(TAG, "notificationID "+notificationID);
+                        //Log.d(TAG, "notificationID "+notificationID);
                         notificationManager.notify(notificationID, notification);
                     } else {
                         Log.d(TAG, "No such document");
