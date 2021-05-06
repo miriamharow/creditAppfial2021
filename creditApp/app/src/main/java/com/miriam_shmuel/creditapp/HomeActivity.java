@@ -122,6 +122,9 @@ public class HomeActivity extends AppCompatActivity {
             case 2:
                 fragment = new WarrantyFragment();
                 break;
+            case 3:
+                fragment = new LocationFragment();
+                break;
         }
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();

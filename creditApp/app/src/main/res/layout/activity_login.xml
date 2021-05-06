@@ -1,48 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".LogInActivity">
+    tools:context=".LogInActivity"
+    tools:ignore="MissingConstraints">
 
     <EditText
         android:id="@+id/email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:ems="10"
+        android:background="@drawable/custom_input"
         android:inputType="textEmailAddress"
-        android:hint="Email"/>
-
-    <RelativeLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp">
-
-        <EditText
-            android:id="@+id/password"
-            android:layout_width="fill_parent"
-            android:layout_height="45dp"
-            android:hint="Password"
-            android:inputType="textPassword"
-            android:paddingLeft="10dp"
-            android:paddingTop="10dp"
-            android:paddingRight="40dp"
-            android:paddingBottom="10dp"
-            android:text=""
-            />
-
-        <ImageView
-            android:id="@+id/show_pass_btn"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="5dp"
-            android:alpha=".5"
-            android:onClick="ShowHidePass"
-            android:padding="5dp"
-            android:src="@drawable/show_password" />
-    </RelativeLayout>
+        android:hint="Email Adress"
+        android:drawableLeft="@drawable/custom_email"
+        android:drawablePadding="12dp"/>
 
     <Button
         android:id="@+id/btnSignIn"
@@ -61,4 +34,38 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="forgot password" />
-</LinearLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <EditText
+            android:id="@+id/password"
+            android:layout_width="fill_parent"
+            android:layout_height="45dp"
+            android:background="@drawable/custom_input"
+            android:drawableLeft="@drawable/custom_password"
+            android:drawablePadding="12dp"
+            android:hint="Password"
+            android:inputType="textPassword"
+
+            android:paddingBottom="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:layout_editor_absoluteY="156dp" />
+
+        <ImageView
+            android:id="@+id/show_pass_btn"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:alpha=".5"
+            android:onClick="ShowHidePass"
+
+            android:src="@drawable/show_password" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
