@@ -1,46 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SignUpActivity">
+    android:orientation="vertical"
+    tools:context=".SignUpActivity"
+    tools:ignore="MissingConstraints">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+    <View
+        android:id="@+id/topView"
+        android:layout_width="0dp"
+        android:layout_height="150dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
         <EditText
             android:id="@+id/username"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:ems="10"
+            android:background="@drawable/custom_input"
+            android:drawableLeft="@drawable/custom_username"
             android:hint="User Name"
-            android:inputType="textPersonName" />
+            android:inputType="textPersonName"
+            android:layout_marginStart="32dp"
+            android:layout_marginEnd="32dp"
+            android:drawablePadding="16dp"
+            android:padding="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/topView"/>
 
         <EditText
             android:id="@+id/email"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:hint="Email"
-            android:inputType="textEmailAddress"/>
+            android:background="@drawable/custom_input"
+            android:drawableLeft="@drawable/custom_email"
+            android:inputType="textEmailAddress"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="32dp"
+            android:drawablePadding="16dp"
+            android:padding="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/username"/>
 
         <RelativeLayout
+            android:id="@+id/password_re"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp">
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="32dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/email">
 
             <EditText
                 android:id="@+id/password"
                 android:layout_width="fill_parent"
-                android:layout_height="45dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/custom_input"
+                android:drawableLeft="@drawable/custom_password"
+                android:drawablePadding="16dp"
                 android:hint="Password"
                 android:inputType="textPassword"
-                android:paddingLeft="10dp"
-                android:paddingTop="10dp"
-                android:paddingRight="40dp"
-                android:paddingBottom="10dp"
                 android:text=""
+                android:padding="16dp"
                 />
 
             <ImageView
@@ -59,20 +89,25 @@
         <RelativeLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp">
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="32dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/password_re"
+            android:id="@+id/pwdAuth_re">
 
             <EditText
                 android:id="@+id/pwdAuth"
                 android:layout_width="fill_parent"
-                android:layout_height="45dp"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:background="@drawable/custom_input"
+                android:drawableLeft="@drawable/custom_password"
+                android:drawablePadding="16dp"
                 android:hint="Password"
                 android:inputType="textPassword"
-                android:paddingLeft="10dp"
-                android:paddingTop="10dp"
-                android:paddingRight="40dp"
-                android:paddingBottom="10dp"
-                android:text=""
-                />
+                 />
 
             <ImageView
                 android:id="@+id/show_pwdAuth_btn"
@@ -87,18 +122,32 @@
                 android:src="@drawable/show_password" />
         </RelativeLayout>
 
-        <TextView
-            android:layout_height="wrap_content"
-            android:layout_width="match_parent"
-            android:id="@+id/textView_PwdNote"
-            android:textStyle="bold"
-            android:gravity="center" />
+    <TextView
+        android:id="@+id/textView_PwdNote"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="32dp"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/pwdAuth_re"  />
 
-        <Button
+    <Button
             android:id="@+id/btnSignUp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="sign up" />
+            android:text="sign up"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="32dp"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView_PwdNote" />
 
-    </LinearLayout>
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

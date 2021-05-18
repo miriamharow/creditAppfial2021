@@ -123,7 +123,7 @@ public class HomeActivity extends AppCompatActivity {
                 fragment = new WarrantyFragment();
                 break;
             case 3:
-                fragment = new LocationFragment();
+                fragment = new MapViewFragment();
                 break;
         }
         FragmentManager fm = getSupportFragmentManager();
