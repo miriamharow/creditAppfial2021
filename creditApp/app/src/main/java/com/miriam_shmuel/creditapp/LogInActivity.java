@@ -128,6 +128,7 @@ public class LogInActivity extends Activity {
                 password.setTransformationMethod(PasswordTransformationMethod.getInstance());
             }
         }
+        ///
     }
 }
 
