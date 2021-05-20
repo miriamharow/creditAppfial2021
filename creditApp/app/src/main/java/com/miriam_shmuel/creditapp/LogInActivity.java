@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -70,10 +71,11 @@ public class LogInActivity extends Activity {
                 } else if (email.isEmpty() && pwd.isEmpty()) {
                     Toast.makeText(LogInActivity.this, "Fields Are Empty!", Toast.LENGTH_SHORT).show();
                 } else if (!(email.isEmpty() && pwd.isEmpty())) {
-                    mFirebaseAuth.signInWithEmailAndPassword(email, pwd).addOnCompleteListener(LogInActivity.this, new OnCompleteListener<AuthResult>() {
+                    mFirebaseAuth.signInWithEmailAndPassword("t@gmail.com", "123123123").addOnCompleteListener(LogInActivity.this, new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (!task.isSuccessful()) {
+                                Log.d("test",task.isSuccessful()+"");
                                 Toast.makeText(LogInActivity.this, "Login Error, Please Login Again", Toast.LENGTH_SHORT).show();
                             } else {
                                 //Toast.makeText(LogInActivity.this, "enter", Toast.LENGTH_SHORT).show();
